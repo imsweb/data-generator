@@ -7,7 +7,7 @@ This Java library can be used to create cancer-related synthetic data files.
 
 ## Download
 
-The library will soon be available on [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.imsweb%22%20AND%20a%3A%22data-generator%22).
+The library is available on [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.imsweb%22%20AND%20a%3A%22data-generator%22).
 
 To include it to your Maven or Gradle project, use the group ID `com.imsweb` and the artifact ID `data-generator`.
 
