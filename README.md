@@ -33,6 +33,7 @@ The library is composed of rules, each rule being responsible for assigning one 
 but if embedded, it can be setup to create any fixed-column or comma-separated file format.
 
 The library uses three ways to assign values:
+
 1. ***Constant values***: the rule always assigns the same value to the field.
 2. ***Random values from a list***: the rule assigns a random value from a specific list of values.
 3. ***Random values based on a frequency***: the rule uses a frequency (usually from a CSV file) to get the value to assign; this results in more common values being assigned more often.
