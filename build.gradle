@@ -54,6 +54,18 @@ jar {
     }
 }
 
+// we don't want these files in the "all" jar, it's confusing
+shadowJar {
+    exclude('XMLPULL_1_1_3_1_VERSION')
+    exclude('XPP3_1.1.4c_MIN_VERSION')
+    from ('VERSION') {
+        rename 'VERSION', 'DATA-GENERATOR-VERSION'
+    }
+    from ('LICENSE') {
+        rename 'LICENSE', 'DATA-GENERATOR-LICENSE'
+    }
+}
+
 // checkstyle plugin settings
 checkstyle {
     ignoreFailures = true
