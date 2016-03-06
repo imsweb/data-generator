@@ -5,6 +5,7 @@ plugins {
     id 'checkstyle'
     id 'findbugs'
     id 'com.bmuschko.nexus' version '2.3.1'
+    id 'com.github.johnrengelman.shadow' version '1.2.1'
 }
 
 group = 'com.imsweb'
@@ -42,7 +43,7 @@ jar {
                 'Built-By': System.getProperty('user.name'),
                 'Built-Date': new Date(),
                 'Built-JDK': System.getProperty('java.version'),
-                'Main-Class': 'StandaloneNaaccrDataGenerator',
+                'Main-Class': 'com.imsweb.datagenerator.gui.StandaloneNaaccrDataGenerator',
                 'Class-Path': configurations.compile.collect { it.getName() }.join(' '))
     }
     from ('VERSION') {
@@ -52,8 +53,6 @@ jar {
         rename 'LICENSE', 'DATA-GENERATOR-LICENSE'
     }
 }
-
-javadoc.enabled = false
 
 // checkstyle plugin settings
 checkstyle {
@@ -71,8 +70,8 @@ findbugs {
 // needed to deploy to Maven Central
 modifyPom {
     project {
-        name 'Cancer-related synthetic data generator.'
-        description 'This Java library can be used to create cancer-related synthetic data files.'
+        name 'Synthetic data generator.'
+        description 'This Java library can be used to create synthetic data files.'
         url 'https://github.com/imsweb/data-generator'
         inceptionYear '2016'
 
