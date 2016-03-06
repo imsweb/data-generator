@@ -1,0 +1,60 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>NAACCR XML Utility Help</title>
+    <style>
+        .wrapper {
+            margin: 0 25px 0 25px;
+        }
+
+        .lvl1 {
+            padding: 0;
+            margin: 0 0 0 25px;
+        }
+
+        .indent1 {
+            padding: 0;
+            margin: 0 0 0 25px;
+        }
+
+        h2 {
+            display: inline-block;
+            color: #002C4C;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <h1>Synthetic Data File Generator</h1>
+    <hr/>
+
+    <div id="toc"><h2>Table of Contents</h2></div>
+    <div class="lvl1"><a href="#intro">Introduction</a></div>
+    <div class="lvl1"><a href="#random">Creating Random Data</a></div>
+    <div class="lvl1"><a href="#about">About this tool</a></div>
+
+    <div id="intro"><h2>Introduction</h2></div>
+    <div class="indent1">
+        This tool can be used to create synthetic (fabricated) NAACCR data files.
+        <br/><br/>
+        To achieve that goal, the tool uses a library that generates random data based on frequencies extracted from the SEER data.
+    </div>
+
+    <div id="random"><h2>Creating Random Data</h2></div>
+    <div class="indent1">
+        The library uses three ways to assign values:
+        <ol>
+            <li><strong>Constant values</strong>: the rule always assigns the same value to the field.</li>
+            <li><strong>Random values from a list</strong>: the rule assigns a random value from a specific list of values.</li>
+            <li><strong>Random values based on a frequency</strong>: the rule uses a frequency (usually from a CSV file) to get the value to assign; this results in more common values being assigned more often.</li>
+        </ol>
+        In addition to those assignment mechanisms, each rule might have dependencies to the values assigned by previous rules.
+    </div>
+
+    <div id="about"><h2>About this tool</h2></div>
+    <div class="indent1">
+        This tool was developed by <strong><a href="https://www.imsweb.com/">Information Management Services, Inc.</a></strong> under the <strong><a href="http://seer.cancer.gov/">SEER program</a></strong> of the Surveillance Research Program, Division of Cancer Control and Population Sciences, National Cancer Institute.
+    </div>
+</div>
+</body>
+</html>

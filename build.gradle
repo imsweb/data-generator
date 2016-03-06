@@ -1,0 +1,113 @@
+import org.gradle.internal.jvm.Jvm
+
+plugins {
+    id 'java'
+    id 'checkstyle'
+    id 'findbugs'
+    id 'com.bmuschko.nexus' version '2.3.1'
+}
+
+group = 'com.imsweb'
+version = file('VERSION').text
+description = 'Cancer-related synthetic data generator.'
+
+println "Starting build using ${Jvm.current()}"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'commons-io:commons-io:2.4'
+    compile 'com.imsweb:layout:1.3.3'
+    compile 'com.imsweb:staging-client-java:2.0'
+    compile 'com.imsweb:algorithms:1.4'
+    testCompile 'junit:junit:4.12'
+}
+
+// enforce UTF-8 for all compilation tasks
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+// display the compilation warnings
+compileJava.options.compilerArgs << '-Xlint:unchecked' << '-Xlint:deprecation'
+compileTestJava.options.compilerArgs << '-Xlint:unchecked' << '-Xlint:deprecation'
+
+// customize the manifest
+jar {
+    manifest {
+        attributes('Implementation-Title': project.name,
+                'Implementation-Version': version,
+                'Implementation-Vendor': 'Information Management Services Inc.',
+                'Created-By': System.properties['java.vm.version'] + ' (' + System.properties['java.vm.vendor'] + ')',
+                'Built-By': System.getProperty('user.name'),
+                'Built-Date': new Date(),
+                'Built-JDK': System.getProperty('java.version'),
+                'Main-Class': 'StandaloneNaaccrDataGenerator',
+                'Class-Path': configurations.compile.collect { it.getName() }.join(' '))
+    }
+    from ('VERSION') {
+        rename 'VERSION', 'DATA-GENERATOR-VERSION'
+    }
+    from ('LICENSE') {
+        rename 'LICENSE', 'DATA-GENERATOR-LICENSE'
+    }
+}
+
+javadoc.enabled = false
+
+// checkstyle plugin settings
+checkstyle {
+    ignoreFailures = true
+    configFile = file('config/checkstyle/checkstyle.xml')
+}
+
+// findbugs plugin settings
+findbugs {
+    ignoreFailures = true
+    effort = 'max'
+    excludeFilter = file('config/findbugs/findbugs-exclude.xml')
+}
+
+// needed to deploy to Maven Central
+modifyPom {
+    project {
+        name 'Cancer-related synthetic data generator.'
+        description 'This Java library can be used to create cancer-related synthetic data files.'
+        url 'https://github.com/imsweb/data-generator'
+        inceptionYear '2016'
+
+        scm {
+            url 'https://github.com/imsweb/data-generator'
+            connection 'scm:https://github.com/imsweb/data-generator.git'
+            developerConnection 'scm:git@github.com:imsweb/data-generator.git'
+        }
+
+        licenses {
+            license {
+                name 'A modified BSD License (BSD)'
+                url 'https://github.com/imsweb/data-generator/blob/master/LICENSE'
+                distribution 'repo'
+            }
+        }
+
+        developers {
+            developer {
+                id 'depryf'
+                name 'Fabian Depry'
+                email 'depryf@imsweb.com'
+            }
+            developer {
+                id 'nakamurae'
+                name 'Nakamur Eric'
+                email 'nakamurae@imsweb.com'
+            }
+        }
+    }
+}
+
+// Gradle wrapper, this allows to build the project without having to install Gradle!
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.9'
+}
+
+
