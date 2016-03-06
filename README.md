@@ -19,8 +19,13 @@ This library requires Java 7 or a more recent version.
 
 There are two ways to use this library:
 
-1. Embed it into your own Java software.
-2. Download the executable JAR and double click it to start the standalone GUI.
+1. Embed it into your own Java software and call the DataGenerator (for generic layouts) or the NaaccrDataGenerator (for NAACCR layouts).
+2. Download the executable JAR from the [release page](https://github.com/imsweb/data-generator/releases) and double click it to start the standalone GUI.
+
+## Defining Variables
+
+This library supports variables and file formats through the [layout framework](https://github.com/imsweb/layout). A layout object must be used
+to initialize one of the data generator objects.
 
 ## Creating Random Data
 
@@ -35,6 +40,8 @@ The library uses three ways to assign values:
 In addition to those assignment mechanisms, each rule might have dependencies to the values assigned by previous rules.
 
 The default rules use frequencies extracted from the SEER data.
+
+To know more about the default NAACCR rules, check out the [rule package](https://github.com/imsweb/data-generator/tree/master/src/main/java/com/imsweb/datagenerator/naaccr/rule).
 
 ## About SEER
 
