@@ -7,6 +7,8 @@ import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
+
 public class BirthRuleTest {
 
     private BirthRule _rule = new BirthRule();
@@ -14,17 +16,18 @@ public class BirthRuleTest {
     @Test
     public void testExecute() {
         Map<String, String> rec = new HashMap<>();
-        _rule.execute(rec, null, null);
+        NaaccrDataGeneratorOptions options = new NaaccrDataGeneratorOptions();
+        options.setMinDxYear(2000);
+        _rule.execute(rec, null, options);
 
         // the birth date should have been assigned
         Assert.assertTrue(rec.get("birthDateYear").matches("\\d{4}"));
         Assert.assertTrue(rec.get("birthDateMonth").matches("\\d{1,2}"));
         Assert.assertTrue(rec.get("birthDateDay").matches("\\d{1,2}"));
 
-        // it should be in a specific range (at least the year)
-        int currentYear = LocalDate.now().getYear();
-        int assignedYear = Integer.parseInt(rec.get("birthDateYear"));
-        Assert.assertTrue(assignedYear >= currentYear - 100 && assignedYear <= currentYear - 5);
+        // it should be in a specific range
+        LocalDate assignedDate = new LocalDate(Integer.parseInt(rec.get("birthDateYear")), Integer.parseInt(rec.get("birthDateMonth")), Integer.parseInt(rec.get("birthDateDay")));
+        Assert.assertTrue(assignedDate.toString(), assignedDate.isBefore(options.getMinDxDate().minusYears(5)) && assignedDate.isAfter(options.getMinDxDate().minusYears(105)));
 
         // the country should have been assigned
         Assert.assertEquals("USA", rec.get("birthplaceCountry"));

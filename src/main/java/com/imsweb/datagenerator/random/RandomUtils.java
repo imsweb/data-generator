@@ -1,7 +1,10 @@
 package com.imsweb.datagenerator.random;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
 
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 
 public class RandomUtils {
@@ -30,23 +33,23 @@ public class RandomUtils {
     }
 
     /**
-     * Generates a random year.
+     * Returns a random date that is no earlier than the latest date in minDates and no later than the earliest date in maxDates
      */
-    public static int getRandomYear(int min, int max) {
-        return nextIntInRange(min, max);
+    public static LocalDate getRandomDateBetween(Collection<LocalDate> minDates, Collection<LocalDate> maxDates) {
+        if (minDates == null || minDates.isEmpty())
+            throw new RuntimeException("At least one min date must be provided");
+        if (maxDates == null || maxDates.isEmpty())
+            throw new RuntimeException("At least one max date must be provided");
+        return getRandomDateBetween(Collections.max(minDates), Collections.min(maxDates));
     }
 
     /**
-     * Generates a random month.
+     * Returns a random date between the two provided dates
      */
-    public static int getRandomMonth() {
-        return nextIntInRange(1, 12);
-    }
-
-    /**
-     * Generates a random day for a given year/month.
-     */
-    public static int getRandomDay(int year, int month) {
-        return nextIntInRange(1, new LocalDate(year, month, 1).dayOfMonth().getMaximumValue());
+    public static LocalDate getRandomDateBetween(LocalDate date1, LocalDate date2) {
+        if (date1 == null || date2 == null)
+            throw new RuntimeException("Neither date may be null");
+        int randomOffset = RandomUtils.nextIntInRange(0, Math.abs(Days.daysBetween(date1, date2).getDays()));
+        return date1.isBefore(date2) ? date1.plusDays(randomOffset) : date2.plusDays(randomOffset);
     }
 }

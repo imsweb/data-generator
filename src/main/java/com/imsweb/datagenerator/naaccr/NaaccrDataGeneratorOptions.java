@@ -5,6 +5,8 @@ package com.imsweb.datagenerator.naaccr;
 
 import java.util.Map;
 
+import org.joda.time.LocalDate;
+
 public class NaaccrDataGeneratorOptions {
 
     // if provided, each patient will have this number of tumors; otherwise a random distribution will be used.
@@ -82,5 +84,25 @@ public class NaaccrDataGeneratorOptions {
 
     public void setVitalStatusDeadValue(String vitalStatusDeadValue) {
         _vitalStatusDeadValue = vitalStatusDeadValue;
+    }
+
+    /**
+     * Returns min DX date. 
+     * If min DX year was not defined, this will return the current year minus ten years.
+     * If min DX year was defined, this will return the first day of that year
+     */
+    public LocalDate getMinDxDate() {
+        return _minDxYear == null ? LocalDate.now().minusYears(10) : new LocalDate(_minDxYear, 1, 1);
+    }
+
+    /**
+     * Returns max DX date. 
+     * If max DX year was not defined this will return the current date. 
+     * If max DX year was defined, this will return the last day of that year (if max DX year is current year, this could return a future date)
+     */
+    public LocalDate getMaxDxDate() {
+        if (_maxDxYear == null || _maxDxYear == LocalDate.now().getYear())
+            return LocalDate.now();
+        return new LocalDate(_maxDxYear, 12, 31);
     }
 }
