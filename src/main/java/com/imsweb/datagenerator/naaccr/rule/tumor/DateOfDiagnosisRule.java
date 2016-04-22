@@ -1,7 +1,11 @@
 package com.imsweb.datagenerator.naaccr.rule.tumor;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import org.joda.time.LocalDate;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
@@ -22,30 +26,28 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
     @Override
     public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
 
-        // get max year from the options
-        Integer maxDxYear = options == null ? null : options.getMaxDxYear();
-        if (maxDxYear == null)
-            maxDxYear = getCurrentYear();
+        // latest possible date set only by options if defined
+        Set<LocalDate> maxDxDates = new HashSet<>();
+        LocalDate maxDate = options == null ? LocalDate.now() : options.getMaxDxDate();
+        maxDxDates.add(maxDate);
 
-        // get min year from the options
-        Integer minDxYear = options == null ? null : options.getMinDxYear();
-        if (minDxYear == null)
-            minDxYear = maxDxYear - 10;
-
-        // if we have already assigned a DX year, take the next year available
-        if (!otherRecords.isEmpty())
-            minDxYear = Math.min(maxDxYear, Integer.parseInt(otherRecords.get(otherRecords.size() - 1).get("dateOfDiagnosisYear")) + 1);
-
+        Set<LocalDate> minDxDates = new HashSet<>();
+        // never go before min date defined in options, or current date minus ten years if options not defined
+        minDxDates.add(options == null ? LocalDate.now().minusYears(10) : options.getMinDxDate());
         // never go before the year of birth
         if (propertyHasValue(record, "birthDateYear"))
-            minDxYear = Math.max(minDxYear, Integer.parseInt(record.get("birthDateYear")) + 1);
+            minDxDates.add(new LocalDate(Integer.parseInt(record.get("birthDateYear")) + 1, 1, 1));
+        // never go before dx date of patient's most recent tumor (if this isn't the first one)
+        if (!otherRecords.isEmpty()) {
+            Map<String, String> lastTumor = otherRecords.get(otherRecords.size() - 1);
+            minDxDates.add(new LocalDate(Integer.parseInt(lastTumor.get("dateOfDiagnosisYear")), Integer.parseInt(lastTumor.get("dateOfDiagnosisMonth")),
+                    Integer.parseInt(lastTumor.get("dateOfDiagnosisDay"))).plusDays(1));
+        }
 
-        Integer year = RandomUtils.getRandomYear(minDxYear, maxDxYear);
-        Integer month = RandomUtils.getRandomMonth();
-        Integer day = RandomUtils.getRandomDay(year, month);
+        LocalDate randomDate = RandomUtils.getRandomDateBetween(minDxDates, maxDxDates);
 
-        record.put("dateOfDiagnosisYear", year.toString());
-        record.put("dateOfDiagnosisMonth", month.toString());
-        record.put("dateOfDiagnosisDay", day.toString());
+        record.put("dateOfDiagnosisYear", Integer.toString(randomDate.getYear()));
+        record.put("dateOfDiagnosisMonth", Integer.toString(randomDate.getMonthOfYear()));
+        record.put("dateOfDiagnosisDay", Integer.toString(randomDate.getDayOfMonth()));
     }
 }
