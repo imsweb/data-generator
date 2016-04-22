@@ -25,7 +25,7 @@ public class BirthRule extends NaaccrDataGeneratorRule {
     public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
 
         // birth date should be no later than five years prior to min dx date (or current date if min dx date not defined)
-        LocalDate maxBirthDate = options == null ? LocalDate.now().minusYears(5) : options.getMinDxDate().minusYears(5);
+        LocalDate maxBirthDate = options == null ? LocalDate.now().minusYears(15) : options.getMinDxDate().minusYears(5);
         // limit age to max 100 years
         LocalDate minBirthDate = maxBirthDate.minusYears(100);
 

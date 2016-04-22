@@ -27,7 +27,8 @@ public class BirthRuleTest {
 
         // it should be in a specific range
         LocalDate assignedDate = new LocalDate(Integer.parseInt(rec.get("birthDateYear")), Integer.parseInt(rec.get("birthDateMonth")), Integer.parseInt(rec.get("birthDateDay")));
-        Assert.assertTrue(assignedDate.toString(), assignedDate.isBefore(options.getMinDxDate().minusYears(5)) && assignedDate.isAfter(options.getMinDxDate().minusYears(105)));
+        Assert.assertTrue(assignedDate.toString(), assignedDate.isBefore(options.getMinDxDate().minusYears(5).plusDays(1)) &&
+                assignedDate.isAfter(options.getMinDxDate().minusYears(105).minusDays(1)));
 
         // the country should have been assigned
         Assert.assertEquals("USA", rec.get("birthplaceCountry"));
