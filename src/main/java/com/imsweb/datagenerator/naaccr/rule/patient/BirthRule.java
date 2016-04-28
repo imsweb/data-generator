@@ -2,17 +2,24 @@ package com.imsweb.datagenerator.naaccr.rule.patient;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.joda.time.LocalDate;
 
+import com.google.common.collect.Sets;
+
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
+import com.imsweb.datagenerator.random.DistributedRandomValueGenerator;
 import com.imsweb.datagenerator.random.RandomUtils;
 
 public class BirthRule extends NaaccrDataGeneratorRule {
 
     // unique identifier for this rule
     public static final String ID = "birth";
+
+    // random birth state value generator
+    private static DistributedRandomValueGenerator _STATE_VALUES;
 
     /**
      * Constructor.
@@ -24,6 +31,10 @@ public class BirthRule extends NaaccrDataGeneratorRule {
     @Override
     public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
 
+        // lazy initialization of random value generator for birth state - this must be done here because we need the state defined in options
+        if (_STATE_VALUES == null)
+            _STATE_VALUES = getBirthStateGenerator(options);
+
         // birth date should be no later than five years prior to min dx date (or current date if min dx date not defined)
         LocalDate maxBirthDate = options == null ? LocalDate.now().minusYears(15) : options.getMinDxDate().minusYears(5);
         // limit age to max 100 years
@@ -34,11 +45,32 @@ public class BirthRule extends NaaccrDataGeneratorRule {
         record.put("birthDateYear", Integer.toString(randomDate.getYear()));
         record.put("birthDateMonth", Integer.toString(randomDate.getMonthOfYear()));
         record.put("birthDateDay", Integer.toString(randomDate.getDayOfMonth()));
-
         record.put("birthplaceCountry", "USA");
-        if (propertyHasValue(record, "addressCurrentState"))
-            record.put("birthplaceState", record.get("addressCurrentState"));
-        else
-            record.put("birthplaceState", "XX");
+        record.put("birthplaceState", _STATE_VALUES.getRandomValue());
+    }
+
+    /**
+     * There is a 90% chance that the birth state will be the registry state (if defined); the remaining 10% is divided equally among the remaining states.
+     * If there is no registry state defined in the options, the probability will be equal for all states.
+     */
+    private static DistributedRandomValueGenerator getBirthStateGenerator(NaaccrDataGeneratorOptions options) {
+        DistributedRandomValueGenerator generator = new DistributedRandomValueGenerator();
+
+        Set<String> states = Sets.newHashSet("AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT",
+                "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY");
+
+        double pSum = 1.0;
+        // if DX state is defined, set probability for that state to 90% and remove it from the list of states to be divided
+        if (options != null && options.getState() != null && states.contains(options.getState().toUpperCase())) {
+            generator.add(options.getState().toUpperCase(), 0.9);
+            states.remove(options.getState().toUpperCase());
+            pSum -= 0.9;
+        }
+
+        // divide probability of states by the remaining sum
+        for (String state : states)
+            generator.add(state, 1.0 / states.size() * pSum);
+
+        return generator;
     }
 }
