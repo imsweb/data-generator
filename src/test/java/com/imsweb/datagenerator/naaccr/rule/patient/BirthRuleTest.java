@@ -32,13 +32,7 @@ public class BirthRuleTest {
 
         // the country should have been assigned
         Assert.assertEquals("USA", rec.get("birthplaceCountry"));
-
-        // if no state is provided, the birth state should be unknown
-        Assert.assertEquals("XX", rec.get("birthplaceState"));
-
-        // if a state is provided, the birth state should not be blank
-        rec.put("addressCurrentState", "MD");
-        _rule.execute(rec, null, null);
-        Assert.assertEquals("MD", rec.get("birthplaceState"));
+        // state is random but should always be assigned
+        Assert.assertTrue(rec.get("birthplaceState").matches("[A-Z]{2}"));
     }
 }
