@@ -19,7 +19,7 @@ public class BirthRule extends NaaccrDataGeneratorRule {
     public static final String ID = "birth";
 
     // random birth state value generator
-    private static DistributedRandomValueGenerator _STATE_VALUES;
+    private DistributedRandomValueGenerator _stateValues;
 
     /**
      * Constructor.
@@ -32,8 +32,8 @@ public class BirthRule extends NaaccrDataGeneratorRule {
     public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
 
         // lazy initialization of random value generator for birth state - this must be done here because we need the state defined in options
-        if (_STATE_VALUES == null)
-            _STATE_VALUES = getBirthStateGenerator(options);
+        if (_stateValues == null)
+            _stateValues = getBirthStateGenerator(options);
 
         // birth date should be no later than five years prior to min dx date (or current date if min dx date not defined)
         LocalDate maxBirthDate = options == null ? LocalDate.now().minusYears(15) : options.getMinDxDate().minusYears(5);
@@ -46,14 +46,14 @@ public class BirthRule extends NaaccrDataGeneratorRule {
         record.put("birthDateMonth", Integer.toString(randomDate.getMonthOfYear()));
         record.put("birthDateDay", Integer.toString(randomDate.getDayOfMonth()));
         record.put("birthplaceCountry", "USA");
-        record.put("birthplaceState", _STATE_VALUES.getRandomValue());
+        record.put("birthplaceState", _stateValues.getRandomValue());
     }
 
     /**
      * There is a 90% chance that the birth state will be the registry state (if defined); the remaining 10% is divided equally among the remaining states.
      * If there is no registry state defined in the options, the probability will be equal for all states.
      */
-    private static DistributedRandomValueGenerator getBirthStateGenerator(NaaccrDataGeneratorOptions options) {
+    private DistributedRandomValueGenerator getBirthStateGenerator(NaaccrDataGeneratorOptions options) {
         DistributedRandomValueGenerator generator = new DistributedRandomValueGenerator();
 
         Set<String> states = Sets.newHashSet("AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT",
