@@ -232,11 +232,15 @@ public final class NaaccrDataGenerator {
      * @return generated patient as a list of tumor maps, never null
      */
     public List<Map<String, String>> generatePatient(int numTumors, NaaccrDataGeneratorOptions options) {
-        List<Map<String, String>> tumors = new ArrayList<>();
+        // make sure number of tumors is valid
+        if (numTumors < 1)
+            throw new IllegalArgumentException("Number of tumors must be greater than 0");
 
         // make sure options are never null
         if (options == null)
             options = new NaaccrDataGeneratorOptions();
+
+        List<Map<String, String>> tumors = new ArrayList<>();
 
         // execute the patient rules once; we will copy the resulting values in each tumor
         Map<String, String> patient = new HashMap<>();
@@ -280,8 +284,9 @@ public final class NaaccrDataGenerator {
      * @param options options that will be provided to every rules.
      */
     public void generateFile(File file, int numTumors, NaaccrDataGeneratorOptions options) throws IOException {
+        // make sure number of tumors is valid
         if (numTumors < 1)
-            throw new RuntimeException("Number of tumors must be greater than 0.");
+            throw new IllegalArgumentException("Number of tumors must be greater than 0");
 
         // make sure options are never null
         if (options == null)

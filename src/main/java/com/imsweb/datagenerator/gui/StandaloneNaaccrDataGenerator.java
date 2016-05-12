@@ -394,15 +394,21 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
 
                 // create the options
                 NaaccrDataGeneratorOptions options = new NaaccrDataGeneratorOptions();
-                if (_numTumPerPatFixed.isSelected())
-                    options.setNumTumorsPerPatient(Integer.valueOf((String)_numTumPerPatBox.getSelectedItem()));
-                options.setMinDxYear(dxStart);
-                options.setMaxDxYear(dxEnd);
-                String state = (String)_stateBox.getSelectedItem();
-                if (state.matches("[A-Z][A-Z]"))
-                    options.setState(state);
-                if (_vsBox.getSelectedItem().toString().toLowerCase().contains("coc"))
-                    options.setVitalStatusDeadValue("0");
+                try {
+                    if (_numTumPerPatFixed.isSelected())
+                        options.setNumTumorsPerPatient(Integer.valueOf(((String)_numTumPerPatBox.getSelectedItem()).trim()));
+                    options.setMinDxYear(dxStart);
+                    options.setMaxDxYear(dxEnd);
+                    String state = (String)_stateBox.getSelectedItem();
+                    if (state.matches("[A-Z][A-Z]"))
+                        options.setState(state);
+                    if (_vsBox.getSelectedItem().toString().toLowerCase().contains("coc"))
+                        options.setVitalStatusDeadValue("0");
+                }
+                catch (IllegalArgumentException exception) {
+                    JOptionPane.showMessageDialog(StandaloneNaaccrDataGenerator.this, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
                 // and finally, create and show a progress dialog
                 final ProgressDialog progressDlg = new ProgressDialog(StandaloneNaaccrDataGenerator.this, targetFile, numRecords, layoutId, options);
