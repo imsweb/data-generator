@@ -3,6 +3,7 @@
  */
 package com.imsweb.datagenerator.naaccr;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import org.joda.time.LocalDate;
@@ -34,7 +35,12 @@ public class NaaccrDataGeneratorOptions {
         return _numTumorsPerPatient;
     }
 
+    /**
+     * @param numTumorsPerPatient must be between 1 and 10, inclusive
+     */
     public void setNumTumorsPerPatient(Integer numTumorsPerPatient) {
+        if (numTumorsPerPatient < 1 || numTumorsPerPatient > 10)
+            throw new IllegalArgumentException("Number of tumors per patient must be between 1 and 10");
         _numTumorsPerPatient = numTumorsPerPatient;
     }
 
@@ -42,7 +48,17 @@ public class NaaccrDataGeneratorOptions {
         return _state;
     }
 
+    /**
+     * @param state must be null, blank, or a valid two-letter abbreviation of a US state - null or blank state will prevent address-based rules from running
+     */
     public void setState(String state) {
+        // validate state - to be valid, state must have an associated zip_codes/xx.csv resource file
+        if (state != null && !state.isEmpty() && !Arrays.asList("AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI",
+                "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY")
+                .contains(state.toUpperCase()))
+            throw new IllegalArgumentException("State '" + state + "' is not a valid US state");
+        if (state != null && state.isEmpty())
+            state = null;
         _state = state;
     }
 
@@ -66,7 +82,14 @@ public class NaaccrDataGeneratorOptions {
         return _maxDxYear;
     }
 
+    /**
+     * @param maxDxYear maximum year of diagnosis (must be greater than or equal to min year of diagnosis and between 1900 and 2100, inclusive
+     */
     public void setMaxDxYear(Integer maxDxYear) {
+        if (maxDxYear < 1900 || maxDxYear > 2100)
+            throw new IllegalArgumentException("Max DX Year must be between 1900 and 2100");
+        if (_minDxYear != null && _minDxYear > maxDxYear)
+            throw new IllegalArgumentException("Max DX Year must be greater than or equal to Min DX Year (" + _minDxYear + ")");
         _maxDxYear = maxDxYear;
     }
 
@@ -74,7 +97,14 @@ public class NaaccrDataGeneratorOptions {
         return _minDxYear;
     }
 
+    /**
+     * @param minDxYear minimum year of diagnosis (must be less than or equal to max year of diagnosis and between 1900 and 2100, inclusive
+     */
     public void setMinDxYear(Integer minDxYear) {
+        if (minDxYear < 1900 || minDxYear > 2100)
+            throw new IllegalArgumentException("Min DX Year must be between 1900 and 2100");
+        if (_maxDxYear != null && _maxDxYear < minDxYear)
+            throw new IllegalArgumentException("Min DX Year must be less than or equal to Max DX Year (" + _maxDxYear + ")");
         _minDxYear = minDxYear;
     }
 
@@ -87,7 +117,7 @@ public class NaaccrDataGeneratorOptions {
     }
 
     /**
-     * Returns min DX date. 
+     * Returns min DX date.
      * If min DX year was not defined, this will return the current year minus ten years.
      * If min DX year was defined, this will return the first day of that year
      */
@@ -96,8 +126,8 @@ public class NaaccrDataGeneratorOptions {
     }
 
     /**
-     * Returns max DX date. 
-     * If max DX year was not defined this will return the current date. 
+     * Returns max DX date.
+     * If max DX year was not defined this will return the current date.
      * If max DX year was defined, this will return the last day of that year (if max DX year is current year, this could return a future date)
      */
     public LocalDate getMaxDxDate() {
