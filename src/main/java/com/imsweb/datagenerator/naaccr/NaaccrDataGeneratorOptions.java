@@ -3,10 +3,9 @@
  */
 package com.imsweb.datagenerator.naaccr;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Map;
-
-import org.joda.time.LocalDate;
 
 public class NaaccrDataGeneratorOptions {
 
@@ -122,7 +121,7 @@ public class NaaccrDataGeneratorOptions {
      * If min DX year was defined, this will return the first day of that year
      */
     public LocalDate getMinDxDate() {
-        return _minDxYear == null ? LocalDate.now().minusYears(10) : new LocalDate(_minDxYear, 1, 1);
+        return _minDxYear == null ? LocalDate.now().minusYears(10) : LocalDate.of(_minDxYear, 1, 1);
     }
 
     /**
@@ -133,6 +132,6 @@ public class NaaccrDataGeneratorOptions {
     public LocalDate getMaxDxDate() {
         if (_maxDxYear == null || _maxDxYear == LocalDate.now().getYear())
             return LocalDate.now();
-        return new LocalDate(_maxDxYear, 12, 31);
+        return LocalDate.of(_maxDxYear, 12, 31);
     }
 }

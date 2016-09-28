@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 
 public abstract class NaaccrDataGeneratorRule {
 

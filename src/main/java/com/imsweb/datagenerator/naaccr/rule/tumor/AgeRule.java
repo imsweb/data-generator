@@ -1,11 +1,10 @@
 package com.imsweb.datagenerator.naaccr.rule.tumor;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import org.joda.time.LocalDate;
-import org.joda.time.Years;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
@@ -32,13 +31,13 @@ public class AgeRule extends NaaccrDataGeneratorRule {
         Integer birthYear = Integer.valueOf(record.get("birthDateYear"));
         Integer birthMonth = Integer.valueOf(record.get("birthDateMonth"));
         Integer birthDay = Integer.valueOf(record.get("birthDateDay"));
-        LocalDate birthDate = new LocalDate(birthYear, birthMonth, birthDay);
+        LocalDate birthDate = LocalDate.of(birthYear, birthMonth, birthDay);
 
         Integer dxYear = Integer.valueOf(record.get("dateOfDiagnosisYear"));
         Integer dxMonth = Integer.valueOf(record.get("dateOfDiagnosisMonth"));
         Integer dxDay = Integer.valueOf(record.get("dateOfDiagnosisDay"));
-        LocalDate dxDate = new LocalDate(dxYear, dxMonth, dxDay);
+        LocalDate dxDate = LocalDate.of(dxYear, dxMonth, dxDay);
 
-        record.put("ageAtDx", String.format("%03d", Years.yearsBetween(birthDate, dxDate).getYears()));
+        record.put("ageAtDx", String.format("%03d", ChronoUnit.YEARS.between(birthDate, dxDate)));
     }
 }

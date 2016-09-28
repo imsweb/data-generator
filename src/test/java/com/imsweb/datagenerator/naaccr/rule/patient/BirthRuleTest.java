@@ -3,7 +3,8 @@ package com.imsweb.datagenerator.naaccr.rule.patient;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -26,7 +27,7 @@ public class BirthRuleTest {
         Assert.assertTrue(rec.get("birthDateDay").matches("\\d{1,2}"));
 
         // it should be in a specific range
-        LocalDate assignedDate = new LocalDate(Integer.parseInt(rec.get("birthDateYear")), Integer.parseInt(rec.get("birthDateMonth")), Integer.parseInt(rec.get("birthDateDay")));
+        LocalDate assignedDate = LocalDate.of(Integer.parseInt(rec.get("birthDateYear")), Integer.parseInt(rec.get("birthDateMonth")), Integer.parseInt(rec.get("birthDateDay")));
         Assert.assertTrue(assignedDate.toString(), assignedDate.isBefore(options.getMinDxDate().minusYears(5).plusDays(1)) &&
                 assignedDate.isAfter(options.getMinDxDate().minusYears(105).minusDays(1)));
 

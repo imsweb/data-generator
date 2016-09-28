@@ -25,6 +25,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -53,7 +55,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import org.apache.commons.io.IOUtils;
-import org.joda.time.LocalDate;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.layout.LayoutFactory;
@@ -121,18 +122,10 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         centerPnl.add(createControlsPanel());
         this.getContentPane().add(centerPnl, BorderLayout.CENTER);
 
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException(Thread t, final Throwable e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        String msg = "An unexpected error happened, it is recommended to close the application.\n\n   Error: " + (e.getMessage() == null ? "null access" : e.getMessage());
-                        JOptionPane.showMessageDialog(StandaloneNaaccrDataGenerator.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                });
-            }
-        });
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> SwingUtilities.invokeLater(() -> {
+            String msg = "An unexpected error happened, it is recommended to close the application.\n\n   Error: " + (e.getMessage() == null ? "null access" : e.getMessage());
+            JOptionPane.showMessageDialog(StandaloneNaaccrDataGenerator.this, msg, "Error", JOptionPane.ERROR_MESSAGE);
+        }));
 
         this.addComponentListener(new ComponentAdapter() {
             @Override
@@ -149,7 +142,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         // this will make it work when running from the JAR file
         try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("DATA-GENERATOR-VERSION")) {
             if (is != null)
-                version = IOUtils.readLines(is).get(0);
+                version = IOUtils.readLines(is, StandardCharsets.UTF_8).get(0);
         }
         catch (IOException e) {
             version = null;
@@ -158,7 +151,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         // this will make it work when running from an IDE
         if (version == null) {
             try (FileInputStream is = new FileInputStream(System.getProperty("user.dir") + File.separator + "VERSION")) {
-                version = IOUtils.readLines(is).get(0);
+                version = IOUtils.readLines(is, StandardCharsets.UTF_8).get(0);
             }
             catch (IOException e) {
                 version = null;
@@ -195,13 +188,10 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         pathPnl.add(_targetFld);
         pathPnl.add(Box.createHorizontalStrut(10));
         JButton browseBtn = new JButton("Browse...");
-        browseBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (_fileChooser.showDialog(StandaloneNaaccrDataGenerator.this, "Select") == JFileChooser.APPROVE_OPTION) {
-                    File file = new File(_targetFld.getText());
-                    _targetFld.setText(new File(_fileChooser.getSelectedFile(), file.getName()).getPath());
-                }
+        browseBtn.addActionListener(e -> {
+            if (_fileChooser.showDialog(StandaloneNaaccrDataGenerator.this, "Select") == JFileChooser.APPROVE_OPTION) {
+                File file = new File(_targetFld.getText());
+                _targetFld.setText(new File(_fileChooser.getSelectedFile(), file.getName()).getPath());
             }
         });
         pathPnl.add(browseBtn);
@@ -215,12 +205,9 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         formatPnl.add(new JLabel("Format:"));
         formatPnl.add(Box.createHorizontalStrut(5));
         _formatBox = new JComboBox<>(new String[] {_FORMAT_16_ABS, _FORMAT_16_INC, _FORMAT_15_ABS, _FORMAT_15_INC});
-        _formatBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!_targetFld.getText().isEmpty())
-                    _targetFld.setText(fixTargetFile());
-            }
+        _formatBox.addActionListener(e -> {
+            if (!_targetFld.getText().isEmpty())
+                _targetFld.setText(fixTargetFile());
         });
         formatPnl.add(_formatBox);
         formatPnl.add(Box.createHorizontalStrut(15));
@@ -229,12 +216,9 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         formatPnl.add(new JLabel("Compression:"));
         formatPnl.add(Box.createHorizontalStrut(5));
         _compressionBox = new JComboBox<>(new String[] {_COMPRESSION_NONE, _COMPRESSION_GZIP});
-        _compressionBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!_targetFld.getText().isEmpty())
-                    _targetFld.setText(fixTargetFile());
-            }
+        _compressionBox.addActionListener(e -> {
+            if (!_targetFld.getText().isEmpty())
+                _targetFld.setText(fixTargetFile());
         });
         formatPnl.add(_compressionBox);
         filePnl.add(formatPnl);
@@ -352,79 +336,73 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         JPanel pnl = new JPanel();
         pnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
         _processBtn = new JButton("Create File");
-        _processBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        _processBtn.addActionListener(e -> {
 
-                // get the target file
-                File targetFile = new File(_targetFld.getText());
-                if (targetFile.exists()) {
-                    String msg = "Target file already exists, are you sure you want to replace it?";
-                    int result = JOptionPane.showConfirmDialog(StandaloneNaaccrDataGenerator.this, msg, "Confirmation", JOptionPane.YES_NO_OPTION);
-                    if (result != JOptionPane.YES_OPTION)
-                        return;
-                }
-
-                // get the number of records
-                String numRecsRaw = _numRecFld.getText().trim();
-                if (!numRecsRaw.matches("\\d+") || numRecsRaw.length() > 8) {
-                    String message = "Wrong format for number of records, needs to be 1 to 8 digits.";
-                    JOptionPane.showMessageDialog(StandaloneNaaccrDataGenerator.this, message, "Error", JOptionPane.ERROR_MESSAGE);
+            // get the target file
+            File targetFile = new File(_targetFld.getText());
+            if (targetFile.exists()) {
+                String msg = "Target file already exists, are you sure you want to replace it?";
+                int result = JOptionPane.showConfirmDialog(StandaloneNaaccrDataGenerator.this, msg, "Confirmation", JOptionPane.YES_NO_OPTION);
+                if (result != JOptionPane.YES_OPTION)
                     return;
-                }
-                int numRecords = Integer.parseInt(numRecsRaw);
-
-                // get the DX year range
-                String dxYearRaw = _dxYearFld.getText();
-                if (!dxYearRaw.matches("\\d{4}-\\d{4}") && !dxYearRaw.matches("\\d{4}")) {
-                    String message = "Wrong format for DX year, needs to be nnnn or nnnn-nnnn.";
-                    JOptionPane.showMessageDialog(StandaloneNaaccrDataGenerator.this, message, "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                int dxStart, dxEnd;
-                if (dxYearRaw.contains("-")) {
-                    dxStart = Integer.parseInt(dxYearRaw.split("-")[0]);
-                    dxEnd = Integer.parseInt(dxYearRaw.split("-")[1]);
-                }
-                else
-                    dxStart = dxEnd = Integer.parseInt(dxYearRaw);
-
-                // get the layout ID
-                String layoutId = getFormatIdFromLabel((String)_formatBox.getSelectedItem());
-
-                // create the options
-                NaaccrDataGeneratorOptions options = new NaaccrDataGeneratorOptions();
-                try {
-                    if (_numTumPerPatFixed.isSelected())
-                        options.setNumTumorsPerPatient(Integer.valueOf(((String)_numTumPerPatBox.getSelectedItem()).trim()));
-                    options.setMinDxYear(dxStart);
-                    options.setMaxDxYear(dxEnd);
-                    String state = (String)_stateBox.getSelectedItem();
-                    if (state.matches("[A-Z][A-Z]"))
-                        options.setState(state);
-                    if (_vsBox.getSelectedItem().toString().toLowerCase().contains("coc"))
-                        options.setVitalStatusDeadValue("0");
-                }
-                catch (IllegalArgumentException exception) {
-                    JOptionPane.showMessageDialog(StandaloneNaaccrDataGenerator.this, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                // and finally, create and show a progress dialog
-                final ProgressDialog progressDlg = new ProgressDialog(StandaloneNaaccrDataGenerator.this, targetFile, numRecords, layoutId, options);
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        // show the dialog in the center of the parent window
-                        Component parent = StandaloneNaaccrDataGenerator.this;
-                        Point center = new Point();
-                        center.setLocation(parent.getLocationOnScreen().x + parent.getWidth() / 2, parent.getLocationOnScreen().y + parent.getHeight() / 2);
-                        progressDlg.pack();
-                        progressDlg.setLocation(center.x - progressDlg.getWidth() / 2, center.y - progressDlg.getHeight() / 2);
-                        progressDlg.setVisible(true);
-                    }
-                });
             }
+
+            // get the number of records
+            String numRecsRaw = _numRecFld.getText().trim();
+            if (!numRecsRaw.matches("\\d+") || numRecsRaw.length() > 8) {
+                String message = "Wrong format for number of records, needs to be 1 to 8 digits.";
+                JOptionPane.showMessageDialog(StandaloneNaaccrDataGenerator.this, message, "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            int numRecords = Integer.parseInt(numRecsRaw);
+
+            // get the DX year range
+            String dxYearRaw = _dxYearFld.getText();
+            if (!dxYearRaw.matches("\\d{4}-\\d{4}") && !dxYearRaw.matches("\\d{4}")) {
+                String message = "Wrong format for DX year, needs to be nnnn or nnnn-nnnn.";
+                JOptionPane.showMessageDialog(StandaloneNaaccrDataGenerator.this, message, "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            int dxStart, dxEnd;
+            if (dxYearRaw.contains("-")) {
+                dxStart = Integer.parseInt(dxYearRaw.split("-")[0]);
+                dxEnd = Integer.parseInt(dxYearRaw.split("-")[1]);
+            }
+            else
+                dxStart = dxEnd = Integer.parseInt(dxYearRaw);
+
+            // get the layout ID
+            String layoutId = getFormatIdFromLabel((String)_formatBox.getSelectedItem());
+
+            // create the options
+            NaaccrDataGeneratorOptions options = new NaaccrDataGeneratorOptions();
+            try {
+                if (_numTumPerPatFixed.isSelected())
+                    options.setNumTumorsPerPatient(Integer.valueOf(((String)_numTumPerPatBox.getSelectedItem()).trim()));
+                options.setMinDxYear(dxStart);
+                options.setMaxDxYear(dxEnd);
+                String state1 = (String)_stateBox.getSelectedItem();
+                if (state1.matches("[A-Z][A-Z]"))
+                    options.setState(state1);
+                if (_vsBox.getSelectedItem().toString().toLowerCase().contains("coc"))
+                    options.setVitalStatusDeadValue("0");
+            }
+            catch (IllegalArgumentException exception) {
+                JOptionPane.showMessageDialog(StandaloneNaaccrDataGenerator.this, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // and finally, create and show a progress dialog
+            final ProgressDialog progressDlg = new ProgressDialog(StandaloneNaaccrDataGenerator.this, targetFile, numRecords, layoutId, options);
+            SwingUtilities.invokeLater(() -> {
+                // show the dialog in the center of the parent window
+                Component parent1 = StandaloneNaaccrDataGenerator.this;
+                Point center = new Point();
+                center.setLocation(parent1.getLocationOnScreen().x + parent1.getWidth() / 2, parent1.getLocationOnScreen().y + parent1.getHeight() / 2);
+                progressDlg.pack();
+                progressDlg.setLocation(center.x - progressDlg.getWidth() / 2, center.y - progressDlg.getHeight() / 2);
+                progressDlg.setVisible(true);
+            });
         });
         pnl.add(_processBtn);
         return pnl;
@@ -496,12 +474,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             Point center = new Point(screenSize.width / 2, screenSize.height / 2);
             dlg.setLocation(center.x - dlg.getWidth() / 2, center.y - dlg.getHeight() / 2);
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    dlg.setVisible(true);
-                }
-            });
+            SwingUtilities.invokeLater(() -> dlg.setVisible(true));
         }
     }
 
@@ -528,11 +501,6 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         Point center = new Point(screenSize.width / 2, screenSize.height / 2);
         frame.setLocation(center.x - frame.getWidth() / 2, center.y - frame.getHeight() / 2);
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                frame.setVisible(true);
-            }
-        });
+        SwingUtilities.invokeLater(() -> frame.setVisible(true));
     }
 }

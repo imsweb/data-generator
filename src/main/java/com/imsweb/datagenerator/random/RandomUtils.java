@@ -1,11 +1,10 @@
 package com.imsweb.datagenerator.random;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
-
-import org.joda.time.Days;
-import org.joda.time.LocalDate;
 
 public class RandomUtils {
 
@@ -49,7 +48,7 @@ public class RandomUtils {
     public static LocalDate getRandomDateBetween(LocalDate date1, LocalDate date2) {
         if (date1 == null || date2 == null)
             throw new RuntimeException("Neither date may be null");
-        int randomOffset = RandomUtils.nextIntInRange(0, Math.abs(Days.daysBetween(date1, date2).getDays()));
+        int randomOffset = RandomUtils.nextIntInRange(0, Math.abs((int)ChronoUnit.DAYS.between(date1, date2)));
         return date1.isBefore(date2) ? date1.plusDays(randomOffset) : date2.plusDays(randomOffset);
     }
 }

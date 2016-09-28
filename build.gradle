@@ -5,7 +5,7 @@ plugins {
     id 'checkstyle'
     id 'findbugs'
     id 'com.bmuschko.nexus' version '2.3.1'
-    id 'com.github.johnrengelman.shadow' version '1.2.1'
+    id 'com.github.johnrengelman.shadow' version '1.2.3'
 }
 
 group = 'com.imsweb'
@@ -19,10 +19,10 @@ repositories {
 }
 
 dependencies {
-    compile 'commons-io:commons-io:2.4'
-    compile 'com.imsweb:layout:1.3.3'
-    compile 'com.imsweb:staging-client-java:2.0'
+    compile 'com.imsweb:layout:1.4'
     compile 'com.imsweb:algorithms:1.4'
+    compile 'com.imsweb:staging-client-java:2.3'
+    compile 'commons-io:commons-io:2.5'
     testCompile 'junit:junit:4.12'
 }
 
@@ -43,8 +43,7 @@ jar {
                 'Built-By': System.getProperty('user.name'),
                 'Built-Date': new Date(),
                 'Built-JDK': System.getProperty('java.version'),
-                'Main-Class': 'com.imsweb.datagenerator.gui.StandaloneNaaccrDataGenerator',
-                'Class-Path': configurations.compile.collect { it.getName() }.join(' '))
+                'Main-Class': 'com.imsweb.datagenerator.gui.StandaloneNaaccrDataGenerator')
     }
     from ('VERSION') {
         rename 'VERSION', 'DATA-GENERATOR-VERSION'
@@ -54,14 +53,20 @@ jar {
     }
 }
 
+// this sucks, but they made the Javadoc way too stritct in Java 8 and it's not worth my time fixing it!
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
+
+
 // we don't want these files in the "all" jar, it's confusing
 shadowJar {
     exclude('XMLPULL_1_1_3_1_VERSION')
     exclude('XPP3_1.1.4c_MIN_VERSION')
-    from ('VERSION') {
+    from('VERSION') {
         rename 'VERSION', 'DATA-GENERATOR-VERSION'
     }
-    from ('LICENSE') {
+    from('LICENSE') {
         rename 'LICENSE', 'DATA-GENERATOR-LICENSE'
     }
 }

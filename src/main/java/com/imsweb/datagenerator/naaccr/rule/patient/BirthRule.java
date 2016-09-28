@@ -1,12 +1,10 @@
 package com.imsweb.datagenerator.naaccr.rule.patient;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.joda.time.LocalDate;
-
-import com.google.common.collect.Sets;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
@@ -36,14 +34,14 @@ public class BirthRule extends NaaccrDataGeneratorRule {
             _stateValues = getBirthStateGenerator(options);
 
         // birth date should be no later than five years prior to min dx date (or current date if min dx date not defined)
-        LocalDate maxBirthDate = options == null ? LocalDate.now().minusYears(15) : options.getMinDxDate().minusYears(5);
+        java.time.LocalDate maxBirthDate = options == null ? java.time.LocalDate.now().minusYears(15) : options.getMinDxDate().minusYears(5);
         // limit age to max 100 years
-        LocalDate minBirthDate = maxBirthDate.minusYears(100);
+        java.time.LocalDate minBirthDate = maxBirthDate.minusYears(100);
 
-        LocalDate randomDate = RandomUtils.getRandomDateBetween(minBirthDate, maxBirthDate);
+        java.time.LocalDate randomDate = RandomUtils.getRandomDateBetween(minBirthDate, maxBirthDate);
 
         record.put("birthDateYear", Integer.toString(randomDate.getYear()));
-        record.put("birthDateMonth", Integer.toString(randomDate.getMonthOfYear()));
+        record.put("birthDateMonth", Integer.toString(randomDate.getMonthValue()));
         record.put("birthDateDay", Integer.toString(randomDate.getDayOfMonth()));
         record.put("birthplaceCountry", "USA");
         record.put("birthplaceState", _stateValues.getRandomValue());
@@ -56,8 +54,9 @@ public class BirthRule extends NaaccrDataGeneratorRule {
     private DistributedRandomValueGenerator getBirthStateGenerator(NaaccrDataGeneratorOptions options) {
         DistributedRandomValueGenerator generator = new DistributedRandomValueGenerator();
 
-        Set<String> states = Sets.newHashSet("AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT",
-                "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY");
+        Set<String> states = new HashSet<>(
+                Arrays.asList("AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT",
+                        "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"));
 
         double pSum = 1.0;
         // if DX state is defined, set probability for that state to 90% and remove it from the list of states to be divided
