@@ -21,8 +21,8 @@ public class DateOfDiagnosisRuleTest {
         for (int i = 0; i < 10; i++) {
             List<Map<String, String>> records = new ArrayList<>();
 
-            // generate 5 tumors for this patient
-            for (int j = 0; j < 5; j++) {
+            // generate 10 tumors for this patient
+            for (int j = 0; j < 10; j++) {
                 Map<String, String> rec = new HashMap<>();
                 _rule.execute(rec, records, null);
 
@@ -42,6 +42,10 @@ public class DateOfDiagnosisRuleTest {
             for (Map<String, String> otherRec : records) {
                 int assignedYear = Integer.parseInt(otherRec.get("dateOfDiagnosisYear"));
                 Assert.assertTrue(assignedYear >= currentYear - 10 && assignedYear <= currentYear && assignedYear >= firstAssignedYear);
+
+                // all dates generated should be on or before the current date because no options were passed
+                LocalDate dxDate = LocalDate.of(Integer.parseInt(otherRec.get("dateOfDiagnosisYear")), Integer.parseInt(otherRec.get("dateOfDiagnosisMonth")), Integer.parseInt(otherRec.get("dateOfDiagnosisDay")));
+                Assert.assertTrue("Future date: " + dxDate.toString(), LocalDate.now().plusDays(1).isAfter(dxDate));
             }
         }
     }

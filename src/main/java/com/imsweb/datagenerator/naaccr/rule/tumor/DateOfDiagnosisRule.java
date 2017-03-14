@@ -41,7 +41,7 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
         if (!otherRecords.isEmpty()) {
             Map<String, String> lastTumor = otherRecords.get(otherRecords.size() - 1);
             minDxDates.add(LocalDate.of(Integer.parseInt(lastTumor.get("dateOfDiagnosisYear")), Integer.parseInt(lastTumor.get("dateOfDiagnosisMonth")),
-                    Integer.parseInt(lastTumor.get("dateOfDiagnosisDay"))).plusDays(1));
+                    Integer.parseInt(lastTumor.get("dateOfDiagnosisDay"))));
         }
 
         LocalDate randomDate = RandomUtils.getRandomDateBetween(minDxDates, maxDxDates);
