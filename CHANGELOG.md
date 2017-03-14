@@ -1,5 +1,8 @@
 ## Synthetic data generator
 
+**Changes in version 0.4**
+ - Fixed bug where dx date and date of last contact could be later than the max date
+
 **Changes in version 0.3**
 
  - Removed Class-Path attribute from generated JAR.
