@@ -256,11 +256,12 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         JPanel registryId = new JPanel();
         registryId.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         registryId.setBorder(null);
-        registryId.add(new JLabel("Registry Id: "));
+        registryId.add(new JLabel("Registry ID: "));
         registryId.add(Box.createHorizontalStrut(5));
         _registryIdFld = new JTextField(10);
         registryId.add(_registryIdFld);
         registryId.add(Box.createHorizontalStrut(5));
+        registryId.add(new JLabel("- optional, corresponds to NAACCR Item #40."));
         optionsPnl.add(registryId);
         optionsPnl.add(Box.createVerticalStrut(15));
 
