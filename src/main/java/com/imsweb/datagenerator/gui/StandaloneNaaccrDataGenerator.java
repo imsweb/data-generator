@@ -75,7 +75,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
     protected static final String _FORMAT_15_INC = "NAACCR 15 Incidence (3,339 characters)";
 
     protected JFileChooser _fileChooser;
-    protected JTextField _targetFld, _numRecFld, _dxYearFld;
+    protected JTextField _targetFld, _numRecFld, _dxYearFld, _registryIdFld;
     protected JRadioButton _numTumPerPatRandom, _numTumPerPatFixed;
     protected JComboBox<String> _compressionBox, _formatBox, _numTumPerPatBox, _stateBox, _vsBox;
     protected JButton _processBtn;
@@ -252,6 +252,18 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         optionsPnl.setBorder(new CompoundBorder(border, new EmptyBorder(10, 15, 5, 15)));
         pnl.add(optionsPnl);
 
+        // registry id
+        JPanel registryId = new JPanel();
+        registryId.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+        registryId.setBorder(null);
+        registryId.add(new JLabel("Registry Id: "));
+        registryId.add(Box.createHorizontalStrut(5));
+        _registryIdFld = new JTextField(15);
+        registryId.add(_registryIdFld);
+        registryId.add(Box.createHorizontalStrut(5));
+        optionsPnl.add(registryId);
+        optionsPnl.add(Box.createVerticalStrut(15));
+
         // number of tumor per patient
         JPanel numTumPerPat = new JPanel();
         numTumPerPat.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
@@ -381,6 +393,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
                     options.setNumTumorsPerPatient(Integer.valueOf(((String)_numTumPerPatBox.getSelectedItem()).trim()));
                 options.setMinDxYear(dxStart);
                 options.setMaxDxYear(dxEnd);
+                options.setRegistryId(_registryIdFld.getText());
                 String state1 = (String)_stateBox.getSelectedItem();
                 if (state1.matches("[A-Z][A-Z]"))
                     options.setState(state1);
