@@ -16,6 +16,7 @@ public class RegistryIdRule extends NaaccrDataGeneratorRule {
 
     @Override
     public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
-        record.put("registryId", options.getRegistryId() == null ? "" : options.getRegistryId());
+        if(options.getRegistryId() != null && !"".equals(options.getRegistryId()))
+            record.put("registryId", options.getRegistryId());
     }
 }

@@ -30,7 +30,7 @@ public class NaaccrDataGeneratorOptions {
     // the value to use for DEAD vital status (SEER uses 4 and COC uses 0); defaults to 4
     protected String _vitalStatusDeadValue;
 
-    //
+    // Registry ID (NAACCR Item #40)
     protected String _registryId;
 
     public Integer getNumTumorsPerPatient() {

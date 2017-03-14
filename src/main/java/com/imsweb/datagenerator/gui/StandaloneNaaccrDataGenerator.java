@@ -258,7 +258,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         registryId.setBorder(null);
         registryId.add(new JLabel("Registry Id: "));
         registryId.add(Box.createHorizontalStrut(5));
-        _registryIdFld = new JTextField(15);
+        _registryIdFld = new JTextField(10);
         registryId.add(_registryIdFld);
         registryId.add(Box.createHorizontalStrut(5));
         optionsPnl.add(registryId);
@@ -383,6 +383,15 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
             else
                 dxStart = dxEnd = Integer.parseInt(dxYearRaw);
 
+            String registryIdRaw = _registryIdFld.getText();
+            // if the user has entered 1 or more only whitespace characters, give an error
+            if(registryIdRaw.length() > 0 && "".equals(registryIdRaw.trim())) {
+                String message = "Registry ID cannot be whitespace. Leave this field empty to create data with no Registry ID.";
+                JOptionPane.showMessageDialog(StandaloneNaaccrDataGenerator.this, message, "Error", JOptionPane.ERROR_MESSAGE);
+                _registryIdFld.setText("");
+                return;
+            }
+
             // get the layout ID
             String layoutId = getFormatIdFromLabel((String)_formatBox.getSelectedItem());
 
@@ -393,7 +402,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
                     options.setNumTumorsPerPatient(Integer.valueOf(((String)_numTumPerPatBox.getSelectedItem()).trim()));
                 options.setMinDxYear(dxStart);
                 options.setMaxDxYear(dxEnd);
-                options.setRegistryId(_registryIdFld.getText());
+                options.setRegistryId(registryIdRaw);
                 String state1 = (String)_stateBox.getSelectedItem();
                 if (state1.matches("[A-Z][A-Z]"))
                     options.setState(state1);
