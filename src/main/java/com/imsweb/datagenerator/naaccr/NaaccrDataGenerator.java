@@ -43,6 +43,7 @@ import com.imsweb.datagenerator.naaccr.rule.tumor.MultiTumorsRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.NapiiaRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.NhiaRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.PrimaryPayerRule;
+import com.imsweb.datagenerator.naaccr.rule.tumor.RegistryIdRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.ReportingSourceRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.RxSummaryRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.SeerCodingSystemRule;
@@ -102,6 +103,7 @@ public final class NaaccrDataGenerator {
         _patientRules.add(new IhsRule());
 
         // default tumor rules
+        _tumorRules.add(new RegistryIdRule());
         _tumorRules.add(new TumorRecordNumberRule());
         _tumorRules.add(new SeerRecordNumberRule());
         _tumorRules.add(new SequenceNumberCentralRule());

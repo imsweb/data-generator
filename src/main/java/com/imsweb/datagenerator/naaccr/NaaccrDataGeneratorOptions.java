@@ -30,6 +30,9 @@ public class NaaccrDataGeneratorOptions {
     // the value to use for DEAD vital status (SEER uses 4 and COC uses 0); defaults to 4
     protected String _vitalStatusDeadValue;
 
+    // Registry ID (NAACCR Item #40)
+    protected String _registryId;
+
     public Integer getNumTumorsPerPatient() {
         return _numTumorsPerPatient;
     }
@@ -133,5 +136,13 @@ public class NaaccrDataGeneratorOptions {
         if (_maxDxYear == null || _maxDxYear == LocalDate.now().getYear())
             return LocalDate.now();
         return LocalDate.of(_maxDxYear, 12, 31);
+    }
+
+    public void setRegistryId(String registryId) {
+        _registryId = registryId;
+    }
+
+    public String getRegistryId() {
+        return _registryId;
     }
 }
