@@ -1,7 +1,9 @@
 ## Synthetic data generator
 
 **Changes in version 0.4**
- - Fixed bug where dx date and date of last contact could be later than the max date
+
+ - Added new parameter for Registry ID.
+ - Fixed bug where DX date and/or DOLC could be set to a future date.
 
 **Changes in version 0.3**
 
