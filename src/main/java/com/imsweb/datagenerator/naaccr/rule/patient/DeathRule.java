@@ -12,11 +12,19 @@ public class DeathRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "death";
 
+    private static final String _CRITERIA = "If Vital Status was set to 1, Cause of Death will be set to 0000 and ICD Revision Number will be set to 0.<br/>"
+            + "Otherwise these fields are not set";
+
     /**
      * Constructor.
      */
     public DeathRule() {
         super(ID, "Cause of death and ICD Revision Number");
+    }
+
+    @Override
+    public String getCriteria() {
+        return _CRITERIA;
     }
 
     @Override

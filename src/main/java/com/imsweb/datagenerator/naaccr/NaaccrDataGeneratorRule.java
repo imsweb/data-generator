@@ -38,6 +38,10 @@ public abstract class NaaccrDataGeneratorRule {
         return _name;
     }
 
+    public String getCriteria() {
+        return "No Description Available";
+    }
+
     /**
      * Returns the required properties for this rule. If one of those properties doesn't have a value, the rule will be skipped.
      */

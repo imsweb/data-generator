@@ -10,8 +10,16 @@ public class RegistryIdRule extends NaaccrDataGeneratorRule {
 
     public static final String ID = "registry_id";
 
+    private static final String _CRITERIA = "If a valid Registry ID is specified, every record will have this Registry ID.<br/>"
+            + "If no Registry ID is specified, the data file will have no Registry ID values";
+
     public RegistryIdRule() {
         super(ID, "Registry ID");
+    }
+
+    @Override
+    public String getCriteria() {
+        return _CRITERIA;
     }
 
     @Override

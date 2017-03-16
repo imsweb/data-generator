@@ -12,11 +12,20 @@ public class SsnRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "social-security-number";
 
+    private static final String _CRITERIA = "The first three digits are randomly generated between 001 and 649.<br/>"
+            + "The next two digits are randomly generated between 01 and 99.<br/>"
+            + "The last four digits are randomly generated between 0001 and 9999.";
+
     /**
      * Constructor.
      */
     public SsnRule() {
         super(ID, "Social Security Number");
+    }
+
+    @Override
+    public String getCriteria() {
+        return _CRITERIA;
     }
 
     @Override
