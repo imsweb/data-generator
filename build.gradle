@@ -16,10 +16,13 @@ println "Starting build using ${Jvm.current()}"
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
 }
 
 dependencies {
-    compile 'com.imsweb:layout:1.4'
+    compile 'com.imsweb:layout:1.4.2-hl7.1-SNAPSHOT'
     compile 'com.imsweb:algorithms:1.4'
     compile 'com.imsweb:staging-client-java:2.3'
     compile 'commons-io:commons-io:2.5'

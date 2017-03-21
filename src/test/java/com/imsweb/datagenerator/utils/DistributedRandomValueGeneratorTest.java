@@ -1,4 +1,4 @@
-package com.imsweb.datagenerator.random;
+package com.imsweb.datagenerator.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;

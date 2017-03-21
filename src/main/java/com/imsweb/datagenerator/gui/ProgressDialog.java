@@ -39,7 +39,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGenerator;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
-import com.imsweb.datagenerator.random.DistributedRandomValueGenerator;
+import com.imsweb.datagenerator.utils.DistributedRandomValueGenerator;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
 

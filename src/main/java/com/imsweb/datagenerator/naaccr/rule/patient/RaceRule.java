@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
-import com.imsweb.datagenerator.random.DistributedRandomValueGenerator;
+import com.imsweb.datagenerator.utils.DistributedRandomValueGenerator;
 
 public class RaceRule extends NaaccrDataGeneratorRule {
 

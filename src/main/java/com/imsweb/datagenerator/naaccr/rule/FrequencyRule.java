@@ -1,7 +1,7 @@
 package com.imsweb.datagenerator.naaccr.rule;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
-import com.imsweb.datagenerator.random.DistributedRandomValueGenerator;
+import com.imsweb.datagenerator.utils.DistributedRandomValueGenerator;
 
 public abstract class FrequencyRule extends NaaccrDataGeneratorRule {
 

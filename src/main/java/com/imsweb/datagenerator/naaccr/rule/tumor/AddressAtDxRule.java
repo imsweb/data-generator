@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.rule.AddressRule;
-import com.imsweb.datagenerator.random.RandomUtils;
+import com.imsweb.datagenerator.utils.RandomUtils;
 
 public class AddressAtDxRule extends AddressRule {
 

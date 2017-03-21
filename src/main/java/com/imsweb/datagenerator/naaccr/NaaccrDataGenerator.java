@@ -53,7 +53,7 @@ import com.imsweb.datagenerator.naaccr.rule.tumor.SequenceNumberCentralRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.SiteRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.TumorMarkerRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.TumorRecordNumberRule;
-import com.imsweb.datagenerator.random.DistributedRandomValueGenerator;
+import com.imsweb.datagenerator.utils.DistributedRandomValueGenerator;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
 

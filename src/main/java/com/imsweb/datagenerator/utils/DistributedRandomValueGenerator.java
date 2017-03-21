@@ -1,4 +1,4 @@
-package com.imsweb.datagenerator.random;
+package com.imsweb.datagenerator.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;

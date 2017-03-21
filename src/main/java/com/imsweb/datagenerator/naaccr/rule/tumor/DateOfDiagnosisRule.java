@@ -1,15 +1,14 @@
 package com.imsweb.datagenerator.naaccr.rule.tumor;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import java.time.LocalDate;
-
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
-import com.imsweb.datagenerator.random.RandomUtils;
+import com.imsweb.datagenerator.utils.RandomUtils;
 
 public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
 

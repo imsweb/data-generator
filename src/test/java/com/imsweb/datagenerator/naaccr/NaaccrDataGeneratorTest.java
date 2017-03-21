@@ -46,6 +46,7 @@ public class NaaccrDataGeneratorTest {
 
         // a layout is required
         try {
+            //noinspection ConstantConditions
             new NaaccrDataGenerator(null);
             Assert.fail();
         }
@@ -107,6 +108,7 @@ public class NaaccrDataGeneratorTest {
     }
 
     @Test
+    @SuppressWarnings("ConstantConditions")
     public void testGeneratePatient() throws IOException {
         NaaccrDataGenerator generator = new NaaccrDataGenerator(_LAYOUT);
 
