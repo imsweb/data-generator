@@ -8,6 +8,7 @@ import com.imsweb.datagenerator.hl7.NaaccrHl7DataGeneratorRule;
 import com.imsweb.datagenerator.utils.DistributedRandomValueGenerator;
 import com.imsweb.datagenerator.utils.RandomUtils;
 import com.imsweb.datagenerator.utils.UniformRandomValueGenerator;
+import com.imsweb.layout.hl7.entity.Hl7Component;
 import com.imsweb.layout.hl7.entity.Hl7Field;
 import com.imsweb.layout.hl7.entity.Hl7Message;
 import com.imsweb.layout.hl7.entity.Hl7RepeatedField;
@@ -31,8 +32,13 @@ public class PatientIdentifierSegmentRule extends NaaccrHl7DataGeneratorRule {
 
         // PID-3: patient identifier list (providing a medical record number and an SSN)
         Hl7Field pid3Fld = new Hl7Field(segment, 3);
-        new Hl7RepeatedField(pid3Fld, "MR-" + RandomUtils.getRandomStringOfLetters(3) + "-" + RandomUtils.getRandomStringOfLettersOrDigits(5), null, null, null, "MR");
-        new Hl7RepeatedField(pid3Fld, RandomUtils.getRandomStringOfDigits(9), null, null, null, "SS");
+        Hl7RepeatedField pid3Rep1 = new Hl7RepeatedField(pid3Fld);
+        new Hl7Component(pid3Rep1, 1, "MR-" + RandomUtils.getRandomStringOfLettersOrDigits(8));
+        new Hl7Component(pid3Rep1, 5, "MR");
+
+        Hl7RepeatedField pid3Rep2 = new Hl7RepeatedField(pid3Fld);
+        new Hl7Component(pid3Rep2, 1, RandomUtils.getRandomStringOfDigits(9));
+        new Hl7Component(pid3Rep2, 5, "SS");
 
         // PID-5: patient name
         new Hl7Field(segment, 5, _NAME_LAST.getRandomValue(), _NAME_FIRST.getRandomValue());

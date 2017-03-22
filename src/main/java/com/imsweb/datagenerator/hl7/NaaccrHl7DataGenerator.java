@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +37,7 @@ public class NaaccrHl7DataGenerator implements DataGenerator {
             throw new RuntimeException("A layout is required for creating a NAACCR HL7 data generator!");
         _layout = layout;
         _rules = new ArrayList<>();
-        
+
         _rules.add(new ControlSegmentRule());
         _rules.add(new PatientIdentifierSegmentRule());
     }
@@ -77,9 +76,11 @@ public class NaaccrHl7DataGenerator implements DataGenerator {
         if (file.getName().toLowerCase().endsWith(".gz"))
             os = new GZIPOutputStream(os);
 
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8))) {
-            for (int i = 0; i < numMessages; i++)
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8))) {
+            for (int i = 0; i < numMessages; i++) {
                 _layout.writeMessage(writer, generateMessage(options));
+                writer.newLine();
+            }
         }
     }
 }
