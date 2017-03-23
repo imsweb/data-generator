@@ -24,11 +24,19 @@ public class SiteRule extends NaaccrDataGeneratorRule {
     // random site generator for males
     private static final DistributedRandomValueGenerator VALUES_MALE = new DistributedRandomValueGenerator(_FILE_FREQUENCY_SITE_MALE);
 
+    private static final String _CRITERIA = "Primary Site, Histology, and Behavior are randomly generated based on frequencies. These frequencies depend on Sex.<br/>"
+            + "Grade is always set to 9. If Primary Site is C809 (unknown), Laterality is set to 0. Otherwise it is set to 9.";
+
     /**
      * Constructor.
      */
     public SiteRule() {
         super(ID, "Primary Site and related fields");
+    }
+
+    @Override
+    public String getCriteria() {
+        return _CRITERIA;
     }
 
     @Override

@@ -12,6 +12,8 @@ public class DateOfInitialRxRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "date-of-initial-rx";
 
+    private static final String _CRITERIA = "Date of Initial RX is always set to the Date of Diagnosis";
+
     /**
      * Constructor.
      */
@@ -22,6 +24,11 @@ public class DateOfInitialRxRule extends NaaccrDataGeneratorRule {
     @Override
     public List<String> getRequiredProperties() {
         return Arrays.asList("dateOfDiagnosisYear", "dateOfDiagnosisMonth", "dateOfDiagnosisDay");
+    }
+
+    @Override
+    public String getCriteria() {
+        return _CRITERIA;
     }
 
     @Override

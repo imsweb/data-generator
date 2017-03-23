@@ -11,11 +11,19 @@ public class SequenceNumberCentralRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "sequence-number-central";
 
+    private static final String _CRITERIA = "If a patient has only 1 tumor, it will be given a Sequence Number of 00.<br/>"
+            + "If a patient has multiple tumors, each tumor will be given a sequence number starting at 01, incrementing by 1 for each additional tumor.";
+
     /**
      * Constructor.
      */
     public SequenceNumberCentralRule() {
         super(ID, "Sequence Number Central");
+    }
+
+    @Override
+    public String getCriteria() {
+        return _CRITERIA;
     }
 
     @Override

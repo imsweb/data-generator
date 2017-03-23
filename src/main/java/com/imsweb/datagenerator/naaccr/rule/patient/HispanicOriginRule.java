@@ -11,11 +11,18 @@ public class HispanicOriginRule extends FrequencyRule {
     // unique identifier for this rule
     public static final String ID = "spanish-hispanic-origin";
 
+    private static final String _CRITERIA = "Spanish/Hispanic Origin is randomly generated based on frequency";
+
     /**
      * Constructor.
      */
     public HispanicOriginRule() {
         super(ID, "Spanish/Hispanic Origin", "frequencies/hispanic_origin.csv");
+    }
+
+    @Override
+    public String getCriteria() {
+        return _CRITERIA;
     }
 
     @Override

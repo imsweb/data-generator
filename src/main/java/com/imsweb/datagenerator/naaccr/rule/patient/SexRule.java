@@ -11,11 +11,18 @@ public class SexRule extends FrequencyRule {
     // unique identifier for this rule
     public static final String ID = "sex";
 
+    private static final String _CRITERIA = "Sex is randomly generated based on frequency";
+
     /**
      * Constructor.
      */
     public SexRule() {
         super(ID, "Sex", "frequencies/sex.csv");
+    }
+
+    @Override
+    public String getCriteria() {
+        return _CRITERIA;
     }
 
     @Override

@@ -11,11 +11,18 @@ public class TumorRecordNumberRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "tumor-record-number";
 
+    private static final String _CRITERIA = "For each patient, each tumor is given a Tumor Record Number starting at 01, incrementing by 1 for each additional tumor.";
+
     /**
      * Constructor.
      */
     public TumorRecordNumberRule() {
         super(ID, "Tumor Record Number");
+    }
+
+    @Override
+    public String getCriteria() {
+        return _CRITERIA;
     }
 
     @Override

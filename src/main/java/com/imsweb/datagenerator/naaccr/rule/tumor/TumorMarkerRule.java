@@ -12,6 +12,9 @@ public class TumorMarkerRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "tumor-marker";
 
+    private static final String _CRITERIA = "If the Date of Diagnosis was in 2003 or earlier, Tumor Marker 1, 2, and 3 are each set to 9. <br/>"
+            + "If the Date of Diagnosis was after 2003, these fields are not set.";
+
     /**
      * Constructor.
      */
@@ -22,6 +25,11 @@ public class TumorMarkerRule extends NaaccrDataGeneratorRule {
     @Override
     public List<String> getRequiredProperties() {
         return Collections.singletonList("dateOfDiagnosisYear");
+    }
+
+    @Override
+    public String getCriteria() {
+        return _CRITERIA;
     }
 
     @Override

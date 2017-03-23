@@ -14,6 +14,8 @@ public class AgeRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "age-at-dx";
 
+    private static final String _CRITERIA = "Age at DX is calculated based on Date of Birth and Date of Diagnosis.";
+
     /**
      * Constructor.
      */
@@ -24,6 +26,11 @@ public class AgeRule extends NaaccrDataGeneratorRule {
     @Override
     public List<String> getRequiredProperties() {
         return Arrays.asList("birthDateYear", "birthDateMonth", "birthDateDay", "dateOfDiagnosisYear", "dateOfDiagnosisMonth", "dateOfDiagnosisDay");
+    }
+
+    @Override
+    public String getCriteria() {
+        return _CRITERIA;
     }
 
     @Override

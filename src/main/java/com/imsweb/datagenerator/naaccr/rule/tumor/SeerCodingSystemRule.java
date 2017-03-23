@@ -13,6 +13,18 @@ public class SeerCodingSystemRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "seer-coding-system";
 
+    private static final String _CRITERIA = "SEER Coding System is based on Date of Diagnosis.<br/>"
+            + "If the Date of Diagnosis is before 2004, this field is not set."
+            + "If the Date of Diagnosis is in 2004, 2005, or 2006, the field is set to 7."
+            + "If the Date of Diagnosis is in 2007, the field is randomly set to either 8 or 9."
+            + "If the Date of Diagnosis is in 2008 or 2009, the field is set to 9."
+            + "If the Date of Diagnosis is in 2010, the field is set to A."
+            + "If the Date of Diagnosis is in 2011, the field is set to B."
+            + "If the Date of Diagnosis is in 2012, the field is set to C."
+            + "If the Date of Diagnosis is in 2013, the field is set to D."
+            + "If the Date of Diagnosis is in 2014, the field is set to E."
+            + "If the Date of Diagnosis is in 2015 or later, the field is set to F.";
+
     /**
      * Constructor.
      */
