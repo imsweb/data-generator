@@ -11,11 +11,18 @@ public class VitalStatusRule extends FrequencyRule {
     // unique identifier for this rule
     public static final String ID = "vital-status";
 
+    private static final String _CRITERIA = "Vital Status is randomly generated based on frequency.";
+
     /**
      * Constructor.
      */
     public VitalStatusRule() {
         super(ID, "Vital Status", "frequencies/vital_status.csv");
+    }
+
+    @Override
+    public String getCriteria() {
+        return _CRITERIA;
     }
 
     @Override

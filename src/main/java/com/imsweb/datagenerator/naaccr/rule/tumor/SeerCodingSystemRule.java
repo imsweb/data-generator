@@ -38,6 +38,11 @@ public class SeerCodingSystemRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
+    public String getCriteria() {
+        return _CRITERIA;
+    }
+
+    @Override
     public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
 
         // don't assign anything prior to 2004

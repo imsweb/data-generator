@@ -1,11 +1,10 @@
 package com.imsweb.datagenerator.naaccr.rule.tumor;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import java.time.LocalDate;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
@@ -16,11 +15,22 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "date-of-diagnosis";
 
+    private static final String _CRITERIA = "Date of Diagnosis is randomly generated between January 1 of the minimum DX year and December 31 of the maximum DX year.<br/>"
+            + "If no minimum year was specified, then the current date minus 10 years is used as the minimum date.<br/>"
+            + "If no maximum year was specified, then the current date is used as the maximum date.<br/>"
+            + "If a patient has multiple tumors, each tumor after the first one will use the previous tumor's Date of Diagnosis as its minimum date.<br/>"
+            + "This ensures that all tumors on a patient are in chronological order.";
+
     /**
      * Constructor.
      */
     public DateOfDiagnosisRule() {
         super(ID, "Date of Diagnosis");
+    }
+
+    @Override
+    public String getCriteria() {
+        return _CRITERIA;
     }
 
     @Override
