@@ -15,11 +15,11 @@ public class NameRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "name";
 
-    private static final String _CRITERIA = "Last Name is randomly generated based on a frequency. The frequency depends on Spanish/Hispanic Origin and Race 1.<br/>"
-            + "First Name is randomly generated based on Sex.<br/>"
-            + "Middle Name is randomly generated based on Sex. There is a 5% chance that Middle Name will be an initial.<br/>"
-            + "Prefix is randomly generated based on Sex. There is a 2% chance that a patient will have a prefix."
-            + "Suffix is randomly generated based on Sex. There is a 3% chance that a patient will have a suffix.";
+    private static final String _CRITERIA = "Last Name is randomly generated based on frequency. The frequency depends on Spanish/Hispanic Origin and Race 1.<br/>"
+            + "First Name is randomly generated from a list based on Sex.<br/>"
+            + "Middle Name is randomly generated from a list based on Sex. There is a 5% chance that Middle Name will be an initial.<br/>"
+            + "Prefix is randomly generated from a list based on Sex. There is a 2% chance that a patient will have a prefix."
+            + "Suffix is randomly generated from a list based on Sex. There is a 3% chance that a patient will have a suffix.";
     // TODO maiden name, spouse name...why is maiden name = last name
 
     // file to last name frequencies

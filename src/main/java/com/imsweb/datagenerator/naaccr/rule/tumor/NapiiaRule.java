@@ -15,6 +15,9 @@ public class NapiiaRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "napiia";
 
+    private static final String _CRITERIA = "NAPIIA is calculated based on Race 1-5, Spanish/Hispanic Origin, Country of Birth, Sex,<br/>"
+            + "Last Name, Maiden Name, and First Name.";
+
     /**
      * Constructor.
      */
@@ -25,6 +28,11 @@ public class NapiiaRule extends NaaccrDataGeneratorRule {
     @Override
     public List<String> getRequiredProperties() {
         return Arrays.asList("dateOfDiagnosisYear", "dateOfDiagnosisMonth", "dateOfDiagnosisDay");
+    }
+
+    @Override
+    public String getCriteria() {
+        return _CRITERIA;
     }
 
     @Override

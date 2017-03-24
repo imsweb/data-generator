@@ -106,6 +106,11 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         helpItem.setActionCommand("menu-help");
         helpItem.addActionListener(this);
         helpMenu.add(helpItem);
+        //TODO uncomment
+        //JMenuItem rulesItem = new JMenuItem("View Rules       ");
+        //rulesItem.setActionCommand("menu-rules");
+        //rulesItem.addActionListener(this);
+        //helpMenu.add(rulesItem);
         helpMenu.addSeparator();
         JMenuItem aboutItem = new JMenuItem("About");
         aboutItem.setActionCommand("menu-about");
@@ -490,6 +495,9 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
             catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Unable to display help.", "Error", JOptionPane.ERROR_MESSAGE);
             }
+        }
+        else if ("menu-rules".equals(cmd)) {
+            //TODO
         }
         else if ("menu-about".equals(cmd)) {
             final JDialog dlg = new AboutDialog(this);

@@ -18,6 +18,8 @@ public class ComputedEthnicityRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "computed-ethnicity";
 
+    private static final String _CRITERIA = "Computed Ethnicity is calculated based on Sex, Last Name, and Maiden Name.";
+
     // resource file containing list of spanish surnames
     protected static final String _FILE_SPANISH_SURNAMES = "lists/spanish_surnames.csv";
 
@@ -36,6 +38,11 @@ public class ComputedEthnicityRule extends NaaccrDataGeneratorRule {
     @Override
     public List<String> getRequiredProperties() {
         return Arrays.asList("sex", "nameLast", "nameMaiden");
+    }
+
+    @Override
+    public String getCriteria() {
+        return _CRITERIA;
     }
 
     @Override

@@ -11,11 +11,18 @@ public class SeerTypeOfFollowUpRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "seer-type-of-fup";
 
+    private static final String _CRITERIA = "SEER Type of Follow Up is always set to 2";
+
     /**
      * Constructor.
      */
     public SeerTypeOfFollowUpRule() {
         super(ID, "SEER Type of Follow Up");
+    }
+
+    @Override
+    public String getCriteria() {
+        return _CRITERIA;
     }
 
     @Override

@@ -11,11 +11,18 @@ public class DxConfirmationRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "dx-confirmation";
 
+    private static final String _CRITERIA = "Diagnostic Confirmation is always set to 1.";
+
     /**
      * Constructor.
      */
     public DxConfirmationRule() {
         super(ID, "Diagnostic Confirmation");
+    }
+
+    @Override
+    public String getCriteria() {
+        return _CRITERIA;
     }
 
     @Override
