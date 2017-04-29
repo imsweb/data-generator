@@ -12,8 +12,13 @@ import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
 import com.imsweb.datagenerator.DataGenerator;
+import com.imsweb.datagenerator.hl7.rule.CommonOrderSegmentRule;
 import com.imsweb.datagenerator.hl7.rule.ControlSegmentRule;
+import com.imsweb.datagenerator.hl7.rule.NextOfKinSegmentRule;
+import com.imsweb.datagenerator.hl7.rule.ObservationRequestSegmentRule;
+import com.imsweb.datagenerator.hl7.rule.ObservationSegmentRule;
 import com.imsweb.datagenerator.hl7.rule.PatientIdentifierSegmentRule;
+import com.imsweb.datagenerator.hl7.rule.PatientVisitSegmentRule;
 import com.imsweb.layout.hl7.NaaccrHl7Layout;
 import com.imsweb.layout.hl7.entity.Hl7Message;
 
@@ -40,6 +45,11 @@ public class NaaccrHl7DataGenerator implements DataGenerator {
 
         _rules.add(new ControlSegmentRule());
         _rules.add(new PatientIdentifierSegmentRule());
+        _rules.add(new NextOfKinSegmentRule());
+        _rules.add(new PatientVisitSegmentRule());
+        _rules.add(new CommonOrderSegmentRule());
+        _rules.add(new ObservationRequestSegmentRule());
+        _rules.add(new ObservationSegmentRule());
     }
 
     @Override

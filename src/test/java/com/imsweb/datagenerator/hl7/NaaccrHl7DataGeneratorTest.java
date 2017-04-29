@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 
 import org.junit.Test;
 
+import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.hl7.NaaccrHl7Layout;
 
 public class NaaccrHl7DataGeneratorTest {
@@ -16,7 +17,7 @@ public class NaaccrHl7DataGeneratorTest {
     @Test
     public void testGenerator() throws IOException {
 
-        NaaccrHl7Layout layout = new NaaccrHl7Layout(); // TODO this will need to change...
+        NaaccrHl7Layout layout = (NaaccrHl7Layout)LayoutFactory.getLayout(LayoutFactory.LAYOUT_ID_NAACCR_HL7_2_5_1);
 
         NaaccrHl7DataGenerator generator = new NaaccrHl7DataGenerator(layout);
 
