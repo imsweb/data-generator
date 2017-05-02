@@ -22,13 +22,10 @@ public class ControlSegmentRule extends NaaccrHl7DataGeneratorRule {
                 .withField(3, "IMS Data Generator")
 
                 // MSH-4: sending facility
-                .withField(4, "FAKE PATH LAB", "3D9999999", "CLIA")
+                .withField(4, "FAKE PATH LAB", "3D9999999", "CLIA");
 
                 // MSH-7: message date (set by the layout framework)
 
                 // MSH-12: version (set by the layout framework)
-
-                // finalize the build
-                .build();
     }
 }

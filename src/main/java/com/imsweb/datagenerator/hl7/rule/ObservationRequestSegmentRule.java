@@ -19,7 +19,7 @@ public class ObservationRequestSegmentRule extends NaaccrHl7DataGeneratorRule {
         new Hl7MessageBuilder(message).withSegment("OBR")
 
                 // OBR-1: set ID
-                .withField(1, "1")
+                .withField(1, "1");
 
                 // OBR-3: filler order number
 
@@ -34,8 +34,5 @@ public class ObservationRequestSegmentRule extends NaaccrHl7DataGeneratorRule {
                 // OBR-28: results copies to
 
                 // OBR-32: principal result interpreter
-
-                // finalize the build
-                .build();
     }
 }

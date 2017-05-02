@@ -16,24 +16,46 @@ public class ObservationSegmentRule extends NaaccrHl7DataGeneratorRule {
 
     @Override
     public void execute(Hl7Message message, NaaccrHl7DataGeneratorOptions options) {
+
+        // OBX-1: set ID
+        // OBX-2: value type (CE for coded value, ST for short string text, FT for formatted text, TX for text data)
+        // OBX-3: observation identifier
+        // OBX-5: observation value
+        // OBX-11: observation result status (F=final)
+
         new Hl7MessageBuilder(message).withSegment("OBX")
-
-                // OBX-1: set ID
                 .withField(1, "1")
-
-                // OBX-2: value type (CE for coded value, ST for short string text, FT for formatted text, TX for text data)
                 .withField(2, "TX")
+                .withField(3, "22633-2", "nature of specimen", "LN")
+                .withField(5, "Bone marrow.")
+                .withField(11, "F");
 
-                // OBX-3: observation identifier
-                .withField(3, "22637-3", "Path report final diagnosis", "LN")
+        new Hl7MessageBuilder(message).withSegment("OBX")
+                .withField(1, "2")
+                .withField(2, "TX")
+                .withField(3, "", "", "LN")
+                .withField(5, "")
+                .withField(11, "F");
 
-                // OBX-5: observation value
-                .withField(5, "Malignant lymphoma, small B-cell type with plasmacytic differentiation and crystal-storing histiocytosis")
+        new Hl7MessageBuilder(message).withSegment("OBX")
+                .withField(1, "3")
+                .withField(2, "TX")
+                .withField(3, "", "", "LN")
+                .withField(5, "")
+                .withField(11, "F");
 
-                // OBX-11: observation result status
-                .withField(11, "F")
+        new Hl7MessageBuilder(message).withSegment("OBX")
+                .withField(1, "4")
+                .withField(2, "TX")
+                .withField(3, "", "", "LN")
+                .withField(5, "")
+                .withField(11, "F");
 
-                // finalize the build
-                .build();
+        new Hl7MessageBuilder(message).withSegment("OBX")
+                .withField(1, "5")
+                .withField(2, "TX")
+                .withField(3, "", "", "LN")
+                .withField(5, "")
+                .withField(11, "F");
     }
 }

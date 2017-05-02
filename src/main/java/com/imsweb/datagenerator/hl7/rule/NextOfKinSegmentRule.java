@@ -32,13 +32,10 @@ public class NextOfKinSegmentRule extends NaaccrHl7DataGeneratorRule {
                 .withField(2, _NAME_LAST.getRandomValue(), _NAME_FIRST.getRandomValue(), RandomUtils.getRandomStringOfLetters(1))
 
                 // NK1-3: relationship
-                .withField(3, "SPO", "spouse", "HL70063")
+                .withField(3, "SPO", "spouse", "HL70063");
 
                 // NK1-4: address
 
                 // NK1-5: phone
-
-                // finalize the build
-                .build();
     }
 }

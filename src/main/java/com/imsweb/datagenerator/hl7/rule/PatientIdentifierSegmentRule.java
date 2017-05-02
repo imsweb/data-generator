@@ -83,12 +83,9 @@ public class PatientIdentifierSegmentRule extends NaaccrHl7DataGeneratorRule {
                 .withField(16, "M")
 
                 // PID-22: spanish-hispanic origin
-                .withField(22, "0")
+                .withField(22, "0");
 
                 // PID-23: birth place
-
-                // finalize the build
-                .build();
 
     }
 

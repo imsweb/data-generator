@@ -19,7 +19,7 @@ public class CommonOrderSegmentRule extends NaaccrHl7DataGeneratorRule {
         new Hl7MessageBuilder(message).withSegment("ORC")
 
                 // ORC-1: order control
-                .withField(1, "1")
+                .withField(1, "1");
 
                 // ORC-21: ordering facility name
 
@@ -28,8 +28,5 @@ public class CommonOrderSegmentRule extends NaaccrHl7DataGeneratorRule {
                 // ORC-23: ordering facility phone
 
                 // ORC-24: ordering provider address
-
-                // finalize the build
-                .build();
     }
 }
