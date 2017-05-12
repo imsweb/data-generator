@@ -47,7 +47,7 @@ public class PatientIdentifierSegmentRule extends NaaccrHl7DataGeneratorRule {
                 // PID-3: patient identifier list (providing a medical record number)
                 .withField(3)
                 .withRepeatedField()
-                .withComponent(1, "MR" + RandomUtils.getRandomStringOfLettersOrDigits(6))
+                .withComponent(1, "MR" + RandomUtils.getRandomStringOfDigits(6))
                 .withComponent(5, "MR")
                 .withRepeatedField()
                 .withComponent(1, RandomUtils.getRandomStringOfDigits(9))
@@ -65,7 +65,7 @@ public class PatientIdentifierSegmentRule extends NaaccrHl7DataGeneratorRule {
                 // PID-8: sex (M, F, U)
                 .withField(8, "M")
 
-                // PID-9: alias (?)
+                // PID-9: alias -> not set
 
                 // PID-10: race
                 .withField(10, "2106-3", "While", "HL70005")

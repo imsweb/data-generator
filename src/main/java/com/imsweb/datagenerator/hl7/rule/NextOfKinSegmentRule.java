@@ -23,6 +23,10 @@ public class NextOfKinSegmentRule extends NaaccrHl7DataGeneratorRule {
 
     @Override
     public void execute(Hl7Message message, NaaccrHl7DataGeneratorOptions options) {
+
+        // TODO use the ethnicity of the PID to generate a name for same one here
+        // TODO invert the sex in PID and always use spouse
+
         new Hl7MessageBuilder(message).withSegment("NK1")
 
                 // NK1-1: set ID
@@ -32,10 +36,13 @@ public class NextOfKinSegmentRule extends NaaccrHl7DataGeneratorRule {
                 .withField(2, _NAME_LAST.getRandomValue(), _NAME_FIRST.getRandomValue(), RandomUtils.getRandomStringOfLetters(1))
 
                 // NK1-3: relationship
-                .withField(3, "SPO", "spouse", "HL70063");
+                .withField(3, "SPO", "spouse", "HL70063")
 
                 // NK1-4: address
 
                 // NK1-5: phone
+                .withField(5)
+                .withComponent(6, RandomUtils.getRandomStringOfDigits(3))
+                .withComponent(7, RandomUtils.getRandomStringOfDigits(7));
     }
 }
