@@ -19,20 +19,50 @@ import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * This class represents a distribution of frequencies and allows a random values to be requested based on those frequencies (so the most highest the frequency the
+ * most likely that particular value will be returned).
+ * @param <T> the type of the value
+ */
 public class Distribution<T> {
 
-    public static <D> Distribution<D> of(Map<D, Double> values) {
-        return new Distribution<>(values.entrySet().stream().map(e -> new DistributionElementDto<>(e.getValue(), e.getKey())).collect(Collectors.toList()));
+    /**
+     * Creates a distribution from a given map of frequencies.
+     * @param frequencies frequencies, required
+     * @param <D> value type
+     * @return a new distribution instance
+     */
+    public static <D> Distribution<D> of(Map<D, Double> frequencies) {
+        return new Distribution<>(frequencies.entrySet().stream().map(e -> new DistributionElementDto<>(e.getValue(), e.getKey())).collect(Collectors.toList()));
     }
 
+    /**
+     * Creates a distribution from a given list of values (the same frequency will be assumed for all of the values).
+     * @param values values, required
+     * @param <D> value type
+     * @return a new distribution instance
+     */
     public static <D> Distribution<D> of(List<D> values) {
         return new Distribution<>(values.stream().map(e -> new DistributionElementDto<>(1D, e)).collect(Collectors.toList()));
     }
 
+    /**
+     * Creates a distribution from the given URl.
+     * @param url target URL, required; must be a CSV file (possibly GZipped), each row can either have one element (the value) or two (the frequency and the value)
+     * @return a new distribution instance
+     */
     public static Distribution<String> of(URL url) {
         return of(url, String.class, null);
     }
 
+    /**
+     * Creates a distribution from the given URl using the given value type and columns mapping to create complex value objects.
+     * @param url target URL, required, must be a CSV file (possibly GZipped)
+     * @param valueType if rows have more than one values (in addition to the frequency), this will be used to instantiate complex value objects and map the values to them
+     * @param columnsMapping if rows have more than one values (in addition to the frequency), this will be used to map the column index to fields in the complex objects
+     * @param <D> value type
+     * @return a new distribution instance
+     */
     @SuppressWarnings("unchecked")
     public static <D> Distribution<D> of(URL url, Class<D> valueType, Map<Integer, String> columnsMapping) {
         try {
@@ -73,10 +103,16 @@ public class Distribution<T> {
         }
     }
 
+    // frequencies
     private List<DistributionElementDto<T>> _frequencies;
 
+    // frequencies total
     private double _frequenciesTotal;
 
+    /**
+     * Constructor.
+     * @param frequencies frequencies, required
+     */
     public Distribution(List<DistributionElementDto<T>> frequencies) {
         _frequencies = frequencies;
         _frequencies.sort(Comparator.comparing(DistributionElementDto::getFrequency));
@@ -91,6 +127,10 @@ public class Distribution<T> {
         _frequencies = frequencies;
     }
 
+    /**
+     * Returns a random value based on the current distribution of frequencies.
+     * @return a random value, can be a simple type (like a string) or a complex object (like an address)
+     */
     public T getValue() {
         double rand = RandomUtils.nextDouble();
         double ratio = 1.0f / _frequenciesTotal;
