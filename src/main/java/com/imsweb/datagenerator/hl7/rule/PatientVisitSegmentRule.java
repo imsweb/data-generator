@@ -22,13 +22,10 @@ public class PatientVisitSegmentRule extends NaaccrHl7DataGeneratorRule {
                 .withField(1, "1")
 
                 // PV1-2: patient class
-                .withField(2, "N")
+                .withField(2, "N");
 
                 // PV1-7: attending doctor
 
                 // PV1-8: referring doctor
-
-                // finalize the build
-                .build();
     }
 }

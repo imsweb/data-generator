@@ -15,7 +15,7 @@ import com.imsweb.layout.hl7.entity.Hl7Message;
 public class ObservationRequestSegmentRule extends NaaccrHl7DataGeneratorRule {
 
     public ObservationRequestSegmentRule() {
-        super("observation-request-segment", "Observation Request Segment (NK1)");
+        super("observation-request-segment", "Observation Request Segment (OBR)");
     }
 
     @Override
