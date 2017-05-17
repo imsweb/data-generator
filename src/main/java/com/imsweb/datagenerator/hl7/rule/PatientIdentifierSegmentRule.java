@@ -8,19 +8,14 @@ import java.time.format.DateTimeFormatter;
 
 import com.imsweb.datagenerator.hl7.NaaccrHl7DataGeneratorOptions;
 import com.imsweb.datagenerator.hl7.NaaccrHl7DataGeneratorRule;
-import com.imsweb.datagenerator.utils.DistributedRandomValueGenerator;
+import com.imsweb.datagenerator.utils.DistributionUtils;
 import com.imsweb.datagenerator.utils.RandomUtils;
-import com.imsweb.datagenerator.utils.UniformRandomValueGenerator;
+import com.imsweb.datagenerator.utils.dto.CityFrequencyDto;
 import com.imsweb.layout.hl7.Hl7MessageBuilder;
 import com.imsweb.layout.hl7.entity.Hl7Message;
 
 public class PatientIdentifierSegmentRule extends NaaccrHl7DataGeneratorRule {
 
-    protected static final DistributedRandomValueGenerator _NAME_LAST = new DistributedRandomValueGenerator("frequencies/last_names_white.csv");
-
-    protected static final UniformRandomValueGenerator _NAME_FIRST = new UniformRandomValueGenerator("lists/first_names_male.csv");
-
-//    protected static final DistributedRandomValueGenerator _SEX_DIST = new DistributedRandomValueGenerator();
     //
     //    static {
     //        _SEX_DIST.add("M", 49.0);
@@ -39,6 +34,9 @@ public class PatientIdentifierSegmentRule extends NaaccrHl7DataGeneratorRule {
         //String sex = _SEX_DIST.getRandomValue();
         LocalDate dob = RandomUtils.getRandomDateBetween(LocalDate.of(1925, 1, 1), LocalDate.now().minusYears(1));
 
+        // TODO use state from options?
+        CityFrequencyDto address = DistributionUtils.getCity(DistributionUtils.getState());
+
         new Hl7MessageBuilder(message).withSegment("PID")
 
                 // PID-1: set ID
@@ -54,7 +52,7 @@ public class PatientIdentifierSegmentRule extends NaaccrHl7DataGeneratorRule {
                 .withComponent(5, "SS")
 
                 // PID-5: patient name (last, first, middle)
-                .withField(5, _NAME_LAST.getRandomValue(), _NAME_FIRST.getRandomValue(), RandomUtils.getRandomStringOfLetters(1))
+                .withField(5, DistributionUtils.getNameLast(), DistributionUtils.getNameFirst(), RandomUtils.getRandomStringOfLetters(1))
 
                 // PID-6: maiden name
                 .withField(6)
@@ -71,8 +69,10 @@ public class PatientIdentifierSegmentRule extends NaaccrHl7DataGeneratorRule {
                 .withField(10, "2106-3", "While", "HL70005")
 
                 // PID-11: address (name, supp, city, state, zip)
+                .withField(11, DistributionUtils.getStreetName(), null, address.getCity(), address.getState(), address.getZip())
 
                 // PID-12: county
+                .withField(12, "999")
 
                 // PID-13: phone
                 .withField(13)
@@ -85,7 +85,7 @@ public class PatientIdentifierSegmentRule extends NaaccrHl7DataGeneratorRule {
                 // PID-22: spanish-hispanic origin
                 .withField(22, "0");
 
-                // PID-23: birth place
+        // PID-23: birth place
 
     }
 

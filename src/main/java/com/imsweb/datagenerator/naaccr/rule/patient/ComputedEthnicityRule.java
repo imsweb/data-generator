@@ -19,7 +19,7 @@ public class ComputedEthnicityRule extends NaaccrDataGeneratorRule {
     public static final String ID = "computed-ethnicity";
 
     // resource file containing list of spanish surnames
-    protected static final String _FILE_SPANISH_SURNAMES = "lists/spanish_surnames.csv";
+    protected static final String _FILE_SPANISH_SURNAMES = "frequencies/spanish_surnames.csv";
 
     // cached list of spanish surnames
     protected List<String> _surnames;

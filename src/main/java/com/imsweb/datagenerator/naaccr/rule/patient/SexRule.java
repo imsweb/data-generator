@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
-import com.imsweb.datagenerator.naaccr.rule.FrequencyRule;
+import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
+import com.imsweb.datagenerator.utils.DistributionUtils;
 
-public class SexRule extends FrequencyRule {
+public class SexRule extends NaaccrDataGeneratorRule {
 
     // unique identifier for this rule
     public static final String ID = "sex";
@@ -15,11 +16,11 @@ public class SexRule extends FrequencyRule {
      * Constructor.
      */
     public SexRule() {
-        super(ID, "Sex", "frequencies/sex.csv");
+        super(ID, "Sex");
     }
 
     @Override
     public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
-        record.put("sex", getRandomValue());
+        record.put("sex", DistributionUtils.getSex());
     }
 }

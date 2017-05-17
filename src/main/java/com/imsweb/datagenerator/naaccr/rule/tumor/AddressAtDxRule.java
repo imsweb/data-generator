@@ -17,8 +17,15 @@ public class AddressAtDxRule extends AddressRule {
      * Constructor.
      */
     public AddressAtDxRule() {
-        super(ID, "Address at DX", "addressAtDxState", "addressAtDxCity", "addressAtDxPostalCode", "addressAtDxCountry", "addressAtDxStreetName",
-                "addressAtDxSupplementl", "addressAtDxCounty");
+        super(ID,
+                "Address at DX",
+                "addressAtDxState",
+                "addressAtDxCity",
+                "addressAtDxPostalCode",
+                "addressAtDxCountry",
+                "addressAtDxStreetName",
+                "addressAtDxSupplementl",
+                "addressAtDxCounty");
     }
 
     @Override
@@ -26,7 +33,7 @@ public class AddressAtDxRule extends AddressRule {
         // if this is not the first tumor, there is an 80% chance to keep previous address at DX
         if (otherRecords != null && !otherRecords.isEmpty() && RandomUtils.nextInt(10) < 8) {
             Map<String, String> otherRecord = otherRecords.get(otherRecords.size() - 1);
-            for (String field : Arrays.asList(_fieldState, _fieldCity, _fieldCountry, _fieldPostalCode, _fieldStreetName, _fieldSupplementl, _fieldCounty))
+            for (String field : Arrays.asList(_fieldState, _fieldCity, _fieldCountry, _fieldPostalCode, _fieldStreetName, _fieldSupp, _fieldCounty))
                 record.put(field, otherRecord.get(field));
         }
         else

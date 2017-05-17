@@ -33,7 +33,7 @@ public class Distribution<T> {
      * @return a new distribution instance
      */
     public static <D> Distribution<D> of(Map<D, Double> frequencies) {
-        return new Distribution<>(frequencies.entrySet().stream().map(e -> new DistributionElementDto<>(e.getValue(), e.getKey())).collect(Collectors.toList()));
+        return new Distribution<>(frequencies.entrySet().stream().map(e -> new DistributionElement<>(e.getValue(), e.getKey())).collect(Collectors.toList()));
     }
 
     /**
@@ -43,7 +43,7 @@ public class Distribution<T> {
      * @return a new distribution instance
      */
     public static <D> Distribution<D> of(List<D> values) {
-        return new Distribution<>(values.stream().map(e -> new DistributionElementDto<>(1D, e)).collect(Collectors.toList()));
+        return new Distribution<>(values.stream().map(e -> new DistributionElement<>(1D, e)).collect(Collectors.toList()));
     }
 
     /**
@@ -70,11 +70,11 @@ public class Distribution<T> {
             if (url.getPath().toLowerCase().endsWith(".gz"))
                 is = new GZIPInputStream(is);
 
-            List<DistributionElementDto<D>> elements = new ArrayList<>();
+            List<DistributionElement<D>> elements = new ArrayList<>();
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
                 String line = reader.readLine();
                 while (line != null) {
-                    DistributionElementDto<D> element = new DistributionElementDto<>();
+                    DistributionElement<D> element = new DistributionElement<>();
                     String[] values = StringUtils.split(line, ',');
                     if (values.length == 1) {
                         element.setValue((D)values[0]);
@@ -104,7 +104,7 @@ public class Distribution<T> {
     }
 
     // frequencies
-    private List<DistributionElementDto<T>> _frequencies;
+    private List<DistributionElement<T>> _frequencies;
 
     // frequencies total
     private double _frequenciesTotal;
@@ -113,17 +113,17 @@ public class Distribution<T> {
      * Constructor.
      * @param frequencies frequencies, required
      */
-    public Distribution(List<DistributionElementDto<T>> frequencies) {
+    public Distribution(List<DistributionElement<T>> frequencies) {
         _frequencies = frequencies;
-        _frequencies.sort(Comparator.comparing(DistributionElementDto::getFrequency));
-        _frequenciesTotal = _frequencies.stream().mapToDouble(DistributionElementDto::getFrequency).sum();
+        _frequencies.sort(Comparator.comparing(DistributionElement::getFrequency));
+        _frequenciesTotal = _frequencies.stream().mapToDouble(DistributionElement::getFrequency).sum();
     }
 
-    public List<DistributionElementDto<T>> getFrequencies() {
+    public List<DistributionElement<T>> getFrequencies() {
         return _frequencies;
     }
 
-    public void setFrequencies(List<DistributionElementDto<T>> frequencies) {
+    public void setFrequencies(List<DistributionElement<T>> frequencies) {
         _frequencies = frequencies;
     }
 
@@ -136,7 +136,7 @@ public class Distribution<T> {
         double ratio = 1.0f / _frequenciesTotal;
         double tempDist = 0;
 
-        for (DistributionElementDto<T> element : _frequencies) {
+        for (DistributionElement<T> element : _frequencies) {
             tempDist += element.getFrequency();
             if (rand / ratio <= tempDist)
                 return element.getValue();

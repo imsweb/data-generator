@@ -16,15 +16,19 @@ import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
  * <br/><br/>
  * The main purpose of this class is to provide caching for those distributions so the data is not loaded several times by different rules...
  */
-public class SeerDistributionUtils {
+public class DistributionUtils {
 
     private static Distribution<String> _DIST_NAME_LAST_WHITE, _DIST_NAME_LAST_BLACK, _DIST_NAME_LAST_API, _DIST_NAME_LAST_HISP;
+    private static Distribution<String> _DIST_NAME_FIRST_MALE, _DIST_NAME_FIRST_FEMALE;
     private static Distribution<String> _DIST_RACE;
     private static Distribution<String> _DIST_HISPANIC_ORIGIN;
     private static Distribution<String> _DIST_SEX;
     private static Distribution<String> _DIST_VITAL_STATUS;
     private static Distribution<SiteFrequencyDto> _DIST_SITE_MALE, _DIST_SITE_FEMALE;
+    private static Distribution<String> _DIST_STREET_NAME;
+    private static Distribution<String> _DIST_STREET_SUFFIX;
     private static Map<String, Distribution<CityFrequencyDto>> _DIST_CITIES = new HashMap<>();
+    private static Distribution<String> _DIST_STATE;
 
     // API races
     private static List<String> _API_RACES = Arrays.asList("04", "05", "06", "07", "08", "10", "11", "12", "13", "14", "15", "16", "17", "20", "21", "22", "25", "26", "27", "28", "30", "31", "32",
@@ -42,13 +46,18 @@ public class SeerDistributionUtils {
         _DIST_NAME_LAST_BLACK = null;
         _DIST_NAME_LAST_API = null;
         _DIST_NAME_LAST_HISP = null;
+        _DIST_NAME_FIRST_MALE = null;
+        _DIST_NAME_FIRST_FEMALE = null;
         _DIST_RACE = null;
         _DIST_HISPANIC_ORIGIN = null;
         _DIST_SEX = null;
         _DIST_VITAL_STATUS = null;
         _DIST_SITE_MALE = null;
         _DIST_SITE_FEMALE = null;
+        _DIST_STREET_NAME = null;
+        _DIST_STREET_SUFFIX = null;
         _DIST_CITIES.clear();
+        _DIST_STATE = null;
     }
 
     public static String getNameLast() {
@@ -69,6 +78,20 @@ public class SeerDistributionUtils {
         if (_API_RACES.contains(race))
             return _DIST_NAME_LAST_API.getValue();
         return _DIST_NAME_LAST_WHITE.getValue();
+    }
+
+    public static String getNameFirst() {
+        return getNameFirst(null);
+    }
+
+    public static String getNameFirst(String sex) {
+        if (_DIST_NAME_FIRST_MALE == null) {
+            _DIST_NAME_FIRST_MALE = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/first_names_male.csv"));
+            _DIST_NAME_FIRST_FEMALE = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/first_names_female.csv"));
+        }
+        if ("2".equals(sex))
+            return _DIST_NAME_FIRST_FEMALE.getValue();
+        return _DIST_NAME_FIRST_MALE.getValue();
     }
 
     public static String getRace() {
@@ -113,6 +136,18 @@ public class SeerDistributionUtils {
         return _DIST_SITE_MALE.getValue();
     }
 
+    public static String getStreetName() {
+        if (_DIST_STREET_NAME == null)
+            _DIST_STREET_NAME = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/street_names.csv"));
+        return _DIST_STREET_NAME.getValue();
+    }
+
+    public static String getStreetSuffix() {
+        if (_DIST_STREET_SUFFIX == null)
+            _DIST_STREET_SUFFIX = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/street_suffixes.csv"));
+        return _DIST_STREET_SUFFIX.getValue();
+    }
+
     public static CityFrequencyDto getCity() {
         return getCity(null);
     }
@@ -133,5 +168,11 @@ public class SeerDistributionUtils {
             _DIST_CITIES.put(state.toLowerCase(), distribution);
         }
         return distribution.getValue();
+    }
+
+    public static String getState() {
+        if (_DIST_STATE == null)
+            _DIST_STATE = Distribution.of(_STATES);
+        return _DIST_STATE.getValue();
     }
 }

@@ -3,16 +3,16 @@
  */
 package com.imsweb.datagenerator.utils;
 
-public class DistributionElementDto<T> {
+public class DistributionElement<T> {
 
     private Double _frequency;
 
     private T _value;
 
-    public DistributionElementDto() {
+    public DistributionElement() {
     }
 
-    public DistributionElementDto(Double frequency, T value) {
+    public DistributionElement(Double frequency, T value) {
         _frequency = frequency;
         _value = value;
     }

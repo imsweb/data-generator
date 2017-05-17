@@ -53,7 +53,7 @@ import com.imsweb.datagenerator.naaccr.rule.tumor.SequenceNumberCentralRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.SiteRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.TumorMarkerRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.TumorRecordNumberRule;
-import com.imsweb.datagenerator.utils.DistributedRandomValueGenerator;
+import com.imsweb.datagenerator.utils.Distribution;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
 
@@ -295,7 +295,7 @@ public final class NaaccrDataGenerator {
             options = new NaaccrDataGeneratorOptions();
 
         // create a random distribution for the number of tumors, if we have to
-        DistributedRandomValueGenerator numTumGen = options.getNumTumorsPerPatient() == null ? getNumTumorsPerPatientDistribution() : null;
+        Distribution<Integer> numTumGen = options.getNumTumorsPerPatient() == null ? getNumTumorsPerPatientDistribution() : null;
 
         // handle a compress file
         OutputStream os = new FileOutputStream(file);
@@ -305,7 +305,7 @@ public final class NaaccrDataGenerator {
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8))) {
             int numCreatedTumors = 0;
             while (numCreatedTumors < numTumors) {
-                int numTumorForThisPatient = numTumGen == null ? options.getNumTumorsPerPatient() : Integer.parseInt(numTumGen.getRandomValue());
+                int numTumorForThisPatient = numTumGen == null ? options.getNumTumorsPerPatient() : numTumGen.getValue();
                 // never create more tumors than requested, so we use a min() call
                 for (Map<String, String> tumor : generatePatient(Math.min(numTumorForThisPatient, numTumors - numCreatedTumors), options)) {
                     _layout.writeRecord(writer, tumor);
@@ -318,12 +318,12 @@ public final class NaaccrDataGenerator {
     /**
      * Returns the distribution to use for generating the number of tumors for a specific patient.
      */
-    public DistributedRandomValueGenerator getNumTumorsPerPatientDistribution() {
-        DistributedRandomValueGenerator numTumGen = new DistributedRandomValueGenerator();
-        numTumGen.add("1", 95.0);
-        numTumGen.add("2", 4.0);
-        numTumGen.add("3", 1.0);
-        return numTumGen;
+    public Distribution<Integer> getNumTumorsPerPatientDistribution() {
+        Map<Integer, Double> frequencies = new HashMap<>();
+        frequencies.put(1, 95.0);
+        frequencies.put(2, 4.0);
+        frequencies.put(3, 1.0);
+        return Distribution.of(frequencies);
     }
 
     /**
