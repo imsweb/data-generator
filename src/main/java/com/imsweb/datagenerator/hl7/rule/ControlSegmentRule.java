@@ -5,6 +5,7 @@ package com.imsweb.datagenerator.hl7.rule;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 import com.imsweb.datagenerator.hl7.NaaccrHl7DataGeneratorOptions;
 import com.imsweb.datagenerator.hl7.NaaccrHl7DataGeneratorRule;
@@ -18,7 +19,7 @@ public class ControlSegmentRule extends NaaccrHl7DataGeneratorRule {
     }
 
     @Override
-    public void execute(Hl7Message message, NaaccrHl7DataGeneratorOptions options) {
+    public void execute(Hl7Message message, NaaccrHl7DataGeneratorOptions options, Map<String, Object> context) {
         new Hl7MessageBuilder(message).withSegment("MSH")
 
                 // MSH-3: sending application

@@ -4,8 +4,9 @@
 package com.imsweb.datagenerator.naaccr;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Map;
+
+import com.imsweb.datagenerator.utils.DistributionUtils;
 
 public class NaaccrDataGeneratorOptions {
 
@@ -54,13 +55,8 @@ public class NaaccrDataGeneratorOptions {
      * @param state must be null, blank, or a valid two-letter abbreviation of a US state - null or blank state will prevent address-based rules from running
      */
     public void setState(String state) {
-        // validate state - to be valid, state must have an associated zip_codes/xx.csv resource file
-        if (state != null && !state.isEmpty() && !Arrays.asList("AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI",
-                "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY")
-                .contains(state.toUpperCase()))
+        if (state != null && !DistributionUtils.getAllStates().contains(state.toUpperCase()))
             throw new IllegalArgumentException("State '" + state + "' is not a valid US state");
-        if (state != null && state.isEmpty())
-            state = null;
         _state = state;
     }
 

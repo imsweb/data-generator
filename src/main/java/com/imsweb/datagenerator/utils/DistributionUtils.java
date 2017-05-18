@@ -60,6 +60,10 @@ public class DistributionUtils {
         _DIST_STATE = null;
     }
 
+    public static List<String> getAllStates() {
+        return _STATES;
+    }
+
     public static String getNameLast() {
         return getNameLast(null, null);
     }

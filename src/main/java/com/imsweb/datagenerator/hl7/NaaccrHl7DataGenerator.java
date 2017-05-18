@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
@@ -66,7 +67,7 @@ public class NaaccrHl7DataGenerator implements DataGenerator {
         Hl7Message message = new Hl7Message();
 
         for (NaaccrHl7DataGeneratorRule rule : _rules)
-            rule.execute(message, options);
+            rule.execute(message, options, new HashMap<>());
 
         return message;
     }

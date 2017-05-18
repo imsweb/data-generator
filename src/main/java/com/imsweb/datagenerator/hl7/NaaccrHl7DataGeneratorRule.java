@@ -1,5 +1,7 @@
 package com.imsweb.datagenerator.hl7;
 
+import java.util.Map;
+
 import com.imsweb.datagenerator.DataGeneratorRule;
 import com.imsweb.layout.hl7.entity.Hl7Message;
 
@@ -34,7 +36,7 @@ public abstract class NaaccrHl7DataGeneratorRule implements DataGeneratorRule {
     /**
      * Execute the logic of the rule on the provided record.
      */
-    public abstract void execute(Hl7Message message, NaaccrHl7DataGeneratorOptions options);
+    public abstract void execute(Hl7Message message, NaaccrHl7DataGeneratorOptions options, Map<String, Object> context);
 
     @Override
     public boolean equals(Object o) {
