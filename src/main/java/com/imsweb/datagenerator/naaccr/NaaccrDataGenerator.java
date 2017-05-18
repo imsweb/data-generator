@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 
+import com.imsweb.datagenerator.DataGenerator;
 import com.imsweb.datagenerator.naaccr.rule.patient.AddressCurrentRule;
 import com.imsweb.datagenerator.naaccr.rule.patient.BirthRule;
 import com.imsweb.datagenerator.naaccr.rule.patient.ComputedEthnicityRule;
@@ -54,6 +55,7 @@ import com.imsweb.datagenerator.naaccr.rule.tumor.SiteRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.TumorMarkerRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.TumorRecordNumberRule;
 import com.imsweb.datagenerator.utils.Distribution;
+import com.imsweb.layout.Layout;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
 
@@ -66,7 +68,7 @@ import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
  * <br/><br/>
  * This generator comes with a set of pre-defined rules. Those can be removed or overridden, and new rules can be added.
  */
-public final class NaaccrDataGenerator {
+public class NaaccrDataGenerator implements DataGenerator {
 
     // NAACCR layout to use for this generator
     private NaaccrLayout _layout;
@@ -79,12 +81,22 @@ public final class NaaccrDataGenerator {
 
     /**
      * Constructor
+     * @param layoutId NAACCR layout ID to use for this generator
+     */
+    public NaaccrDataGenerator(String layoutId) {
+        this(LayoutFactory.getLayout(layoutId));
+    }
+
+    /**
+     * Constructor
      * @param layout NAACCR layout to use for this generator
      */
-    public NaaccrDataGenerator(NaaccrLayout layout) {
+    public NaaccrDataGenerator(Layout layout) {
         if (layout == null)
+            throw new RuntimeException("A layout is required for creating a NAACCR data generator!");
+        if (!(layout instanceof NaaccrLayout))
             throw new RuntimeException("A NAACCR layout is required for creating a NAACCR data generator!");
-        _layout = layout;
+        _layout = (NaaccrLayout)layout;
         _patientRules = new ArrayList<>();
         _tumorRules = new ArrayList<>();
 
@@ -127,6 +139,11 @@ public final class NaaccrDataGenerator {
         _tumorRules.add(new CollaborativeStageRule());
         _tumorRules.add(new NhiaRule());
         _tumorRules.add(new NapiiaRule());
+    }
+
+    @Override
+    public String getId() {
+        return _layout.getLayoutId();
     }
 
     /**
@@ -230,6 +247,17 @@ public final class NaaccrDataGenerator {
      * <br/><br/>
      * Every patient field will have the same value on every generated tumor.
      * @param numTumors number of tumors to generate
+     * @return generated patient as a list of tumor maps, never null
+     */
+    public List<Map<String, String>> generatePatient(int numTumors) {
+        return generatePatient(numTumors, null);
+    }
+
+    /**
+     * Generates a single patient with a requested number of tumors.
+     * <br/><br/>
+     * Every patient field will have the same value on every generated tumor.
+     * @param numTumors number of tumors to generate
      * @param options options
      * @return generated patient as a list of tumor maps, never null
      */
@@ -275,6 +303,17 @@ public final class NaaccrDataGenerator {
         }
 
         return tumors;
+    }
+
+    /**
+     * Generates a requested number of tumors and saves them in the specified file.
+     * <br/><br/>
+     * Every patient field will have the same value on every generated tumor.
+     * @param file file to create; if the name ends with ".gz", it will be compressed
+     * @param numTumors number of tumors to generate, must be greater than 0
+     */
+    public void generateFile(File file, int numTumors) throws IOException {
+        generateFile(file, numTumors, null);
     }
 
     /**
@@ -336,20 +375,5 @@ public final class NaaccrDataGenerator {
                 return false;
         }
         return true;
-    }
-
-    // TODO FPD remove this
-    public static void main(String[] args) {
-        NaaccrDataGenerator generator = new NaaccrDataGenerator((NaaccrLayout)LayoutFactory.getLayout(LayoutFactory.LAYOUT_ID_NAACCR_16_ABSTRACT));
-
-        System.out.println("Demographic Rules");
-        for (NaaccrDataGeneratorRule rule : generator.getPatientRules())
-            System.out.println("   " + rule.getName());
-
-        System.out.println("");
-
-        System.out.println("Tumor Rules");
-        for (NaaccrDataGeneratorRule rule : generator.getTumorRules())
-            System.out.println("   " + rule.getName());
     }
 }

@@ -20,6 +20,8 @@ import com.imsweb.datagenerator.hl7.rule.ObservationRequestSegmentRule;
 import com.imsweb.datagenerator.hl7.rule.ObservationSegmentRule;
 import com.imsweb.datagenerator.hl7.rule.PatientIdentifierSegmentRule;
 import com.imsweb.datagenerator.hl7.rule.PatientVisitSegmentRule;
+import com.imsweb.layout.Layout;
+import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.hl7.NaaccrHl7Layout;
 import com.imsweb.layout.hl7.entity.Hl7Message;
 
@@ -36,12 +38,22 @@ public class NaaccrHl7DataGenerator implements DataGenerator {
 
     /**
      * Constructor
-     * @param layout record layout to use
+     * @param layoutId NAACCR HL7 layout ID to use
      */
-    public NaaccrHl7DataGenerator(NaaccrHl7Layout layout) {
+    public NaaccrHl7DataGenerator(String layoutId) {
+        this(LayoutFactory.getLayout(layoutId));
+    }
+
+    /**
+     * Constructor
+     * @param layout Naaccr HL7 layout to use
+     */
+    public NaaccrHl7DataGenerator(Layout layout) {
         if (layout == null)
             throw new RuntimeException("A layout is required for creating a NAACCR HL7 data generator!");
-        _layout = layout;
+        if (!(layout instanceof NaaccrHl7Layout))
+            throw new RuntimeException("A NAACCR HL7 layout is required for creating a NAACCR HL7 data generator!");
+        _layout = (NaaccrHl7Layout)layout;
         _rules = new ArrayList<>();
 
         _rules.add(new ControlSegmentRule());
@@ -60,6 +72,14 @@ public class NaaccrHl7DataGenerator implements DataGenerator {
 
     /**
      * Generates a single message.
+     * @return the created message
+     */
+    public Hl7Message generateMessage() {
+        return generateMessage(null);
+    }
+
+    /**
+     * Generates a single message.
      * @param options options that will be provided to every rules.
      * @return the created message
      */
@@ -70,6 +90,15 @@ public class NaaccrHl7DataGenerator implements DataGenerator {
             rule.execute(message, options, new HashMap<>());
 
         return message;
+    }
+
+    /**
+     * Generates a requested number of messages and saves them in the specified file.
+     * @param file file to create; if the name ends with ".gz", it will be compressed
+     * @param numMessages number of messages to generate, must be greater than 0
+     */
+    public void generateFile(File file, int numMessages) throws IOException {
+        generateFile(file, numMessages, null);
     }
 
     /**

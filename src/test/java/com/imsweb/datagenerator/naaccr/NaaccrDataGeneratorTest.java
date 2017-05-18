@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import testing.TestingUtils;
 
+import com.imsweb.layout.Layout;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.FixedColumnsField;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
@@ -47,7 +48,7 @@ public class NaaccrDataGeneratorTest {
         // a layout is required
         try {
             //noinspection ConstantConditions
-            new NaaccrDataGenerator(null);
+            new NaaccrDataGenerator((Layout)null);
             Assert.fail();
         }
         catch (RuntimeException e) {
@@ -110,7 +111,7 @@ public class NaaccrDataGeneratorTest {
     @Test
     @SuppressWarnings("ConstantConditions")
     public void testGeneratePatient() throws IOException {
-        NaaccrDataGenerator generator = new NaaccrDataGenerator(_LAYOUT);
+        NaaccrDataGenerator generator = new NaaccrDataGenerator(_LAYOUT.getLayoutId());
 
         // null options, 1 tumor
         List<Map<String, String>> patient = generator.generatePatient(1, null);

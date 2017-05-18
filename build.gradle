@@ -24,8 +24,8 @@ repositories {
 
 dependencies {
     compile 'com.imsweb:layout:1.5.1-SNAPSHOT'
-    compile 'com.imsweb:algorithms:1.4'
-    compile 'com.imsweb:staging-client-java:2.3'
+    compile 'com.imsweb:algorithms:1.7'
+    compile 'com.imsweb:staging-client-java:2.5'
     compile 'commons-io:commons-io:2.5'
     testCompile 'junit:junit:4.12'
 }

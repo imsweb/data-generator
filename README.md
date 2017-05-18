@@ -13,19 +13,44 @@ To include it to your Maven or Gradle project, use the group ID `com.imsweb` and
 
 You can check out the [release page](https://github.com/imsweb/data-generator/releases) for a list of the releases and their changes.
 
-This library requires Java 7 or a more recent version.
+This library requires Java 8 or a more recent version.
 
 ## Usage
 
 There are two ways to use this library:
 
-1. Embed it into your own Java software and call the DataGenerator (for generic layouts) or the NaaccrDataGenerator (for NAACCR layouts).
+1. Embed it into your own Java software and call one of the data generators.
 2. Download the executable JAR from the [release page](https://github.com/imsweb/data-generator/releases) and double click it to start the standalone GUI.
+
+There are currently three types of generator that are provided:
+ - RecordDataGenerator can bu used with generic fixed-columns layouts.
+ - NaaccrDataGenerator can be used for NAACCR fixed-columns layouts.
+ - NaaccrHl7DataGenerator can be used for NAACCR HL7 layouts.
+
+Here is an example using the NAACCR generator:
+```java
+NaaccrDataGenerator generator = new NaaccrDataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_16_ABSTRACT);
+// generate a single patient with 2 tumors (tumors are represented by individual maps, patients are represented as list of maps)
+List<Map<String, String>> patient = generator.generatePatient(2);
+// generate a file with 500 patients, each one will have between 1 and 3 tumors (1 being a much higher probability)
+generator.generateFile(targetFile, 500)
+```
+
+Here is an example using the NAACCR HL7 generator:
+```java
+NaaccrHl7DataGenerator generator = new NaaccrHl7DataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_HL7_2_5_1);
+// generate a single message
+Hl7Message message = generator.generateMessage();
+// generate a file with 10 messages
+generator.generateFile(targetFile, 10)
+```
+
+Both NAACCR generators accept an additional options object as an input to the generate methods, that object can be used to customize the random data generation of some fields.
 
 ## Defining Variables
 
 This library supports variables and file formats through the [layout framework](https://github.com/imsweb/layout). A layout object must be used
-to initialize one of the data generator objects.
+to initialize one of the data generator objects (although some of them supports proving just the layout ID).
 
 ## Creating Random Data
 

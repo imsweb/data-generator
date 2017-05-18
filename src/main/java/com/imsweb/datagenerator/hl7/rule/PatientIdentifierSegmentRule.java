@@ -73,7 +73,7 @@ public class PatientIdentifierSegmentRule extends NaaccrHl7DataGeneratorRule {
 
         // address
         String[] address = null;
-        if (options.getState() != null) {
+        if (options != null && options.getState() != null) {
             CityFrequencyDto dto = DistributionUtils.getCity(options.getState());
             address = new String[] {DistributionUtils.getStreetName(), null, dto.getCity(), dto.getState(), dto.getZip()};
         }
