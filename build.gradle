@@ -10,7 +10,7 @@ plugins {
 }
 
 group = 'com.imsweb'
-version = file('VERSION').text
+version = file('VERSION').text.trim()
 description = 'Cancer-related synthetic data generator.'
 
 println "Starting build using ${Jvm.current()}"
@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.imsweb:layout:1.5.1-SNAPSHOT'
+    compile 'com.imsweb:layout:1.5.1'
     compile 'com.imsweb:algorithms:1.7'
     compile 'com.imsweb:staging-client-java:2.5'
     compile 'commons-io:commons-io:2.5'
