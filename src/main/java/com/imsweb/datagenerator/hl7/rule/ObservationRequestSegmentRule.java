@@ -22,6 +22,9 @@ public class ObservationRequestSegmentRule extends NaaccrHl7DataGeneratorRule {
 
     @Override
     public void execute(Hl7Message message, NaaccrHl7DataGeneratorOptions options, Map<String, Object> context) {
+
+        LocalDate observationDate = RandomUtils.getRandomDateBetween(LocalDate.now().minusYears(1L), LocalDate.now()).minusMonths(1);
+
         new Hl7MessageBuilder(message).withSegment("OBR")
 
                 // OBR-1: set ID
@@ -33,11 +36,14 @@ public class ObservationRequestSegmentRule extends NaaccrHl7DataGeneratorRule {
                 // OBR-4: universal service ID
                 .withField(4, "11529-5", "SURGICAL PATH REPORT", "LN")
 
+                // OBR-7 - Observation date/time
+                .withField(7, DateTimeFormatter.ofPattern("yyyyMMdd").format(observationDate))
+
                 // OBR-10: collector identifier
                 .withField(10, RandomUtils.getRandomStringOfDigits(5), DistributionUtils.getNameLast(), DistributionUtils.getNameFirst())
 
                 // OBR-14: specimen received date/time
-                .withField(14, DateTimeFormatter.ofPattern("yyyyMMdd").format(RandomUtils.getRandomDateBetween(LocalDate.now().minusYears(1L), LocalDate.now())))
+                .withField(14, DateTimeFormatter.ofPattern("yyyyMMdd").format(observationDate.plusDays(2)))
 
                 // OBR-16: ordering provider
                 .withField(16)

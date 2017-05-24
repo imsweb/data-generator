@@ -78,6 +78,9 @@ public class PatientIdentifierSegmentRule extends NaaccrHl7DataGeneratorRule {
             address = new String[] {DistributionUtils.getStreetName(), null, dto.getCity(), dto.getState(), dto.getZip()};
         }
 
+        // put a site in the context, based on the sex
+        context.put("site", DistributionUtils.getSite(sex));
+
         new Hl7MessageBuilder(message).withSegment("PID")
 
                 // PID-1: set ID

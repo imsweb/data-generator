@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 
 import com.imsweb.datagenerator.DataGenerator;
@@ -86,8 +87,9 @@ public class NaaccrHl7DataGenerator implements DataGenerator {
     public Hl7Message generateMessage(NaaccrHl7DataGeneratorOptions options) {
         Hl7Message message = new Hl7Message();
 
+        Map<String, Object> context = new HashMap<>();
         for (NaaccrHl7DataGeneratorRule rule : _rules)
-            rule.execute(message, options, new HashMap<>());
+            rule.execute(message, options, context);
 
         return message;
     }

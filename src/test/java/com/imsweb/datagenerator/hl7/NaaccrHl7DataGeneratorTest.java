@@ -23,7 +23,11 @@ public class NaaccrHl7DataGeneratorTest {
 
         Path buildDir = Paths.get("build");
 
-        generator.generateFile(buildDir.resolve("naaccr-hl7-test.txt").toFile(), 3, null);
+        NaaccrHl7DataGeneratorOptions options = new NaaccrHl7DataGeneratorOptions();
+        options.setGenerateSiteAndMorphology(true);
+        options.setState("MD");
+
+        generator.generateFile(buildDir.resolve("naaccr-hl7-test.txt").toFile(), 3, options);
     }
 
 }

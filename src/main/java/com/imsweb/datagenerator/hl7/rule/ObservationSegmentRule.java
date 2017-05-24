@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.imsweb.datagenerator.hl7.NaaccrHl7DataGeneratorOptions;
 import com.imsweb.datagenerator.hl7.NaaccrHl7DataGeneratorRule;
+import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
 import com.imsweb.layout.hl7.Hl7MessageBuilder;
 import com.imsweb.layout.hl7.entity.Hl7Message;
 
@@ -56,8 +57,27 @@ public class ObservationSegmentRule extends NaaccrHl7DataGeneratorRule {
         new Hl7MessageBuilder(message).withSegment("OBX")
                 .withField(1, "5")
                 .withField(2, "TX")
-                .withField(3, "22634-0^gross description", "gross description", "LN")
+                .withField(3, "22634-0", "gross description", "LN")
                 .withField(5, "Part #1 is labeled \"left breast biopsy\" and is received fresh after frozen section preparation. It consists of a single firm nodule measuring 3cm in circular diameter and 1.5cm in thickness surrounded by adherent firbrofatty tissue. On section a pale gray, slightly mottled appearance is revealed. Numerous sections are submitted for permanent processing.\\.br\\Part #2 is labeled \"apical left axillary tissue\" and is received fresh. It consists of two amorphous fibrofatty tissue masses without grossly discernible lymph nodes therein. Both pieces are rendered into numerous sections and submitted in their entirety for history.\\.br\\Part #3 is labeled \"contents of left radical mastectomy\" and is received flesh. It consists of a large ellipse of skin overlying breast tissue, the ellipse measuring 20cm in length and 14 cm in height. A freshly sutured incision extends 3cm directly lateral from the areola, corresponding to the closure for removal of part #1. Abundant amounts of fibrofatty connective tissue surround the entire beast and the deep aspect includes and 8cm length of pectoralis minor and a generous mass of overlying pectoralis major muscle. Incision from the deepest aspect of the specimen beneath the tumor mass reveals tumor extension gross to within 0.5cm of muscle. Sections are submitted according to the following code: DE- deep surgical resection margins; SU, LA, INF, ME -- full thickness radila samplings from the center of the tumor superiorly, laterally, inferiorly and medially, respectively: NI- nipple and subjacent tissue. Lymph nodes dissected free from axillary fibrofatty tissue from levels I, II, and III will be labeled accordingly.")
                 .withField(11, "F");
+
+        if (options != null && Boolean.TRUE.equals(options.getGenerateSiteAndMorphology())) {
+
+            SiteFrequencyDto siteDto = (SiteFrequencyDto)context.get("site");
+
+            new Hl7MessageBuilder(message).withSegment("OBX")
+                    .withField(1, "5")
+                    .withField(2, "CE")
+                    .withField(3, "31205-8", "Topography", "LN")
+                    .withField(5, siteDto.getSite())
+                    .withField(11, "F");
+
+            new Hl7MessageBuilder(message).withSegment("OBX")
+                    .withField(1, "5")
+                    .withField(2, "CE")
+                    .withField(3, "22049-1", "Morphology", "LN")
+                    .withField(5, "M-" + siteDto.getHistology() + siteDto.getBehavior())
+                    .withField(11, "F");
+        }
     }
 }
