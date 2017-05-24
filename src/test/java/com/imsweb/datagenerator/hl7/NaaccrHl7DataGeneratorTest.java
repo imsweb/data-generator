@@ -5,8 +5,6 @@ package com.imsweb.datagenerator.hl7;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,7 +12,6 @@ import org.junit.Test;
 import testing.TestingUtils;
 
 import com.imsweb.layout.LayoutFactory;
-import com.imsweb.layout.hl7.Hl7Utils;
 import com.imsweb.layout.hl7.NaaccrHl7Layout;
 import com.imsweb.layout.hl7.entity.Hl7Message;
 
@@ -45,7 +42,7 @@ public class NaaccrHl7DataGeneratorTest {
         msg = layout.readAllMessages(file).get(2);
         Assert.assertNotNull(msg.getSegment("PID").getField(5).getValue());
         Assert.assertNotNull(msg.getSegment("PID").getField(11).getValue());
-        
+
         // test codes site option
         options.setGenerateSiteAndMorphology(true);
         generator.generateFile(file, 1, options);
