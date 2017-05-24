@@ -32,10 +32,10 @@ import com.imsweb.layout.hl7.entity.Hl7Message;
 public class NaaccrHl7DataGenerator implements DataGenerator {
 
     // the layout used for this generator (the layout defines the variables that can be used in the rules)
-    private NaaccrHl7Layout _layout;
+    protected NaaccrHl7Layout _layout;
 
     // list of rules to be executed
-    private List<NaaccrHl7DataGeneratorRule> _rules;
+    protected List<NaaccrHl7DataGeneratorRule> _rules;
 
     /**
      * Constructor
