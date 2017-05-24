@@ -29,18 +29,26 @@ There are currently three types of generator that are provided:
 
 Here is an example using the NAACCR generator:
 ```java
+// create the generator
 NaaccrDataGenerator generator = new NaaccrDataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_16_ABSTRACT);
-// generate a single patient with 2 tumors (tumors are represented by individual maps, patients are represented as list of maps)
+
+// generate a single patient with 2 tumors
+// tumors are represented by individual maps, patients are represented as list of maps
 List<Map<String, String>> patient = generator.generatePatient(2);
-// generate a file with 500 patients, each one will have between 1 and 3 tumors (1 being a much higher probability)
+
+// generate a file with 500 patients, each one will have between 1 and 3 tumors
+// with 1 being a much higher probability
 generator.generateFile(targetFile, 500)
 ```
 
 Here is an example using the NAACCR HL7 generator:
 ```java
+// create the generator
 NaaccrHl7DataGenerator generator = new NaaccrHl7DataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_HL7_2_5_1);
+
 // generate a single message
 Hl7Message message = generator.generateMessage();
+
 // generate a file with 10 messages
 generator.generateFile(targetFile, 10)
 ```
@@ -50,12 +58,12 @@ Both NAACCR generators accept an additional options object as an input to the ge
 ## Defining Variables
 
 This library supports variables and file formats through the [layout framework](https://github.com/imsweb/layout). A layout object must be used
-to initialize one of the data generator objects (although some of them supports proving just the layout ID).
+to initialize one of the data generator objects (although some of them supports providing just the layout ID).
 
 ## Creating Random Data
 
-The library is composed of rules, each rule being responsible for assigning one or several fields. It comes with a set of rules (very basic at this point) to assign some of the NAACCR fields;
-but if embedded, it can be setup to create any fixed-column or comma-separated file format.
+The library uses rules to create data; each rule being responsible for assigning one or several fields. The NAACCR generators come with a set of basic rules to assign some of the NAACCR fields;
+the generic generator does't come with any rules.
 
 The library uses three ways to assign values:
 
@@ -65,7 +73,7 @@ The library uses three ways to assign values:
 
 In addition to those assignment mechanisms, each rule might have dependencies to the values assigned by previous rules.
 
-The default rules use frequencies extracted from the SEER data.
+The default NAACCR rules use frequencies extracted from the SEER data.
 
 To know more about the default NAACCR rules, check out the [rule package](https://github.com/imsweb/data-generator/tree/master/src/main/java/com/imsweb/datagenerator/naaccr/rule).
 
