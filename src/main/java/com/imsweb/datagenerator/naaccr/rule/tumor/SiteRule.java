@@ -5,7 +5,8 @@ import java.util.Map;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
-import com.imsweb.datagenerator.random.DistributedRandomValueGenerator;
+import com.imsweb.datagenerator.utils.DistributionUtils;
+import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
 
 public class SiteRule extends NaaccrDataGeneratorRule {
 
@@ -42,10 +43,10 @@ public class SiteRule extends NaaccrDataGeneratorRule {
     @Override
     public void execute(Map<String, String> tumor, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options) {
 
-        List<String> values = tumor.get("sex").equals("2") ? VALUES_FEMALE.getRandomValueList() : VALUES_MALE.getRandomValueList();
-        tumor.put("primarySite", values.get(0));
-        tumor.put("histologyIcdO3", values.get(1));
-        tumor.put("behaviorIcdO3", values.get(2));
+        SiteFrequencyDto dto = DistributionUtils.getSite(tumor.get("sex"));
+        tumor.put("primarySite", dto.getSite());
+        tumor.put("histologyIcdO3", dto.getHistology());
+        tumor.put("behaviorIcdO3", dto.getBehavior());
 
         // set grade and laterality to 9, unknown
         tumor.put("grade", "9");

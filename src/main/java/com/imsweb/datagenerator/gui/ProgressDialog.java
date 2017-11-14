@@ -39,7 +39,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGenerator;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
-import com.imsweb.datagenerator.random.DistributedRandomValueGenerator;
+import com.imsweb.datagenerator.utils.Distribution;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
 
@@ -167,7 +167,7 @@ public class ProgressDialog extends JDialog {
                     return null;
 
                 // create a random distribution for the number of tumors, if we have to
-                DistributedRandomValueGenerator numTumGen = _options.getNumTumorsPerPatient() == null ? generator.getNumTumorsPerPatientDistribution() : null;
+                Distribution<Integer> numTumGen = _options.getNumTumorsPerPatient() == null ? generator.getNumTumorsPerPatientDistribution() : null;
 
                 // deal with compression
                 OutputStream os = new FileOutputStream(_file);
@@ -179,7 +179,7 @@ public class ProgressDialog extends JDialog {
                 try (Writer writer = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8))) {
                     int numCreatedTumors = 0;
                     while (numCreatedTumors < _numRecs) {
-                        int numTumorForThisPatient = numTumGen == null ? _options.getNumTumorsPerPatient() : Integer.parseInt(numTumGen.getRandomValue());
+                        int numTumorForThisPatient = numTumGen == null ? _options.getNumTumorsPerPatient() : numTumGen.getValue();
                         // never create more tumors than requested, so we use a min() call
                         List<Map<String, String>> patient = generator.generatePatient(Math.min(numTumorForThisPatient, _numRecs - numCreatedTumors), _options);
                         for (Map<String, String> tumor : patient)

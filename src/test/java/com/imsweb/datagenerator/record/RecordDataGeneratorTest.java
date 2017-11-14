@@ -1,4 +1,4 @@
-package com.imsweb.datagenerator;
+package com.imsweb.datagenerator.record;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,11 +15,11 @@ import testing.TestingUtils;
 import com.imsweb.layout.record.fixed.FixedColumnsField;
 import com.imsweb.layout.record.fixed.FixedColumnsLayout;
 
-public class DataGeneratorTest {
+public class RecordDataGeneratorTest {
 
     @Test
     public void testGenerator() {
-        DataGenerator generator = createGenerator();
+        RecordDataGenerator generator = createGenerator();
 
         // 1 rule
         Assert.assertEquals(1, generator.getRules().size());
@@ -34,7 +34,8 @@ public class DataGeneratorTest {
 
         // a layout is required
         try {
-            new DataGenerator(null);
+            //noinspection ConstantConditions
+            new RecordDataGenerator(null);
             Assert.fail();
         }
         catch (RuntimeException e) {
@@ -44,7 +45,7 @@ public class DataGeneratorTest {
 
     @Test
     public void testGenerateRecord() {
-        DataGenerator generator = createGenerator();
+        RecordDataGenerator generator = createGenerator();
 
         // null options
         Map<String, String> record = generator.generateRecord(null);
@@ -73,7 +74,7 @@ public class DataGeneratorTest {
 
     @Test
     public void testGenerateFile() throws IOException {
-        DataGenerator generator = createGenerator();
+        RecordDataGenerator generator = createGenerator();
 
         // regular file, 1 record
         File file = TestingUtils.createFile("data-generator-1-rec.txt");
@@ -123,7 +124,7 @@ public class DataGeneratorTest {
         }
     }
 
-    private DataGenerator createGenerator() {
+    private RecordDataGenerator createGenerator() {
 
         // first, let's create a fake layout
         FixedColumnsLayout layout = new FixedColumnsLayout();
@@ -138,10 +139,10 @@ public class DataGeneratorTest {
         layout.setFields(Collections.singleton(f1));
 
         // then lets create the generator
-        DataGenerator generator = new DataGenerator(layout);
+        RecordDataGenerator generator = new RecordDataGenerator(layout);
 
         // and finally, let's add a rule for the unique field
-        generator.addRule(new DataGeneratorRule("field1-rule", "Field 1") {
+        generator.addRule(new RecordDataGeneratorRule("field1-rule", "Field 1") {
             @Override
             public void execute(Map<String, String> record, Map<String, Object> options) {
                 if (options != null && Boolean.TRUE.equals(options.get("uppercase")))

@@ -11,7 +11,14 @@ public class AddressCurrentRule extends AddressRule {
      * Constructor.
      */
     public AddressCurrentRule() {
-        super(ID, "Current address", "addressCurrentState", "addressCurrentCity", "addressCurrentPostalCode", "addressCurrentCountry", "addressCurrentStreetName",
-                "addressCurrentSupplementl", "addressCurrentCounty");
+        super(ID,
+                "Current address",
+                "addressCurrentState",
+                "addressCurrentCity",
+                "addressCurrentPostalCode",
+                "addressCurrentCountry",
+                "addressCurrentStreetName",
+                "addressCurrentSupplementl",
+                "addressCurrentCounty");
     }
 }

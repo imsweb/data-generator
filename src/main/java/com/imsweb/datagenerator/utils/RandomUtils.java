@@ -1,4 +1,4 @@
-package com.imsweb.datagenerator.random;
+package com.imsweb.datagenerator.utils;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -29,6 +29,50 @@ public class RandomUtils {
      */
     public static double nextDouble() {
         return _RANDOM.nextDouble();
+    }
+
+    /**
+     * Generates a random letter.
+     */
+    public static char nextLetter() {
+        return (char)(nextInt(26) + 65);
+    }
+
+    /**
+     * Generates a random digit as a character.
+     */
+    public static char nextDigit() {
+        return (char)(nextInt(10) + 48);
+    }
+
+    /**
+     * Generates a random string of characters.
+     */
+    public static String getRandomStringOfLetters(int length) {
+        StringBuilder buf = new StringBuilder();
+        for (int i = 0; i < length; i++)
+            buf.append(nextLetter());
+        return buf.toString();
+    }
+
+    /**
+     * Generates a random string of digits.
+     */
+    public static String getRandomStringOfDigits(int length) {
+        StringBuilder buf = new StringBuilder();
+        for (int i = 0; i < length; i++)
+            buf.append(nextDigit());
+        return buf.toString();
+    }
+
+    /**
+     * Generates a random string of characters and digits.
+     */
+    public static String getRandomStringOfLettersOrDigits(int length) {
+        StringBuilder buf = new StringBuilder();
+        for (int i = 0; i < length; i++)
+            buf.append(nextInt(100) > 75 ? nextDigit() : nextLetter());
+        return buf.toString();
     }
 
     /**

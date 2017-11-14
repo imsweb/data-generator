@@ -21,7 +21,7 @@ public class ComputedEthnicityRule extends NaaccrDataGeneratorRule {
     private static final String _CRITERIA = "Computed Ethnicity is calculated based on Sex, Last Name, and Maiden Name.";
 
     // resource file containing list of spanish surnames
-    protected static final String _FILE_SPANISH_SURNAMES = "lists/spanish_surnames.csv";
+    protected static final String _FILE_SPANISH_SURNAMES = "frequencies/spanish_surnames.csv";
 
     // cached list of spanish surnames
     protected List<String> _surnames;
