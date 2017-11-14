@@ -15,12 +15,6 @@ public class RaceRule extends NaaccrDataGeneratorRule {
     private static final String _CRITERIA = "Race 1 is randomly generated based on frequency. If Race 1 is set to 99, Race 2-5 are set to 99 also.<br/>"
             + "Otherwise, Race 2-5 are set to 88.";
 
-    // file to the frequencies
-    protected static final String _FREQUENCY_FILE = "frequencies/race.csv";
-
-    // random race value generator
-    protected static final DistributedRandomValueGenerator _VALUES = new DistributedRandomValueGenerator(_FREQUENCY_FILE);
-
     /**
      * Constructor.
      */

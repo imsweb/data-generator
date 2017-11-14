@@ -13,18 +13,6 @@ public class SiteRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "site";
 
-    // file to the female frequencies
-    private static final String _FILE_FREQUENCY_SITE_FEMALE = "frequencies/sites_sex_female.csv";
-
-    // file to the male frequencies
-    private static final String _FILE_FREQUENCY_SITE_MALE = "frequencies/sites_sex_male.csv";
-
-    // random site generator for females
-    private static final DistributedRandomValueGenerator VALUES_FEMALE = new DistributedRandomValueGenerator(_FILE_FREQUENCY_SITE_FEMALE);
-
-    // random site generator for males
-    private static final DistributedRandomValueGenerator VALUES_MALE = new DistributedRandomValueGenerator(_FILE_FREQUENCY_SITE_MALE);
-
     private static final String _CRITERIA = "Primary Site, Histology, and Behavior are randomly generated based on frequencies. These frequencies depend on Sex.<br/>"
             + "Grade is always set to 9. If Primary Site is C809 (unknown), Laterality is set to 0. Otherwise it is set to 9.";
 

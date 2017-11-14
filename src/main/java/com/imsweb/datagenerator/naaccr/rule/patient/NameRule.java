@@ -21,24 +21,6 @@ public class NameRule extends NaaccrDataGeneratorRule {
             + "Suffix is randomly generated from a list based on Sex. There is a 3% chance that a patient will have a suffix.";
     // TODO maiden name, spouse name...why is maiden name = last name
 
-    // file to last name frequencies
-    protected static final String _FREQUENCY_FILE_LAST_WHITE = "frequencies/last_names_white.csv";
-    protected static final String _FREQUENCY_FILE_LAST_BLACK = "frequencies/last_names_black.csv";
-    protected static final String _FREQUENCY_FILE_LAST_API = "frequencies/last_names_api.csv";
-    protected static final String _FREQUENCY_FILE_LAST_HISPANIC = "frequencies/last_names_hispanic.csv";
-
-    // file to first names
-    protected static final String _FILE_FIRST_MALE = "lists/first_names_male.csv";
-    protected static final String _FILE_FIRST_FEMALE = "lists/first_names_female.csv";
-
-    // random name generators
-    protected static final DistributedRandomValueGenerator _VALUES_WHITE = new DistributedRandomValueGenerator(_FREQUENCY_FILE_LAST_WHITE);
-    protected static final DistributedRandomValueGenerator _VALUES_BLACK = new DistributedRandomValueGenerator(_FREQUENCY_FILE_LAST_BLACK);
-    protected static final DistributedRandomValueGenerator _VALUES_API = new DistributedRandomValueGenerator(_FREQUENCY_FILE_LAST_API);
-    protected static final DistributedRandomValueGenerator _VALUES_HISPANIC = new DistributedRandomValueGenerator(_FREQUENCY_FILE_LAST_HISPANIC);
-    protected static final UniformRandomValueGenerator _VALUES_NAME_FIRST_MALE = new UniformRandomValueGenerator(_FILE_FIRST_MALE);
-    protected static final UniformRandomValueGenerator _VALES_NAME_FIRST_FEMALE = new UniformRandomValueGenerator(_FILE_FIRST_FEMALE);
-
     // lists of valid name prefixes and suffixes
     private static final String[] _VALUES_PREFIXES_MALE = {"Dr", "Rev", "Mr"};
     private static final String[] _VALUES_PREFIXES_FEMALE = {"Dr", "Rev", "Ms", "Mrs"};
