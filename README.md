@@ -41,6 +41,44 @@ List<Map<String, String>> patient = generator.generatePatient(2);
 generator.generateFile(targetFile, 500)
 ```
 
+The NAACCR generator current provides rules for the following fields:
+ - Patient ID Number
+ - Sex
+ - Race 1-5
+ - Spanish/Hispanic Origin
+ - Social Security Number
+ - Name (Last, First, Middle, Prefix, Suffix and Maiden if needed)
+ - Vital Status
+ - Cause of death and ICD Revision Number
+ - Date of Birth, Birthplace Country and State
+ - Current address
+ - Computed Ethnicity
+ - IHS
+ - Registry ID
+ - Tumor Record Number
+ - SEER Record Number
+ - Sequence Number Central
+ - Date of Diagnosis
+ - Primary Site and related fields
+ - Age at DX
+ - Date of Initial RX
+ - Date of Last Contact
+ - Address at DX
+ - Marital Status at DX
+ - Diagnostic Confirmation
+ - Type of Reporting Source
+ - Census fields
+ - RX Summary fields
+ - SEER Type of Follow Up
+ - Primary Payer at DX
+ - Tumor Marker 1, 2 and 3
+ - SEER Coding System
+ - Multiple Tumors fields
+ - Date Conclusive DX
+ - Collaborative Stage fields
+ - NHIA
+ - NAPIIA
+
 Here is an example using the NAACCR HL7 generator:
 ```java
 // create the generator
@@ -52,6 +90,15 @@ Hl7Message message = generator.generateMessage();
 // generate a file with 10 messages
 generator.generateFile(targetFile, 10)
 ```
+
+The current NAACCR HL7 generator provides rules for the following segments:
+ - Control Segment (MSH)
+ - Patient Identifier Segment (PID)
+ - Next of Kin Segment (NK1)
+ - Patient Visit Segment (PV1)
+ - Common Order Segment (ORC)
+ - Observation Request Segment (OBR)
+ - Observation/Result Segment (OBX)
 
 Both NAACCR generators accept an additional options object as an input to the generate methods, that object can be used to customize the random data generation of some fields.
 

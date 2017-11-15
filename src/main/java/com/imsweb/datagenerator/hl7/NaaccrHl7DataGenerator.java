@@ -72,6 +72,13 @@ public class NaaccrHl7DataGenerator implements DataGenerator {
     }
 
     /**
+     * Returns all the rules from this generator.
+     */
+    public List<NaaccrHl7DataGeneratorRule> getRules() {
+        return _rules;
+    }
+
+    /**
      * Generates a single message.
      * @return the created message
      */
