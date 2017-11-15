@@ -5,8 +5,6 @@ package lab;
 
 import com.imsweb.datagenerator.hl7.NaaccrHl7DataGenerator;
 import com.imsweb.datagenerator.hl7.NaaccrHl7DataGeneratorRule;
-import com.imsweb.datagenerator.naaccr.NaaccrDataGenerator;
-import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
 import com.imsweb.layout.LayoutFactory;
 
 public class RuleDescriptionGenerator {
@@ -18,5 +16,4 @@ public class RuleDescriptionGenerator {
             System.out.println(" - " + rule.getName());
     }
 
-    
 }
