@@ -11,7 +11,7 @@ public class PrimaryPayerRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "primary-payer-at-dx";
 
-    private static final String _CRITERIA = "Primary Payer at DX is alway set to 99.";
+    private static final String _DESCRIPTION = "Primary Payer at DX is alway set to 99.";
 
     /**
      * Constructor.
@@ -21,8 +21,8 @@ public class PrimaryPayerRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public String getCriteria() {
-        return _CRITERIA;
+    public String getDescription() {
+        return _DESCRIPTION;
     }
 
     @Override

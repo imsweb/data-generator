@@ -12,7 +12,7 @@ public class DateOfInitialRxRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "date-of-initial-rx";
 
-    private static final String _CRITERIA = "Date of Initial RX is always set to the Date of Diagnosis";
+    private static final String _DESCRIPTION = "Date of Initial RX is always set to the Date of Diagnosis";
 
     /**
      * Constructor.
@@ -27,8 +27,8 @@ public class DateOfInitialRxRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public String getCriteria() {
-        return _CRITERIA;
+    public String getDescription() {
+        return _DESCRIPTION;
     }
 
     @Override

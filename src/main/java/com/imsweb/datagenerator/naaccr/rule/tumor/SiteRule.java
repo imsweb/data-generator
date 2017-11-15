@@ -13,7 +13,7 @@ public class SiteRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "site";
 
-    private static final String _CRITERIA = "Primary Site, Histology, and Behavior are randomly generated based on frequencies. These frequencies depend on Sex.<br/>"
+    private static final String _DESCRIPTION = "Primary Site, Histology, and Behavior are randomly generated based on SEER frequencies and Sex.<br/>"
             + "Grade is always set to 9. If Primary Site is C809 (unknown), Laterality is set to 0. Otherwise it is set to 9.";
 
     /**
@@ -24,8 +24,8 @@ public class SiteRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public String getCriteria() {
-        return _CRITERIA;
+    public String getDescription() {
+        return _DESCRIPTION;
     }
 
     @Override

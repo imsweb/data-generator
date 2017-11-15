@@ -11,7 +11,7 @@ public class PatientIdRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "patient-id-number";
 
-    private static final String _CRITERIA = "Patient ID starts at 00000001 and is incremented by 1 for each new patient. Records for the same patient will have the same Patient ID.";
+    private static final String _DESCRIPTION = "Patient ID starts at 00000001 and is incremented by 1 for each new patient.";
 
     // current counter value
     private int _currentValue;
@@ -25,8 +25,8 @@ public class PatientIdRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public String getCriteria() {
-        return _CRITERIA;
+    public String getDescription() {
+        return _DESCRIPTION;
     }
 
     @Override

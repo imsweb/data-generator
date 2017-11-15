@@ -12,7 +12,7 @@ public class DateOfConclusiveDxRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "date-conclusive-dx";
 
-    private static final String _CRITERIA = "Date of Conclusive DX is always set to the Date of Diagnosis.";
+    private static final String _DESCRIPTION = "Date of Conclusive DX is always set to the Date of Diagnosis.";
 
     /**
      * Constructor.
@@ -27,8 +27,8 @@ public class DateOfConclusiveDxRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public String getCriteria() {
-        return _CRITERIA;
+    public String getDescription() {
+        return _DESCRIPTION;
     }
 
     @Override

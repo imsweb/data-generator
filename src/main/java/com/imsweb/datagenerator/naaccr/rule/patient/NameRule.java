@@ -14,12 +14,12 @@ public class NameRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "name";
 
-    private static final String _CRITERIA = "Last Name is randomly generated based on frequency. The frequency depends on Spanish/Hispanic Origin and Race 1.<br/>"
+    private static final String _DESCRIPTION = "Last Name is randomly generated based on SEER frequency, Spanish/Hispanic Origin, and Race 1.<br/>"
             + "First Name is randomly generated from a list based on Sex.<br/>"
-            + "Middle Name is randomly generated from a list based on Sex. There is a 5% chance that Middle Name will be an initial.<br/>"
-            + "Prefix is randomly generated from a list based on Sex. There is a 2% chance that a patient will have a prefix."
-            + "Suffix is randomly generated from a list based on Sex. There is a 3% chance that a patient will have a suffix.";
-    // TODO maiden name, spouse name...why is maiden name = last name
+            + "Middle Name is randomly generated from a list based on Sex.<br/>"
+            + "Prefix is randomly generated from a list based on Sex.<br/>"
+            + "Suffix is randomly generated from a list based on Sex."
+            + "Maiden Name is set randomly if Sex is female. If it is set, it will always be the value of Last Name.";
 
     // lists of valid name prefixes and suffixes
     private static final String[] _VALUES_PREFIXES_MALE = {"Dr", "Rev", "Mr"};
@@ -40,8 +40,8 @@ public class NameRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public String getCriteria() {
-        return _CRITERIA;
+    public String getDescription() {
+        return _DESCRIPTION;
     }
 
     @Override

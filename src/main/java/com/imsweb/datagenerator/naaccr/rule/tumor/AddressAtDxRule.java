@@ -13,6 +13,8 @@ public class AddressAtDxRule extends AddressRule {
     // unique identifier for this rule
     public static final String ID = "address-dx";
 
+    private static final String _DESCRIPTION = "Address at DX is randomly generated based on SEER frequencies and the provided state.";
+
     /**
      * Constructor.
      */
@@ -38,5 +40,10 @@ public class AddressAtDxRule extends AddressRule {
         }
         else
             super.execute(record, otherRecords, options);
+    }
+
+    @Override
+    public String getDescription() {
+        return _DESCRIPTION;
     }
 }

@@ -11,7 +11,7 @@ public class IhsRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "ihs";
 
-    private static final String _CRITERIA = "IHS is always left blank.";
+    private static final String _DESCRIPTION = "IHS is always left blank.";
 
     /**
      * Constructor.
@@ -21,8 +21,8 @@ public class IhsRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public String getCriteria() {
-        return _CRITERIA;
+    public String getDescription() {
+        return _DESCRIPTION;
     }
 
     @Override

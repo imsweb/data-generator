@@ -12,10 +12,7 @@ public class MaritalStatusRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "marital-status";
 
-    private static final String _CRITERIA = "Martial Status at DX is randomly generated based on the patient's Maiden Name.<br/>"
-            + "If the patient has no Maiden Name, then a Marital Status between 1 and 6 will be randomly assigned.</br>"
-            + "If the patient has a Maiden Name, then a Martial Status between 2 and 5 will be randomly assigned.";
-
+    private static final String _DESCRIPTION = "Martial Status at DX is randomly generated based on the patient's Maiden Name.";
     /**
      * Constructor.
      */
@@ -24,8 +21,8 @@ public class MaritalStatusRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public String getCriteria() {
-        return _CRITERIA;
+    public String getDescription() {
+        return _DESCRIPTION;
     }
 
     @Override

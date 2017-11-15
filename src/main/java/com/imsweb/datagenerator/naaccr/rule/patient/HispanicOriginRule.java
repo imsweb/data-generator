@@ -12,7 +12,7 @@ public class HispanicOriginRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "spanish-hispanic-origin";
 
-    private static final String _CRITERIA = "Spanish/Hispanic Origin is randomly generated based on frequency";
+    private static final String _DESCRIPTION = "Spanish/Hispanic Origin is randomly generated based on SEER frequency";
 
     /**
      * Constructor.
@@ -22,8 +22,8 @@ public class HispanicOriginRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public String getCriteria() {
-        return _CRITERIA;
+    public String getDescription() {
+        return _DESCRIPTION;
     }
 
     @Override

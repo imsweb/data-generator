@@ -14,7 +14,7 @@ public class NhiaRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "nhia";
 
-    private static final String _CRITERIA = "NHIA is calculated based on Spanish/Hispanic Origin, Country of Birth, Sex, Race 1,<br/>"
+    private static final String _DESCRIPTION = "NHIA is calculated based on Spanish/Hispanic Origin, Birthplace--Country, Sex, Race 1,<br/>"
             + "IHS, Last Name, Maiden Name, and State and County at DX.";
 
     /**
@@ -25,8 +25,8 @@ public class NhiaRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public String getCriteria() {
-        return _CRITERIA;
+    public String getDescription() {
+        return _DESCRIPTION;
     }
 
     @Override

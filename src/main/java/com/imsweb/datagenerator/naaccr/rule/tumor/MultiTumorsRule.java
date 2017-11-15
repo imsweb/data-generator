@@ -12,6 +12,9 @@ public class MultiTumorsRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "multi-tumors";
 
+    private static final String _DESCRIPTION = "If Date of Diagnosis is 2007 and later, Date of Mult Tumors is set to Date of Diagnosis,<br/> "
+            + "Mult Tum Rpt as One Prim is set to 99, and Multiplicity Counter is set to 99";
+
     /**
      * Constructor.
      */
@@ -22,6 +25,11 @@ public class MultiTumorsRule extends NaaccrDataGeneratorRule {
     @Override
     public List<String> getRequiredProperties() {
         return Arrays.asList("dateOfDiagnosisYear", "dateOfDiagnosisMonth", "dateOfDiagnosisDay");
+    }
+
+    @Override
+    public String getDescription() {
+        return _DESCRIPTION;
     }
 
     @Override

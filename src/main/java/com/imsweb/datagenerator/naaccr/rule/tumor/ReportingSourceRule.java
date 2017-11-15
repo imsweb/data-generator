@@ -11,7 +11,7 @@ public class ReportingSourceRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "type-rpt-src";
 
-    private static final String _CRITERIA = "Type of Reporting Source is always set to 1.";
+    private static final String _DESCRIPTION = "Type of Reporting Source is always set to 1.";
 
     /**
      * Constructor.
@@ -21,8 +21,8 @@ public class ReportingSourceRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public String getCriteria() {
-        return _CRITERIA;
+    public String getDescription() {
+        return _DESCRIPTION;
     }
 
     @Override

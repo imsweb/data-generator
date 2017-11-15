@@ -15,11 +15,9 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "date-of-diagnosis";
 
-    private static final String _CRITERIA = "Date of Diagnosis is randomly generated between January 1 of the minimum DX year and December 31 of the maximum DX year.<br/>"
+    private static final String _DESCRIPTION = "Date of Diagnosis is randomly generated between January 1 of the minimum DX year and December 31 of the maximum DX year.<br/>"
             + "If no minimum year was specified, then the current date minus 10 years is used as the minimum date.<br/>"
-            + "If no maximum year was specified, then the current date is used as the maximum date.<br/>"
-            + "If a patient has multiple tumors, each tumor after the first one will use the previous tumor's Date of Diagnosis as its minimum date.<br/>"
-            + "This ensures that all tumors on a patient are in chronological order.";
+            + "If no maximum year was specified, then the current date is used as the maximum date.<br/>";
 
     /**
      * Constructor.
@@ -29,8 +27,8 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public String getCriteria() {
-        return _CRITERIA;
+    public String getDescription() {
+        return _DESCRIPTION;
     }
 
     @Override

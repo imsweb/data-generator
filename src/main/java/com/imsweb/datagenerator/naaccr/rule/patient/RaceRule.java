@@ -12,7 +12,7 @@ public class RaceRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "race";
 
-    private static final String _CRITERIA = "Race 1 is randomly generated based on frequency. If Race 1 is set to 99, Race 2-5 are set to 99 also.<br/>"
+    private static final String _DESCRIPTION = "Race 1 is randomly generated based on SEER frequency. If Race 1 is set to 99, Race 2-5 are set to 99 also.<br/>"
             + "Otherwise, Race 2-5 are set to 88.";
 
     /**
@@ -24,8 +24,8 @@ public class RaceRule extends NaaccrDataGeneratorRule {
 
 
     @Override
-    public String getCriteria() {
-        return _CRITERIA;
+    public String getDescription() {
+        return _DESCRIPTION;
     }
 
     @Override

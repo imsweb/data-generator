@@ -1,10 +1,9 @@
 package com.imsweb.datagenerator.naaccr;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import java.time.LocalDate;
 
 public abstract class NaaccrDataGeneratorRule {
 
@@ -38,7 +37,7 @@ public abstract class NaaccrDataGeneratorRule {
         return _name;
     }
 
-    public String getCriteria() {
+    public String getDescription() {
         return "No Description Available";
     }
 

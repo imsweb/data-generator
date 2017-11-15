@@ -12,7 +12,7 @@ public class SexRule extends NaaccrDataGeneratorRule {
     // unique identifier for this rule
     public static final String ID = "sex";
 
-    private static final String _CRITERIA = "Sex is randomly generated based on frequency";
+    private static final String _DESCRIPTION = "Sex is randomly generated based on SEER frequency";
 
     /**
      * Constructor.
@@ -22,8 +22,8 @@ public class SexRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public String getCriteria() {
-        return _CRITERIA;
+    public String getDescription() {
+        return _DESCRIPTION;
     }
 
     @Override
