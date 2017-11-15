@@ -80,6 +80,9 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
     // staging object
     private final Staging _staging = Staging.getInstance(CsDataProvider.getInstance(CsVersion.v020550));
 
+    private static final String _DESCRIPTION = "CS fields are generated on Primary Site, Histologic Type ICD-O-3, Behavior Code ICD-O-3, Grade, Date of Diagnosis, <br/>"
+            + "Age at Diagnosis, Vital Status, and Type of Reporting Source";
+
     /**
      * Constructor.
      */
@@ -90,6 +93,11 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
     @Override
     public List<String> getRequiredProperties() {
         return Arrays.asList("primarySite", "histologyIcdO3", "behaviorIcdO3", "grade", "dateOfDiagnosisYear", "ageAtDx", "vitalStatus", "typeOfReportingSource");
+    }
+
+    @Override
+    public String getDescription() {
+        return _DESCRIPTION;
     }
 
     @Override

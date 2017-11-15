@@ -19,9 +19,16 @@ public class RxSummaryRule extends NaaccrDataGeneratorRule {
         super(ID, "RX Summary fields");
     }
 
+    private static final String _DESCRIPTION = "RX Summary fields are set based on Date of Diagnosis";
+
     @Override
     public List<String> getRequiredProperties() {
         return Collections.singletonList("dateOfDiagnosisYear");
+    }
+
+    @Override
+    public String getDescription() {
+        return _DESCRIPTION;
     }
 
     @Override
