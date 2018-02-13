@@ -1,5 +1,9 @@
 ## Synthetic data generator
 
+**Changes in version 1.3**
+
+- Updated Staging library from version 2.10 to version 2.12. 
+
 **Changes in version 1.2**
 
  - Updated Algorithm library from version 1.9.1 to version 1.10.
