@@ -22,9 +22,9 @@ import com.imsweb.staging.cs.CsStagingData.CsInput;
 import com.imsweb.staging.cs.CsStagingData.CsOutput;
 import com.imsweb.staging.entities.StagingColumnDefinition;
 import com.imsweb.staging.entities.StagingEndpoint;
+import com.imsweb.staging.entities.StagingRange;
 import com.imsweb.staging.entities.StagingSchema;
 import com.imsweb.staging.entities.StagingSchemaInput;
-import com.imsweb.staging.entities.StagingStringRange;
 import com.imsweb.staging.entities.StagingTable;
 import com.imsweb.staging.entities.StagingTableRow;
 
@@ -38,9 +38,6 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
 
     static {
         _CS_FIELDS = new LinkedHashMap<>();
-        _CS_FIELDS.put("csExtension", "extension");
-        _CS_FIELDS.put("csTumorSizeExtEval", "extension_eval");
-        _CS_FIELDS.put("csLymphNodes", "nodes");
         _CS_FIELDS.put("csExtension", "extension");
         _CS_FIELDS.put("csTumorSizeExtEval", "extension_eval");
         _CS_FIELDS.put("csLymphNodes", "nodes");
@@ -243,8 +240,8 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
         StagingTableRow randomRow = tableRows.get(RandomUtils.nextInt(tableRows.size()));
 
         // get a random value or value range from the row using key
-        List<StagingStringRange> stringRange = randomRow.getColumnInput(key);
-        StagingStringRange randomStringRange = stringRange.get(RandomUtils.nextInt(stringRange.size()));
+        List<StagingRange> stringRange = randomRow.getColumnInput(key);
+        StagingRange randomStringRange = stringRange.get(RandomUtils.nextInt(stringRange.size()));
 
         // if no range, return high value, otherwise pick a random value in range and return it
         if (randomStringRange.getHigh().equals(randomStringRange.getLow()))
@@ -288,7 +285,7 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
             StagingTableRow row = tableRows.get(i);
 
             // check invalid values list - omit any input values that are marked invalid
-            List<StagingStringRange> inputs = row.getColumnInput(key);
+            List<StagingRange> inputs = row.getColumnInput(key);
             boolean isInvalidValue = !inputs.isEmpty() && getInvalidValues(key, record, schemaId).contains(inputs.get(0).getHigh());
 
             // check for error in endpoints - omit these from table
