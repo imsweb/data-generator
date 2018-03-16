@@ -20,7 +20,7 @@ public class MaritalStatusRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, String> context) {
         // no maiden name (possibly male) - all possible marital status values are valid (1-6)
         if (!propertyHasValue(record, "nameMaiden"))
             record.put("maritalStatusAtDx", Integer.toString(RandomUtils.nextInt(6) + 1));

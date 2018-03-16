@@ -26,7 +26,7 @@ public class SeerCodingSystemRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, String> context) {
 
         // don't assign anything prior to 2004
         if (!inDxYearRange(record, 2004, null))

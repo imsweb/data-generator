@@ -14,7 +14,7 @@ public class NaaccrDataGeneratorRuleTest {
 
     private NaaccrDataGeneratorRule _rule = new NaaccrDataGeneratorRule("id", "name") {
         @Override
-        public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
+        public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, String> context) {
         }
     };
 

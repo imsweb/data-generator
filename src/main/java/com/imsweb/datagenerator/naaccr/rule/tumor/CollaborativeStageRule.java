@@ -90,7 +90,7 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, String> context) {
 
         // Collaborative Stage was used only in 2004-2015
         if (!inDxYearRange(record, 2004, 2015))

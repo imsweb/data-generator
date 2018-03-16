@@ -20,7 +20,16 @@ public class SexRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
-        record.put("sex", DistributionUtils.getSex());
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, String> context) {
+
+        String wantedSex = null;
+        if (context != null)
+            if (propertyHasValue(context, "sex"))
+                wantedSex = context.get("sex");
+
+        if (wantedSex == null)
+            wantedSex = DistributionUtils.getSex();
+
+        record.put("sex", wantedSex);
     }
 }

@@ -25,7 +25,7 @@ public class DateOfLastContactRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, String> context) {
 
         // for now this is set to the DX date...
         record.put("dateOfLastContactYear", record.get("dateOfDiagnosisYear"));

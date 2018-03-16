@@ -8,6 +8,8 @@ import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
 import com.imsweb.datagenerator.utils.DistributionUtils;
 import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
 
+import static com.imsweb.datagenerator.utils.DistributionUtils.getAgeGroup;
+
 public class SiteRule extends NaaccrDataGeneratorRule {
 
     // unique identifier for this rule
@@ -21,12 +23,22 @@ public class SiteRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> tumor, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options) {
+    public void execute(Map<String, String> tumor, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options, Map<String, String> context) {
 
-        SiteFrequencyDto dto = DistributionUtils.getSite(tumor.get("sex"));
-        tumor.put("primarySite", dto.getSite());
-        tumor.put("histologyIcdO3", dto.getHistology());
-        tumor.put("behaviorIcdO3", dto.getBehavior());
+        if (context != null)
+            if (propertyHasValue(context, "currentTumor")) {
+                String currentTumor = context.get("currentTumor");
+                tumor.put("primarySite", context.get("tumor" + currentTumor + " primarySite"));
+                tumor.put("histologyIcdO3", context.get("tumor" + currentTumor + " histologyIcdO3"));
+                tumor.put("behaviorIcdO3", context.get("tumor" + currentTumor + " behaviorIcdO3"));
+            }
+
+        if (!propertyHasValue(tumor, "primarySite")) {
+            SiteFrequencyDto dto = DistributionUtils.getSite(tumor.get("sex"));
+            tumor.put("primarySite", dto.getSite());
+            tumor.put("histologyIcdO3", dto.getHistology());
+            tumor.put("behaviorIcdO3", dto.getBehavior());
+        }
 
         // set grade and laterality to 9, unknown
         tumor.put("grade", "9");

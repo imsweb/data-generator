@@ -39,7 +39,7 @@ public class ComputedEthnicityRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, String> context) {
 
         boolean lastNameMatch = _surnames.contains(record.get("nameLast").toUpperCase());
         boolean maidenNameEmpty = record.get("nameMaiden") == null || record.get("nameMaiden").isEmpty();

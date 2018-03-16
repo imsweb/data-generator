@@ -29,7 +29,7 @@ public class AddressAtDxRule extends AddressRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, String> context) {
         // if this is not the first tumor, there is an 80% chance to keep previous address at DX
         if (otherRecords != null && !otherRecords.isEmpty() && RandomUtils.nextInt(10) < 8) {
             Map<String, String> otherRecord = otherRecords.get(otherRecords.size() - 1);
@@ -37,6 +37,6 @@ public class AddressAtDxRule extends AddressRule {
                 record.put(field, otherRecord.get(field));
         }
         else
-            super.execute(record, otherRecords, options);
+            super.execute(record, otherRecords, options, context);
     }
 }

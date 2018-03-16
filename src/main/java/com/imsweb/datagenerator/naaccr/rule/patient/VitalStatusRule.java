@@ -20,7 +20,7 @@ public class VitalStatusRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, String> context) {
         String value = DistributionUtils.getVitalStatus();
 
         // recode 4 into 0 if we have to

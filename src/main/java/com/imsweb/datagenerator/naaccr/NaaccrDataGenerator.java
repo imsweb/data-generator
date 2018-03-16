@@ -55,9 +55,13 @@ import com.imsweb.datagenerator.naaccr.rule.tumor.SiteRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.TumorMarkerRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.TumorRecordNumberRule;
 import com.imsweb.datagenerator.utils.Distribution;
+import com.imsweb.datagenerator.utils.DistributionUtils;
+import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
 import com.imsweb.layout.Layout;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
+
+import static com.imsweb.datagenerator.utils.DistributionUtils.getAgeGroup;
 
 /**
  * A NAACCR data generator can be used to create fake NAACCR data files.
@@ -270,16 +274,23 @@ public class NaaccrDataGenerator implements DataGenerator {
         if (options == null)
             options = new NaaccrDataGeneratorOptions();
 
+        // Context contains information that is shared amongst the rules. Contains values we want to use for this patient.
+        Map<String, String> context = generateInitialPatientContext(numTumors);
+
         List<Map<String, String>> tumors = new ArrayList<>();
 
         // execute the patient rules once; we will copy the resulting values in each tumor
         Map<String, String> patient = new HashMap<>();
         for (NaaccrDataGeneratorRule rule : _patientRules)
             if (allPropertiesHaveValue(patient, rule.getRequiredProperties()))
-                rule.execute(patient, null, options);
+                rule.execute(patient, null, options, context);
 
         // create each tumor and add it to the return list
         for (int i = 0; i < numTumors; i++) {
+            if (context != null)
+                if (context.get("totalTumorCount") != null)
+                    context.put("currentTumor", String.valueOf(i));
+
             Map<String, String> tumor = new HashMap<>();
 
             // if there is pre-processing constant values, set them
@@ -292,7 +303,7 @@ public class NaaccrDataGenerator implements DataGenerator {
             // execute the tumor rules
             for (NaaccrDataGeneratorRule rule : _tumorRules)
                 if (allPropertiesHaveValue(tumor, rule.getRequiredProperties()))
-                    rule.execute(tumor, tumors, options);
+                    rule.execute(tumor, tumors, options, context);
 
             // if there is post-processing constant values, set them
             if (options.getConstantValuesPostProcessing() != null)
@@ -304,6 +315,40 @@ public class NaaccrDataGenerator implements DataGenerator {
 
         return tumors;
     }
+
+    /**
+     * Generates a list of values that we want this patient to have.
+     * Specifically the sex of the patient and the sites for the tumors.
+     * <br/><br/>
+     * @param numTumors number of tumors to generate, must be greater than 0
+     */
+    private Map<String, String> generateInitialPatientContext(int numTumors) {
+
+        // Context contains information that is shared amongst the rules. Contains values we want to use for this patient.
+        Map<String, String> context = new HashMap<>();
+
+        // Pick the patient sex. The sex of the patient will influence the tumor sites.
+        context.put("sex", DistributionUtils.getSex());
+
+        // Pick the sites we want for the tumors. The Tumor sites can influence the patient's age.
+        context.put("currentTumor", "");
+        context.put("totalTumorCount", String.valueOf(numTumors));
+        for (int i = 0; i < numTumors; i++) {
+            SiteFrequencyDto dto = DistributionUtils.getSite(context.get("sex"));
+            String tumorName = "tumor" + i;
+            context.put(tumorName + " primarySite", dto.getSite());
+            context.put(tumorName + " histologyIcdO3", dto.getHistology());
+            context.put(tumorName + " behaviorIcdO3", dto.getBehavior());
+            int tumorAgeGroup = getAgeGroup(dto.getSite());
+            context.put(tumorName + " ageGroup", String.valueOf(tumorAgeGroup));
+        }
+
+        return context;
+    }
+
+
+
+
 
     /**
      * Generates a requested number of tumors and saves them in the specified file.

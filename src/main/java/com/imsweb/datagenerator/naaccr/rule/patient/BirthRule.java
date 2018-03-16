@@ -22,12 +22,26 @@ public class BirthRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, String> context) {
 
         // birth date should be no later than five years prior to min dx date (or current date if min dx date not defined)
         LocalDate maxBirthDate = options == null ? LocalDate.now().minusYears(15) : options.getMinDxDate().minusYears(5);
         // limit age to max 100 years
         LocalDate minBirthDate = maxBirthDate.minusYears(100);
+
+        // Based on our tumors, pick an age that's possible for these sites.
+        if (context != null)
+            if (propertyHasValue(context, "totalTumorCount")) {
+                int maxAgeGroup = -1;
+                int tumorCount = Integer.valueOf(context.get("totalTumorCount"));
+                for (int i = 0; i < tumorCount; i++) {
+                    int tumorAgeGroup = Integer.valueOf(context.get("tumor" + i + " ageGroup"));
+                    maxAgeGroup = Integer.max(maxAgeGroup, tumorAgeGroup);
+                }
+                if (maxAgeGroup >= 0) {
+                    maxBirthDate = minBirthDate.plusYears(100 - (maxAgeGroup * 10));
+                }
+            }
 
         LocalDate randomDate = RandomUtils.getRandomDateBetween(minBirthDate, maxBirthDate);
 

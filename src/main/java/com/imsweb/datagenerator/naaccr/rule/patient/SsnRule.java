@@ -20,7 +20,7 @@ public class SsnRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, String> context) {
         // three digit area code (001-649)
         String areaCode = String.format("%03d", RandomUtils.nextInt(648) + 1);
         // two digit group number (01-99)

@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import testing.TestingUtils;
 
+import com.imsweb.datagenerator.utils.RandomUtils;
 import com.imsweb.layout.Layout;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.FixedColumnsField;
@@ -213,7 +214,7 @@ public class NaaccrDataGeneratorTest {
         }
 
         @Override
-        public void execute(Map<String, String> patient, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options) {
+        public void execute(Map<String, String> patient, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options, Map<String, String> context) {
             patient.put("nameLast", _value);
         }
     }
@@ -231,8 +232,100 @@ public class NaaccrDataGeneratorTest {
         }
 
         @Override
-        public void execute(Map<String, String> tumor, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options) {
+        public void execute(Map<String, String> tumor, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options, Map<String, String> context) {
             tumor.put("primarySite", _value);
         }
     }
+
+    // *** TEMPORARY FOR TESTING ***
+    // ABH 3/16/18
+    @Test
+    @SuppressWarnings("ConstantConditions")
+    public void testDisplayPatient() {
+        NaaccrDataGenerator generator = new NaaccrDataGenerator(_LAYOUT.getLayoutId());
+        NaaccrDataGeneratorOptions options = new NaaccrDataGeneratorOptions();
+
+        List<Map<String, String>> patient;
+
+        final int NUM_PATIENTS = 1000;
+
+        String header = "Patient Num \tpatientIdNumber \tnameFirst \tnameLast \tsex \tbirthDateYear \tbirthDateMonth \tbirthDateDay \t";
+        header += "Tumor Num \tseerRecordNumber \ttumorRecordNumber \tprimarySite \thistologyIcdO3 \tbehaviorIcdO3 \tageAtDx \tdateOfDiagnosisYear \tdateOfDiagnosisMonth \tdateOfDiagnosisDay";
+
+        System.out.println(header);
+        String line;
+        for (int i = 0; i < NUM_PATIENTS; i++) {
+            int numTumors = RandomUtils.nextInt(2) + 1;
+
+            patient = generator.generatePatient(numTumors, options);
+
+            /*
+            System.out.println("Patient " + i);
+            System.out.println("  patientIdNumber: " + patient.get(0).get("patientIdNumber"));
+            System.out.println("  nameFirst: " + patient.get(0).get("nameFirst"));
+            System.out.println("  nameLast: " + patient.get(0).get("nameLast"));
+            System.out.println("  sex: " + patient.get(0).get("sex"));
+            System.out.println("  birthDateYear: " + patient.get(0).get("birthDateYear"));
+            System.out.println("  birthDateMonth: " + patient.get(0).get("birthDateMonth"));
+            System.out.println("  birthDateDay: " + patient.get(0).get("birthDateDay"));
+            */
+
+            int tumorCount = 0;
+            for (Map<String, String> m : patient) {
+                tumorCount++;
+
+                line = "";
+                line += i + "\t";
+                line += m.get("patientIdNumber") + "\t";
+                line += m.get("nameFirst") + "\t";
+                line += m.get("nameLast") + "\t";
+                line += m.get("sex") + "\t";
+                line += m.get("birthDateYear") + "\t";
+                line += m.get("birthDateMonth") + "\t";
+                line += m.get("birthDateDay") + "\t";
+
+                line += tumorCount + "\t";
+                line += m.get("seerRecordNumber") + "\t";
+                line += m.get("tumorRecordNumber") + "\t";
+                line += m.get("primarySite") + "\t";
+                line += m.get("histologyIcdO3") + "\t";
+                line += m.get("behaviorIcdO3") + "\t";
+                line += m.get("ageAtDx") + "\t";
+                line += m.get("dateOfDiagnosisYear") + "\t";
+                line += m.get("dateOfDiagnosisMonth") + "\t";
+                line += m.get("dateOfDiagnosisDay") + "\t";
+                System.out.println(line);
+
+                /*
+                System.out.println("  Tumor " + tumorCount);
+
+                System.out.println("    seerRecordNumber: " + m.get("seerRecordNumber"));
+                System.out.println("    tumorRecordNumber: " + m.get("tumorRecordNumber"));
+                System.out.println("    primarySite: " + m.get("primarySite"));
+                System.out.println("    histologyIcdO3: " + m.get("histologyIcdO3"));
+                System.out.println("    behaviorIcdO3: " + m.get("behaviorIcdO3"));
+                System.out.println("    ageAtDx: " + m.get("ageAtDx"));
+                System.out.println("    dateOfDiagnosisYear: " + m.get("dateOfDiagnosisYear"));
+                System.out.println("    dateOfDiagnosisMonth: " + m.get("dateOfDiagnosisMonth"));
+                System.out.println("    dateOfDiagnosisDay: " + m.get("dateOfDiagnosisDay"));
+                */
+
+
+                /*
+                for (Map.Entry<String, String> entry : m.entrySet()) {
+                    System.out.println("    " + entry.getKey() + ": " + entry.getValue());
+                }
+                */
+
+            }
+
+            //System.out.println("");
+
+        }
+
+    }
+
+
+
+
 }

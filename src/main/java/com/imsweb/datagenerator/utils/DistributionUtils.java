@@ -183,16 +183,17 @@ public class DistributionUtils {
         return _DIST_STATE.getValue();
     }
 
+
     public static int getAgeGroup(String site) {
-        if (site == null)
-            site = "C000";
+        if ((site == null) || (Thread.currentThread().getContextClassLoader().getResource("frequencies/sites/" + site.toUpperCase() + ".csv") == null))
+            return -1;
 
         Distribution<String> distribution = _DIST_SITE_AGE_GROUPS.get(site.toUpperCase());
         if (distribution == null) {
             distribution = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/sites/" + site.toUpperCase() + ".csv"));
             _DIST_SITE_AGE_GROUPS.put(site.toUpperCase(), distribution);
         }
-        String ageGroup = distribution.getValue();
+        String ageGroup = distribution.getValue().trim();
         return Integer.parseInt(ageGroup);
     }
 

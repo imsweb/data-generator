@@ -25,7 +25,7 @@ public class RxSummaryRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, String> context) {
 
         record.put("rxSummTreatmentStatus", "9");
         // If Year of DX < 1998, RX Summ--Surg Prim Site must be blank.

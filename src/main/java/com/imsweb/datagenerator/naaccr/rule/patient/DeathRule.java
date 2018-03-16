@@ -25,7 +25,7 @@ public class DeathRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, String> context) {
         if ("1".equals(record.get("vitalStatus"))) {
             record.put("causeOfDeath", "0000");
             record.put("icdRevisionNumber", "0");
