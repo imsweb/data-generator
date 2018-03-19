@@ -54,13 +54,16 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
                 // 1. Minimum date must be within 10 years of today.
                 // 2. Options specify a minimum DX date.
                 // 3. This tumor must be diagnosed after the previous ones for this patient.
+                // From Fabian: Only #2 is required. Try to get all tumors to use this minimum. If that can't be done, at least one tumor must meet it.
                 minDxDates.clear();
                 maxDxDates.clear();
 
                 String currentTumor = context.get("currentTumor");
                 int tumorAgeGroup = Integer.valueOf(context.get("tumor" + currentTumor + " ageGroup"));
-                minDxDates.add(birthDate.plusYears((tumorAgeGroup * 10) - 10));
-                maxDxDates.add(birthDate.plusYears((tumorAgeGroup * 10)));
+                LocalDate thisMinDate = birthDate.plusYears((tumorAgeGroup * 10));
+                LocalDate thisMaxDate = maxDate;
+                minDxDates.add(thisMinDate);
+                maxDxDates.add(thisMaxDate);
             }
 
 

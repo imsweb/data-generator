@@ -25,7 +25,8 @@ public class BirthRule extends NaaccrDataGeneratorRule {
     public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, String> context) {
 
         // birth date should be no later than five years prior to min dx date (or current date if min dx date not defined)
-        LocalDate maxBirthDate = options == null ? LocalDate.now().minusYears(15) : options.getMinDxDate().minusYears(5);
+        //LocalDate maxBirthDate = options == null ? LocalDate.now().minusYears(15) : options.getMinDxDate().minusYears(5);
+        LocalDate maxBirthDate = options == null ? LocalDate.now() : options.getMinDxDate().minusYears(5);
         // limit age to max 100 years
         LocalDate minBirthDate = maxBirthDate.minusYears(100);
 
@@ -40,6 +41,19 @@ public class BirthRule extends NaaccrDataGeneratorRule {
                 }
                 if (maxAgeGroup >= 0) {
                     maxBirthDate = minBirthDate.plusYears(100 - (maxAgeGroup * 10));
+                    if (options != null) {
+                        LocalDate minDxDate = options.getMinDxDate();
+
+                        // MinDxDate = 2000
+                        // maxAgeGroup = 5
+                        // Age At Dx = 50 - 59.
+                        // Age = MinDxDate - maxAgeGroup * 10 = 2000 - 50 = 1950
+                        // MinBirthDate = 1950
+                        // MaxBirthDate = 1959
+
+                        minBirthDate = minDxDate.minusYears(maxAgeGroup * 10);
+                        maxBirthDate = minBirthDate.plusYears(10);
+                    }
                 }
             }
 
