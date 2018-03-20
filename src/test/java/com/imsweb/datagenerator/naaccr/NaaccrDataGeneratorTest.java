@@ -2,6 +2,7 @@ package com.imsweb.datagenerator.naaccr;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -144,6 +145,27 @@ public class NaaccrDataGeneratorTest {
         options.setConstantValuesPostProcessing(Collections.singletonMap("nameLast", "TEST"));
         patient = generator.generatePatient(1, options);
         Assert.assertEquals("TEST", patient.get(0).get("nameLast"));
+
+        // Test context
+        int numTumors = 2;
+        options = new NaaccrDataGeneratorOptions();
+        options.setMinDxYear(2000);
+        options.setMaxDxYear(2005);
+        patient = generator.generatePatient(numTumors, options);
+
+        LocalDate dateOfDx1 = LocalDate.of(Integer.valueOf(patient.get(0).get("dateOfDiagnosisYear")), Integer.valueOf(patient.get(0).get("dateOfDiagnosisMonth")),
+                Integer.valueOf(patient.get(0).get("dateOfDiagnosisDay")));
+        LocalDate dateOfDx2 = LocalDate.of(Integer.valueOf(patient.get(1).get("dateOfDiagnosisYear")), Integer.valueOf(patient.get(1).get("dateOfDiagnosisMonth")),
+                Integer.valueOf(patient.get(1).get("dateOfDiagnosisDay")));
+
+        boolean dateInRange1 = dateOfDx1.isAfter(options.getMinDxDate().minusDays(1)) && dateOfDx1.isBefore(options.getMaxDxDate().plusDays(1));
+        boolean dateInRange2 = dateOfDx2.isAfter(options.getMinDxDate().minusDays(1)) && dateOfDx2.isBefore(options.getMaxDxDate().plusDays(1));
+
+        Assert.assertTrue("Diagnosis Date outside options Minimum and Maximum.", dateInRange1 || dateInRange2);
+
+
+
+
     }
 
     @Test
@@ -239,11 +261,15 @@ public class NaaccrDataGeneratorTest {
 
     // *** TEMPORARY FOR TESTING ***
     // ABH 3/16/18
+    /*
     @Test
     @SuppressWarnings("ConstantConditions")
     public void testDisplayPatient() {
         NaaccrDataGenerator generator = new NaaccrDataGenerator(_LAYOUT.getLayoutId());
         NaaccrDataGeneratorOptions options = new NaaccrDataGeneratorOptions();
+
+        //options.setMinDxYear(2003);
+        //options.setMaxDxYear(2004);
 
         List<Map<String, String>> patient;
 
@@ -258,17 +284,6 @@ public class NaaccrDataGeneratorTest {
             int numTumors = RandomUtils.nextInt(2) + 1;
 
             patient = generator.generatePatient(numTumors, options);
-
-            /*
-            System.out.println("Patient " + i);
-            System.out.println("  patientIdNumber: " + patient.get(0).get("patientIdNumber"));
-            System.out.println("  nameFirst: " + patient.get(0).get("nameFirst"));
-            System.out.println("  nameLast: " + patient.get(0).get("nameLast"));
-            System.out.println("  sex: " + patient.get(0).get("sex"));
-            System.out.println("  birthDateYear: " + patient.get(0).get("birthDateYear"));
-            System.out.println("  birthDateMonth: " + patient.get(0).get("birthDateMonth"));
-            System.out.println("  birthDateDay: " + patient.get(0).get("birthDateDay"));
-            */
 
             int tumorCount = 0;
             for (Map<String, String> m : patient) {
@@ -295,37 +310,10 @@ public class NaaccrDataGeneratorTest {
                 line += m.get("dateOfDiagnosisMonth") + "\t";
                 line += m.get("dateOfDiagnosisDay") + "\t";
                 System.out.println(line);
-
-                /*
-                System.out.println("  Tumor " + tumorCount);
-
-                System.out.println("    seerRecordNumber: " + m.get("seerRecordNumber"));
-                System.out.println("    tumorRecordNumber: " + m.get("tumorRecordNumber"));
-                System.out.println("    primarySite: " + m.get("primarySite"));
-                System.out.println("    histologyIcdO3: " + m.get("histologyIcdO3"));
-                System.out.println("    behaviorIcdO3: " + m.get("behaviorIcdO3"));
-                System.out.println("    ageAtDx: " + m.get("ageAtDx"));
-                System.out.println("    dateOfDiagnosisYear: " + m.get("dateOfDiagnosisYear"));
-                System.out.println("    dateOfDiagnosisMonth: " + m.get("dateOfDiagnosisMonth"));
-                System.out.println("    dateOfDiagnosisDay: " + m.get("dateOfDiagnosisDay"));
-                */
-
-
-                /*
-                for (Map.Entry<String, String> entry : m.entrySet()) {
-                    System.out.println("    " + entry.getKey() + ": " + entry.getValue());
-                }
-                */
-
             }
-
-            //System.out.println("");
-
         }
 
     }
-
-
-
+    */
 
 }

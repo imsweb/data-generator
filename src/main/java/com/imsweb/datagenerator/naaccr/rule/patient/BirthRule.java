@@ -9,6 +9,8 @@ import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
 import com.imsweb.datagenerator.utils.DistributionUtils;
 import com.imsweb.datagenerator.utils.RandomUtils;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 public class BirthRule extends NaaccrDataGeneratorRule {
 
     // unique identifier for this rule
@@ -43,16 +45,12 @@ public class BirthRule extends NaaccrDataGeneratorRule {
                     maxBirthDate = minBirthDate.plusYears(100 - (maxAgeGroup * 10));
                     if (options != null) {
                         LocalDate minDxDate = options.getMinDxDate();
-
-                        // MinDxDate = 2000
-                        // maxAgeGroup = 5
-                        // Age At Dx = 50 - 59.
-                        // Age = MinDxDate - maxAgeGroup * 10 = 2000 - 50 = 1950
-                        // MinBirthDate = 1950
-                        // MaxBirthDate = 1959
+                        LocalDate maxDxDate = options.getMaxDxDate();
+                        long daysBetween = minDxDate.until(maxDxDate, DAYS) - 1;
+                        if (daysBetween > 3650) daysBetween = 3650;
 
                         minBirthDate = minDxDate.minusYears(maxAgeGroup * 10);
-                        maxBirthDate = minBirthDate.plusYears(10);
+                        maxBirthDate = minBirthDate.plusDays(daysBetween);
                     }
                 }
             }

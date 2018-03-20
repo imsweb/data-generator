@@ -35,5 +35,44 @@ public class BirthRuleTest {
         Assert.assertEquals("USA", rec.get("birthplaceCountry"));
         // state is random but should always be assigned
         Assert.assertTrue(rec.get("birthplaceState").matches("[A-Z]{2}"));
+
+        // Use of a context
+        Map<String, String> context = new HashMap<>();
+        context.put("sex", "1");
+        context.put("totalTumorCount", "2");
+        context.put("tumor0 primarySite", "C000");
+        context.put("tumor0 histologyIcdO3", "8070");
+        context.put("tumor0 behaviorIcdO3", "3");
+        context.put("tumor0 ageGroup", "5");
+        context.put("tumor1 primarySite", "C001");
+        context.put("tumor1 histologyIcdO3", "8070");
+        context.put("tumor1 behaviorIcdO3", "3");
+        context.put("tumor1 ageGroup", "8");
+
+        rec = new HashMap<>();
+        options = new NaaccrDataGeneratorOptions();
+
+        // 5 year range maximum 1920 - 1925.
+        options.setMinDxYear(2000);
+        options.setMaxDxYear(2005);
+
+        _rule.execute(rec, null, options, context);
+
+        assignedDate = LocalDate.of(Integer.parseInt(rec.get("birthDateYear")), Integer.parseInt(rec.get("birthDateMonth")), Integer.parseInt(rec.get("birthDateDay")));
+        LocalDate startDate = options.getMinDxDate().minusYears(80).minusDays(1);
+        LocalDate endDate = options.getMinDxDate().minusYears(75).plusDays(1);
+        Assert.assertTrue(assignedDate.toString(), assignedDate.isAfter(startDate) && assignedDate.isBefore(endDate));
+
+        // 10 year range maximum 1920 - 1930.
+        options.setMinDxYear(2000);
+        options.setMaxDxYear(2015);
+
+        _rule.execute(rec, null, options, context);
+
+        assignedDate = LocalDate.of(Integer.parseInt(rec.get("birthDateYear")), Integer.parseInt(rec.get("birthDateMonth")), Integer.parseInt(rec.get("birthDateDay")));
+        startDate = options.getMinDxDate().minusYears(80).minusDays(1);
+        endDate = options.getMinDxDate().minusYears(70).plusDays(1);
+        Assert.assertTrue(assignedDate.toString(), assignedDate.isAfter(startDate) && assignedDate.isBefore(endDate));
+
     }
 }

@@ -322,7 +322,7 @@ public class NaaccrDataGenerator implements DataGenerator {
      * <br/><br/>
      * @param numTumors number of tumors to generate, must be greater than 0
      */
-    private Map<String, String> generateInitialPatientContext(int numTumors) {
+    protected Map<String, String> generateInitialPatientContext(int numTumors) {
 
         // Context contains information that is shared amongst the rules. Contains values we want to use for this patient.
         Map<String, String> context = new HashMap<>();

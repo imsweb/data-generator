@@ -37,11 +37,12 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
         if (propertyHasValue(record, "birthDateYear"))
             minDxDates.add(LocalDate.of(Integer.parseInt(record.get("birthDateYear")) + 1, 1, 1));
         // never go before dx date of patient's most recent tumor (if this isn't the first one)
-        if (!otherRecords.isEmpty()) {
-            Map<String, String> lastTumor = otherRecords.get(otherRecords.size() - 1);
-            minDxDates.add(LocalDate.of(Integer.parseInt(lastTumor.get("dateOfDiagnosisYear")), Integer.parseInt(lastTumor.get("dateOfDiagnosisMonth")),
-                    Integer.parseInt(lastTumor.get("dateOfDiagnosisDay"))));
-        }
+        if (otherRecords != null)
+            if (!otherRecords.isEmpty()) {
+                Map<String, String> lastTumor = otherRecords.get(otherRecords.size() - 1);
+                minDxDates.add(LocalDate.of(Integer.parseInt(lastTumor.get("dateOfDiagnosisYear")), Integer.parseInt(lastTumor.get("dateOfDiagnosisMonth")),
+                        Integer.parseInt(lastTumor.get("dateOfDiagnosisDay"))));
+            }
 
         if (context != null)
             if (propertyHasValue(context, "currentTumor")) {
@@ -60,10 +61,8 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
 
                 String currentTumor = context.get("currentTumor");
                 int tumorAgeGroup = Integer.valueOf(context.get("tumor" + currentTumor + " ageGroup"));
-                LocalDate thisMinDate = birthDate.plusYears((tumorAgeGroup * 10));
-                LocalDate thisMaxDate = maxDate;
-                minDxDates.add(thisMinDate);
-                maxDxDates.add(thisMaxDate);
+                minDxDates.add(birthDate.plusYears((tumorAgeGroup * 10)));
+                maxDxDates.add(maxDate);
             }
 
 

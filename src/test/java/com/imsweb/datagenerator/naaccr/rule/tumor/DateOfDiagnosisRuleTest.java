@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
+
 public class DateOfDiagnosisRuleTest {
 
     private DateOfDiagnosisRule _rule = new DateOfDiagnosisRule();
@@ -48,5 +50,31 @@ public class DateOfDiagnosisRuleTest {
                 Assert.assertTrue("Future date: " + dxDate.toString(), LocalDate.now().plusDays(1).isAfter(dxDate));
             }
         }
+
+        // Use of a context
+        Map<String, String> context = new HashMap<>();
+        context.put("sex", "1");
+        context.put("currentTumor", "0");
+        context.put("totalTumorCount", "1");
+        context.put("tumor0 ageGroup", "5");
+
+        Map<String, String> rec = new HashMap<>();
+        rec.put("birthDateYear", "1940");
+        rec.put("birthDateMonth", "7");
+        rec.put("birthDateDay", "1");
+
+        NaaccrDataGeneratorOptions options = new NaaccrDataGeneratorOptions();
+        options.setMaxDxYear(2005);
+
+        _rule.execute(rec, null, options, context);
+
+        LocalDate dateOfDx = LocalDate.of(Integer.valueOf(rec.get("dateOfDiagnosisYear")), Integer.valueOf(rec.get("dateOfDiagnosisMonth")), Integer.valueOf(rec.get("dateOfDiagnosisDay")));
+        LocalDate birthDate = LocalDate.of(1940, 7, 1);
+
+        LocalDate startDate = birthDate.plusYears(5 * 10);
+        LocalDate endDate = options.getMaxDxDate();
+        Assert.assertTrue(dateOfDx.toString(), dateOfDx.isAfter(startDate) && dateOfDx.isBefore(endDate));
+
+
     }
 }
