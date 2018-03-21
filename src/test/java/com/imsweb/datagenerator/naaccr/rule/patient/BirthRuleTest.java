@@ -60,8 +60,9 @@ public class BirthRuleTest {
 
         assignedDate = LocalDate.of(Integer.parseInt(rec.get("birthDateYear")), Integer.parseInt(rec.get("birthDateMonth")), Integer.parseInt(rec.get("birthDateDay")));
         LocalDate startDate = options.getMinDxDate().minusYears(80).minusDays(1);
-        LocalDate endDate = options.getMinDxDate().minusYears(75).plusDays(1);
-        Assert.assertTrue(assignedDate.toString(), assignedDate.isAfter(startDate) && assignedDate.isBefore(endDate));
+        LocalDate endDate = options.getMaxDxDate().minusYears(80).plusDays(1);
+        String assertMsg = assignedDate.toString() + ": Not between " + startDate.toString() + " and " + endDate.toString();
+        Assert.assertTrue(assertMsg, assignedDate.isAfter(startDate) && assignedDate.isBefore(endDate));
 
         // 10 year range maximum 1920 - 1930.
         options.setMinDxYear(2000);
@@ -71,8 +72,9 @@ public class BirthRuleTest {
 
         assignedDate = LocalDate.of(Integer.parseInt(rec.get("birthDateYear")), Integer.parseInt(rec.get("birthDateMonth")), Integer.parseInt(rec.get("birthDateDay")));
         startDate = options.getMinDxDate().minusYears(80).minusDays(1);
-        endDate = options.getMinDxDate().minusYears(70).plusDays(1);
-        Assert.assertTrue(assignedDate.toString(), assignedDate.isAfter(startDate) && assignedDate.isBefore(endDate));
+        endDate = options.getMaxDxDate().minusYears(80).plusDays(1);
+        assertMsg = assignedDate.toString() + ": Not between " + startDate.toString() + " and " + endDate.toString();
+        Assert.assertTrue(assertMsg, assignedDate.isAfter(startDate) && assignedDate.isBefore(endDate));
 
     }
 }
