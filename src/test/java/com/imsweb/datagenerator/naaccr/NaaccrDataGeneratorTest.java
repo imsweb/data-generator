@@ -14,7 +14,6 @@ import org.junit.Test;
 
 import testing.TestingUtils;
 
-import com.imsweb.datagenerator.utils.RandomUtils;
 import com.imsweb.layout.Layout;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.FixedColumnsField;

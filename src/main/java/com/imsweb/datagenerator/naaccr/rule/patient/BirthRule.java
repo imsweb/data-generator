@@ -36,9 +36,9 @@ public class BirthRule extends NaaccrDataGeneratorRule {
         if (context != null)
             if (propertyHasValue(context, "totalTumorCount")) {
                 int maxAgeGroup = -1;
-                int tumorCount = Integer.valueOf(context.get("totalTumorCount"));
+                int tumorCount = Integer.parseInt(context.get("totalTumorCount"));
                 for (int i = 0; i < tumorCount; i++) {
-                    int tumorAgeGroup = Integer.valueOf(context.get("tumor" + i + " ageGroup"));
+                    int tumorAgeGroup = Integer.parseInt(context.get("tumor" + i + " ageGroup"));
                     maxAgeGroup = Integer.max(maxAgeGroup, tumorAgeGroup);
                 }
                 if (maxAgeGroup >= 0) {

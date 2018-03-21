@@ -8,7 +8,6 @@ import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
 import com.imsweb.datagenerator.utils.DistributionUtils;
 import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
 
-import static com.imsweb.datagenerator.utils.DistributionUtils.getAgeGroup;
 
 public class SiteRule extends NaaccrDataGeneratorRule {
 

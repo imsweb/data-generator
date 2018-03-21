@@ -46,9 +46,9 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
 
         if (context != null)
             if (propertyHasValue(context, "currentTumor")) {
-                Integer birthYear = Integer.valueOf(record.get("birthDateYear"));
-                Integer birthMonth = Integer.valueOf(record.get("birthDateMonth"));
-                Integer birthDay = Integer.valueOf(record.get("birthDateDay"));
+                Integer birthYear = Integer.parseInt(record.get("birthDateYear"));
+                Integer birthMonth = Integer.parseInt(record.get("birthDateMonth"));
+                Integer birthDay = Integer.parseInt(record.get("birthDateDay"));
                 LocalDate birthDate = LocalDate.of(birthYear, birthMonth, birthDay);
 
                 // PROBLEM: This brakes 3 previous rules:
@@ -60,7 +60,7 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
                 maxDxDates.clear();
 
                 String currentTumor = context.get("currentTumor");
-                int tumorAgeGroup = Integer.valueOf(context.get("tumor" + currentTumor + " ageGroup"));
+                int tumorAgeGroup = Integer.parseInt(context.get("tumor" + currentTumor + " ageGroup"));
                 minDxDates.add(birthDate.plusYears((tumorAgeGroup * 10)));
                 maxDxDates.add(maxDate);
             }

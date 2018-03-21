@@ -9,7 +9,6 @@ import com.imsweb.datagenerator.naaccr.NaaccrDataGenerator;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.naaccrxml.NaaccrXmlLayout;
-import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
 
 @SuppressWarnings("ConstantConditions")
 public class SeerBatchGenerator {
