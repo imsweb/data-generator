@@ -61,7 +61,6 @@ import com.imsweb.layout.Layout;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
 
-import static com.imsweb.datagenerator.utils.DistributionUtils.getAgeGroup;
 
 /**
  * A NAACCR data generator can be used to create fake NAACCR data files.
@@ -275,7 +274,7 @@ public class NaaccrDataGenerator implements DataGenerator {
             options = new NaaccrDataGeneratorOptions();
 
         // Context contains information that is shared amongst the rules. Contains values we want to use for this patient.
-        Map<String, String> context = generateInitialPatientContext(numTumors);
+        Map<String, Object> context = generateInitialPatientContext(numTumors);
 
         List<Map<String, String>> tumors = new ArrayList<>();
 
@@ -287,9 +286,7 @@ public class NaaccrDataGenerator implements DataGenerator {
 
         // create each tumor and add it to the return list
         for (int i = 0; i < numTumors; i++) {
-            if (context != null)
-                if (context.get("totalTumorCount") != null)
-                    context.put("currentTumor", String.valueOf(i));
+            context.put(CONTEXT_FLAG_CURRENT_TUMOR_INDEX, i);
 
             Map<String, String> tumor = new HashMap<>();
 
@@ -316,38 +313,49 @@ public class NaaccrDataGenerator implements DataGenerator {
         return tumors;
     }
 
+    public static final String CONTEXT_FLAG_SEX = "sex";
+    public static final String CONTEXT_FLAG_CURRENT_TUMOR_INDEX = "currentTumorIndex";
+    //public static final String CONTEXT_FLAG_TOTAL_TUMOR_COUNT = "totalTumorCount";
+    public static final String CONTEXT_FLAG_SITE_FREQ_MAP = "siteFreqMap";
+    public static final String CONTEXT_FLAG_AGE_GROUP_MAP = "ageGroupMap";
+    public static final String CONTEXT_FLAG_MAX_AGE_GROUP = "maxAgeGroup";
+
     /**
      * Generates a list of values that we want this patient to have.
      * Specifically the sex of the patient and the sites for the tumors.
      * <br/><br/>
      * @param numTumors number of tumors to generate, must be greater than 0
      */
-    protected Map<String, String> generateInitialPatientContext(int numTumors) {
+    private Map<String, Object> generateInitialPatientContext(int numTumors) {
 
         // Context contains information that is shared amongst the rules. Contains values we want to use for this patient.
-        Map<String, String> context = new HashMap<>();
+        Map<String, Object> context = new HashMap<>();
 
         // Pick the patient sex. The sex of the patient will influence the tumor sites.
-        context.put("sex", DistributionUtils.getSex());
+        context.put(CONTEXT_FLAG_SEX, DistributionUtils.getSex());
 
         // Pick the sites we want for the tumors. The Tumor sites can influence the patient's age.
-        context.put("currentTumor", "");
-        context.put("totalTumorCount", String.valueOf(numTumors));
+        context.put(CONTEXT_FLAG_CURRENT_TUMOR_INDEX, -1);
+        //context.put(CONTEXT_FLAG_TOTAL_TUMOR_COUNT, numTumors);
+
+        Map<Integer, SiteFrequencyDto> siteFreqMap = new HashMap<>();
+        Map<Integer, Integer> ageGroupMap = new HashMap<>();
+        int maxAgeGroup = -1;
         for (int i = 0; i < numTumors; i++) {
-            SiteFrequencyDto dto = DistributionUtils.getSite(context.get("sex"));
-            String tumorName = "tumor" + i;
-            context.put(tumorName + " primarySite", dto.getSite());
-            context.put(tumorName + " histologyIcdO3", dto.getHistology());
-            context.put(tumorName + " behaviorIcdO3", dto.getBehavior());
-            int tumorAgeGroup = getAgeGroup(dto.getSite());
-            context.put(tumorName + " ageGroup", String.valueOf(tumorAgeGroup));
+            SiteFrequencyDto dto = DistributionUtils.getSite((String)context.get(CONTEXT_FLAG_SEX));
+            siteFreqMap.put(i, dto);
+            int iAgeGroup = DistributionUtils.getAgeGroup(dto.getSite());
+            ageGroupMap.put(i, iAgeGroup);
+            maxAgeGroup = Integer.max(maxAgeGroup, iAgeGroup);
         }
+        context.put(CONTEXT_FLAG_SITE_FREQ_MAP, siteFreqMap);
+        context.put(CONTEXT_FLAG_AGE_GROUP_MAP, ageGroupMap);
+        context.put(CONTEXT_FLAG_MAX_AGE_GROUP, maxAgeGroup);
+
+
 
         return context;
     }
-
-
-
 
 
     /**

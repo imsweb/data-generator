@@ -20,7 +20,7 @@ public class RaceRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, String> context) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         record.put("race1", DistributionUtils.getRace());
         // if race1 is 99 set race2 - race5 to 99, else set them to 88
         String otherRaceCode = record.get("race1").equals("99") ? "99" : "88";

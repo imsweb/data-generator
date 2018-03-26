@@ -11,6 +11,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
+import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
+
+import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_AGE_GROUP_MAP;
+import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_CURRENT_TUMOR_INDEX;
+import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_MAX_AGE_GROUP;
+import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_SEX;
+import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_SITE_FREQ_MAP;
 
 public class DateOfDiagnosisRuleTest {
 
@@ -19,6 +26,8 @@ public class DateOfDiagnosisRuleTest {
     @Test
     public void testExecute() {
 
+        Map<String, Object> context = new HashMap<>();
+
         // run the entire test 10 times (each run simulates multiple tumors for a single patient)
         for (int i = 0; i < 10; i++) {
             List<Map<String, String>> records = new ArrayList<>();
@@ -26,7 +35,9 @@ public class DateOfDiagnosisRuleTest {
             // generate 10 tumors for this patient
             for (int j = 0; j < 10; j++) {
                 Map<String, String> rec = new HashMap<>();
-                _rule.execute(rec, records, null);
+                context = new HashMap<>();
+
+                _rule.execute(rec, records, null, context);
 
                 Assert.assertTrue(rec.get("dateOfDiagnosisYear").matches("\\d{4}"));
                 Assert.assertTrue(rec.get("dateOfDiagnosisMonth").matches("\\d{1,2}"));
@@ -52,11 +63,23 @@ public class DateOfDiagnosisRuleTest {
         }
 
         // Use of a context
-        Map<String, String> context = new HashMap<>();
-        context.put("sex", "1");
-        context.put("currentTumor", "0");
-        context.put("totalTumorCount", "1");
-        context.put("tumor0 ageGroup", "5");
+        context.put(CONTEXT_FLAG_SEX, "1");
+        context.put(CONTEXT_FLAG_CURRENT_TUMOR_INDEX, 0);
+
+        Map<Integer, SiteFrequencyDto> siteFreqMap = new HashMap<>();
+        Map<Integer, Integer> ageGroupMap = new HashMap<>();
+
+        SiteFrequencyDto dto = new SiteFrequencyDto();
+        dto.setSite("C001");
+        dto.setHistology("8070");
+        dto.setBehavior("3");
+        siteFreqMap.put(0, dto);
+        ageGroupMap.put(0, 5);
+
+        context.put(CONTEXT_FLAG_SITE_FREQ_MAP, siteFreqMap);
+        context.put(CONTEXT_FLAG_AGE_GROUP_MAP, ageGroupMap);
+        context.put(CONTEXT_FLAG_MAX_AGE_GROUP, 5);
+
 
         Map<String, String> rec = new HashMap<>();
         rec.put("birthDateYear", "1940");

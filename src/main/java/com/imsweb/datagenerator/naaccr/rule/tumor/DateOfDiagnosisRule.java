@@ -10,6 +10,9 @@ import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
 import com.imsweb.datagenerator.utils.RandomUtils;
 
+import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_AGE_GROUP_MAP;
+import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_CURRENT_TUMOR_INDEX;
+
 public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
 
     // unique identifier for this rule
@@ -23,7 +26,7 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, String> context) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
 
         // latest possible date set only by options if defined
         Set<LocalDate> maxDxDates = new HashSet<>();
@@ -44,26 +47,25 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
                         Integer.parseInt(lastTumor.get("dateOfDiagnosisDay"))));
             }
 
-        if (context != null)
-            if (propertyHasValue(context, "currentTumor")) {
-                Integer birthYear = Integer.parseInt(record.get("birthDateYear"));
-                Integer birthMonth = Integer.parseInt(record.get("birthDateMonth"));
-                Integer birthDay = Integer.parseInt(record.get("birthDateDay"));
-                LocalDate birthDate = LocalDate.of(birthYear, birthMonth, birthDay);
+        if (context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX) != null) {
+            Integer birthYear = Integer.parseInt(record.get("birthDateYear"));
+            Integer birthMonth = Integer.parseInt(record.get("birthDateMonth"));
+            Integer birthDay = Integer.parseInt(record.get("birthDateDay"));
+            LocalDate birthDate = LocalDate.of(birthYear, birthMonth, birthDay);
 
-                // PROBLEM: This brakes 3 previous rules:
-                // 1. Minimum date must be within 10 years of today.
-                // 2. Options specify a minimum DX date.
-                // 3. This tumor must be diagnosed after the previous ones for this patient.
-                // From Fabian: Only #2 is required. Try to get all tumors to use this minimum. If that can't be done, at least one tumor must meet it.
-                minDxDates.clear();
-                maxDxDates.clear();
+            // PROBLEM: This brakes 3 previous rules:
+            // 1. Minimum date must be within 10 years of today.
+            // 2. Options specify a minimum DX date.
+            // 3. This tumor must be diagnosed after the previous ones for this patient.
+            // From Fabian: Only #2 is required. Try to get all tumors to use this minimum. If that can't be done, at least one tumor must meet it.
+            minDxDates.clear();
+            maxDxDates.clear();
 
-                String currentTumor = context.get("currentTumor");
-                int tumorAgeGroup = Integer.parseInt(context.get("tumor" + currentTumor + " ageGroup"));
-                minDxDates.add(birthDate.plusYears((tumorAgeGroup * 10)));
-                maxDxDates.add(maxDate);
-            }
+            int currentTumorIndex = (int)context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX);
+            Map<Integer, Integer> ageGroupMap = (Map<Integer, Integer>)context.get(CONTEXT_FLAG_AGE_GROUP_MAP);
+            minDxDates.add(birthDate.plusYears((ageGroupMap.get(currentTumorIndex) * 10)));
+            maxDxDates.add(maxDate);
+        }
 
 
 

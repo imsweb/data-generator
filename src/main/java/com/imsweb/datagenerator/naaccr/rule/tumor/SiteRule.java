@@ -8,6 +8,8 @@ import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
 import com.imsweb.datagenerator.utils.DistributionUtils;
 import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
 
+import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_CURRENT_TUMOR_INDEX;
+import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_SITE_FREQ_MAP;
 
 public class SiteRule extends NaaccrDataGeneratorRule {
 
@@ -22,15 +24,16 @@ public class SiteRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> tumor, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options, Map<String, String> context) {
+    public void execute(Map<String, String> tumor, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
 
-        if (context != null)
-            if (propertyHasValue(context, "currentTumor")) {
-                String currentTumor = context.get("currentTumor");
-                tumor.put("primarySite", context.get("tumor" + currentTumor + " primarySite"));
-                tumor.put("histologyIcdO3", context.get("tumor" + currentTumor + " histologyIcdO3"));
-                tumor.put("behaviorIcdO3", context.get("tumor" + currentTumor + " behaviorIcdO3"));
-            }
+        if (context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX) != null) {
+            int currentTumorIndex = (int)context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX);
+
+            Map<Integer, SiteFrequencyDto> siteFreqMap = (Map<Integer, SiteFrequencyDto>)context.get(CONTEXT_FLAG_SITE_FREQ_MAP);
+            tumor.put("primarySite", siteFreqMap.get(currentTumorIndex).getSite());
+            tumor.put("histologyIcdO3", siteFreqMap.get(currentTumorIndex).getHistology());
+            tumor.put("behaviorIcdO3", siteFreqMap.get(currentTumorIndex).getBehavior());
+        }
 
         if (!propertyHasValue(tumor, "primarySite")) {
             SiteFrequencyDto dto = DistributionUtils.getSite(tumor.get("sex"));

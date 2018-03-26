@@ -19,7 +19,7 @@ public class SeerRecordNumberRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, String> context) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         record.put("seerRecordNumber", String.format("%02d", otherRecords.size() + 1));
     }
 }

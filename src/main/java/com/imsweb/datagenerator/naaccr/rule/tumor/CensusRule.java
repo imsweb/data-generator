@@ -19,7 +19,7 @@ public class CensusRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, String> context) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         record.put("censusTract708090", "");
         record.put("censusTract2000", "999999");
         record.put("censusTract2010", "999999");

@@ -235,7 +235,7 @@ public class NaaccrDataGeneratorTest {
         }
 
         @Override
-        public void execute(Map<String, String> patient, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options, Map<String, String> context) {
+        public void execute(Map<String, String> patient, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
             patient.put("nameLast", _value);
         }
     }
@@ -253,7 +253,7 @@ public class NaaccrDataGeneratorTest {
         }
 
         @Override
-        public void execute(Map<String, String> tumor, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options, Map<String, String> context) {
+        public void execute(Map<String, String> tumor, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
             tumor.put("primarySite", _value);
         }
     }

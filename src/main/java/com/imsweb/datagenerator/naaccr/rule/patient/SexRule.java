@@ -3,9 +3,12 @@ package com.imsweb.datagenerator.naaccr.rule.patient;
 import java.util.List;
 import java.util.Map;
 
+import com.imsweb.datagenerator.naaccr.NaaccrDataGenerator;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
 import com.imsweb.datagenerator.utils.DistributionUtils;
+
+import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_SEX;
 
 public class SexRule extends NaaccrDataGeneratorRule {
 
@@ -20,16 +23,9 @@ public class SexRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, String> context) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
 
-        String wantedSex = null;
-        if (context != null)
-            if (propertyHasValue(context, "sex"))
-                wantedSex = context.get("sex");
+        record.put("sex", (String)context.getOrDefault(CONTEXT_FLAG_SEX, DistributionUtils.getSex()));
 
-        if (wantedSex == null)
-            wantedSex = DistributionUtils.getSex();
-
-        record.put("sex", wantedSex);
     }
 }

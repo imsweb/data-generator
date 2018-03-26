@@ -23,6 +23,7 @@ public class CollaborativeStageRuleTest {
         List<String> lviList = new ArrayList<>(Arrays.asList("0", "1", "8", "9"));
 
         // set required fields
+        Map<String, Object> context = new HashMap<>();
 
         Map<String, String> rec = new HashMap<>();
         rec.put("primarySite", "C680");
@@ -33,7 +34,7 @@ public class CollaborativeStageRuleTest {
         rec.put("ageAtDx", "060");
         rec.put("vitalStatus", "1");
         rec.put("typeOfReportingSource", "1");
-        _rule.execute(rec, null, null);
+        _rule.execute(rec, null, null, context);
 
         // validate CSInput values are in acceptable ranges
         int size = Integer.parseInt(rec.get("csTumorSize"));

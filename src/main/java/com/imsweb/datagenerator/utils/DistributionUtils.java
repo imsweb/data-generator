@@ -3,6 +3,7 @@
  */
 package com.imsweb.datagenerator.utils;
 
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -185,16 +186,19 @@ public class DistributionUtils {
 
 
     public static int getAgeGroup(String site) {
-        if ((site == null) || (Thread.currentThread().getContextClassLoader().getResource("frequencies/sites/" + site.toUpperCase() + ".csv") == null))
+        if (site == null)
             return -1;
 
         Distribution<String> distribution = _DIST_SITE_AGE_GROUPS.get(site.toUpperCase());
         if (distribution == null) {
-            distribution = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/sites/" + site.toUpperCase() + ".csv"));
+            URL url = Thread.currentThread().getContextClassLoader().getResource("frequencies/sites/" + site.toUpperCase() + ".csv");
+            if (url == null)
+                return -1;
+            distribution = Distribution.of(url);
             _DIST_SITE_AGE_GROUPS.put(site.toUpperCase(), distribution);
         }
-        String ageGroup = distribution.getValue().trim();
-        return Integer.parseInt(ageGroup);
+
+        return Integer.parseInt(distribution.getValue());
     }
 
 
