@@ -1,11 +1,9 @@
 package com.imsweb.datagenerator.naaccr.rule.patient;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.imsweb.datagenerator.naaccr.NaaccrDataGenerator;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
 import com.imsweb.datagenerator.utils.DistributionUtils;
