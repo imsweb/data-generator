@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2018 Information Management Services, Inc.
  */
-package com.imsweb.datagenerator.provider.facility;
+package com.imsweb.datagenerator.provider;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.Map;
 
 import com.imsweb.datagenerator.DataGeneratorRule;
 
-public abstract class FacilityDataGeneratorRule implements DataGeneratorRule {
+public abstract class ProviderDataGeneratorRule implements DataGeneratorRule {
 
     // the unique ID of this rule
     private String _id;
@@ -22,7 +22,7 @@ public abstract class FacilityDataGeneratorRule implements DataGeneratorRule {
      * @param id rule ID
      * @param name rule name
      */
-    public FacilityDataGeneratorRule(String id, String name) {
+    public ProviderDataGeneratorRule(String id, String name) {
         _id = id;
         _name = name;
     }
@@ -49,14 +49,14 @@ public abstract class FacilityDataGeneratorRule implements DataGeneratorRule {
      * @param provider current record
      * @param options generator options
      */
-    public abstract void execute(Map<String, String> provider, FacilityDataGeneratorOptions options);
+    public abstract void execute(Map<String, String> provider, ProviderDataGeneratorOptions options);
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof FacilityDataGeneratorRule)) return false;
+        if (!(o instanceof com.imsweb.datagenerator.provider.ProviderDataGeneratorRule)) return false;
 
-        FacilityDataGeneratorRule that = (FacilityDataGeneratorRule)o;
+        com.imsweb.datagenerator.provider.ProviderDataGeneratorRule that = (com.imsweb.datagenerator.provider.ProviderDataGeneratorRule)o;
 
         return _id.equals(that._id);
 

@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2018 Information Management Services, Inc.
  */
-package com.imsweb.datagenerator.provider.facility;
+package com.imsweb.datagenerator.provider;
 
 import com.imsweb.datagenerator.utils.DistributionUtils;
 
-public class FacilityDataGeneratorOptions {
+public class ProviderDataGeneratorOptions {
 
     // the state abbreviation (upper-cased) to use to generate the address information (no address info will be generated if left null)
-    protected String _state;
+    private String _state;
 
-    public FacilityDataGeneratorOptions() { }
+    ProviderDataGeneratorOptions() { }
 
     public String getState() {
         return _state;
@@ -21,5 +21,4 @@ public class FacilityDataGeneratorOptions {
             throw new IllegalArgumentException("State '" + state + "' is not a valid US state");
         _state = state;
     }
-
 }
