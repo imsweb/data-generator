@@ -7,6 +7,8 @@ import java.util.Map;
 
 import com.imsweb.datagenerator.provider.ProviderDataGeneratorOptions;
 import com.imsweb.datagenerator.provider.ProviderDataGeneratorRule;
+import com.imsweb.datagenerator.utils.DistributionUtils;
+import com.imsweb.datagenerator.utils.dto.PhysicianFrequencyDto;
 
 public class NameRule extends ProviderDataGeneratorRule {
 
@@ -20,13 +22,30 @@ public class NameRule extends ProviderDataGeneratorRule {
         super(ID, "Physician Name");
     }
 
-    //@Override
-    //public List<String> getRequiredProperties() {
-    //    return Arrays.asList("birthDateYear", "birthDateMonth", "birthDateDay", "dateOfDiagnosisYear", "dateOfDiagnosisMonth", "dateOfDiagnosisDay");
-    //}
-
     @Override
     public void execute(Map<String, String> provider, ProviderDataGeneratorOptions options) {
+        if (options == null || options.getState() == null)
+            return;
 
+        // get facility.
+        PhysicianFrequencyDto dto = DistributionUtils.getPhysician(options.getState());
+        provider.put("npi", dto.getNpi());
+        provider.put("nameLast", dto.getLastName());
+        provider.put("nameFirst", dto.getFirstName());
+        provider.put("nameMiddle", dto.getMiddleName());
+        provider.put("namePrefix", dto.getNamePrefix());
+        provider.put("nameSuffix", dto.getNameSuffix());
+        provider.put("credentials", dto.getCredentials());
+        provider.put("addressFirstLine", dto.getAddressFirstLine());
+        provider.put("addressSecondLine", dto.getAddressSecondLine());
+        provider.put("addressCity", dto.getAddressCity());
+        provider.put("addressState", dto.getAddressState());
+        provider.put("addressPostalCode", dto.getAddressPostalCode());
+        provider.put("addressTelephone", dto.getAddressTelephone());
+        for (int i = 0; i < 15; i++) {
+            if (dto.getSpecialty(i) != null)
+                if (dto.getSpecialty(i).trim().equals(""))
+                    provider.put("specialty" + (i + 1), dto.getSpecialty(i));
+        }
     }
 }

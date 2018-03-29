@@ -23,21 +23,10 @@ import com.imsweb.layout.LayoutFactory;
 
 public abstract class ProviderDataGenerator implements DataGenerator {
 
-    private Layout _layout;
-
     // list of rules to be executed
     protected List<ProviderDataGeneratorRule> _rules;
 
-    public ProviderDataGenerator(String layoutId) {
-        this(LayoutFactory.getLayout(layoutId));
-    }
-
-    public ProviderDataGenerator(Layout layout) {
-        if (layout == null)
-            throw new RuntimeException("A layout is required for creating a NAACCR HL7 data generator!");
-        //if (!(layout instanceof Layout))
-        //    throw new RuntimeException("A NAACCR HL7 layout is required for creating a NAACCR HL7 data generator!");
-        _layout = layout;
+    public ProviderDataGenerator() {
         _rules = new ArrayList<>();
     }
 
@@ -80,15 +69,16 @@ public abstract class ProviderDataGenerator implements DataGenerator {
      * @param options options
      * @return list of generated providers
      */
-    private List<Map<String, String>> generateProviders(int numProviders, ProviderDataGeneratorOptions options) {
+    public List<Map<String, String>> generateProviders(int numProviders, ProviderDataGeneratorOptions options) {
         // make sure options are never null
         if (options == null)
             options = new ProviderDataGeneratorOptions();
 
         List<Map<String, String>> providers = new ArrayList<>();
         for (int i = 0; i < numProviders; i++) {
-            Map<String, String> facility = generateProvider(options);
-            providers.add(facility);
+            Map<String, String> provider = generateProvider(options);
+            if (!providers.contains(provider))
+                providers.add(provider);
         }
 
         return providers;
@@ -104,42 +94,6 @@ public abstract class ProviderDataGenerator implements DataGenerator {
                 return false;
         }
         return true;
-    }
-
-    /**
-     * Generates a requested number of providers and saves them in the specified file.
-     * <br/><br/>
-     * @param file file to create; if the name ends with ".gz", it will be compressed
-     * @param numProviders number of providers to create
-     */
-    public void generateFile(File file, int numProviders) throws IOException {
-        generateFile(file, numProviders, null);
-    }
-
-    /**
-     * Generates a requested number of providers and saves them in the specified file.
-     * <br/><br/>
-     * @param file file to create; if the name ends with ".gz", it will be compressed
-     * @param numProviders number of providers to create
-     * @param options options that will be provided to every rules.
-     */
-    private void generateFile(File file, int numProviders, ProviderDataGeneratorOptions options) throws IOException {
-
-        // make sure options are never null
-        if (options == null)
-            options = new ProviderDataGeneratorOptions();
-
-        // handle a compress file
-        OutputStream os = new FileOutputStream(file);
-        if (file.getName().toLowerCase().endsWith(".gz"))
-            os = new GZIPOutputStream(os);
-
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8))) {
-            List<Map<String, String>> providerList = generateProviders(numProviders, options);
-            //for (int i = 0; i < providerList.size(); i++) {
-            //    _layout.writeRecord(writer, providerList[i]);
-            //}
-        }
     }
 
 }
