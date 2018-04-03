@@ -61,7 +61,6 @@ import com.imsweb.layout.Layout;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
 
-
 /**
  * A NAACCR data generator can be used to create fake NAACCR data files.
  * <br/><br/>
@@ -315,7 +314,6 @@ public class NaaccrDataGenerator implements DataGenerator {
 
     public static final String CONTEXT_FLAG_SEX = "sex";
     public static final String CONTEXT_FLAG_CURRENT_TUMOR_INDEX = "currentTumorIndex";
-    //public static final String CONTEXT_FLAG_TOTAL_TUMOR_COUNT = "totalTumorCount";
     public static final String CONTEXT_FLAG_SITE_FREQ_MAP = "siteFreqMap";
     public static final String CONTEXT_FLAG_AGE_GROUP_MAP = "ageGroupMap";
     public static final String CONTEXT_FLAG_MAX_AGE_GROUP = "maxAgeGroup";
@@ -336,7 +334,6 @@ public class NaaccrDataGenerator implements DataGenerator {
 
         // Pick the sites we want for the tumors. The Tumor sites can influence the patient's age.
         context.put(CONTEXT_FLAG_CURRENT_TUMOR_INDEX, -1);
-        //context.put(CONTEXT_FLAG_TOTAL_TUMOR_COUNT, numTumors);
 
         Map<Integer, SiteFrequencyDto> siteFreqMap = new HashMap<>();
         Map<Integer, Integer> ageGroupMap = new HashMap<>();
@@ -352,11 +349,8 @@ public class NaaccrDataGenerator implements DataGenerator {
         context.put(CONTEXT_FLAG_AGE_GROUP_MAP, ageGroupMap);
         context.put(CONTEXT_FLAG_MAX_AGE_GROUP, maxAgeGroup);
 
-
-
         return context;
     }
-
 
     /**
      * Generates a requested number of tumors and saves them in the specified file.

@@ -40,12 +40,11 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
         if (propertyHasValue(record, "birthDateYear"))
             minDxDates.add(LocalDate.of(Integer.parseInt(record.get("birthDateYear")) + 1, 1, 1));
         // never go before dx date of patient's most recent tumor (if this isn't the first one)
-        if (otherRecords != null)
-            if (!otherRecords.isEmpty()) {
-                Map<String, String> lastTumor = otherRecords.get(otherRecords.size() - 1);
-                minDxDates.add(LocalDate.of(Integer.parseInt(lastTumor.get("dateOfDiagnosisYear")), Integer.parseInt(lastTumor.get("dateOfDiagnosisMonth")),
-                        Integer.parseInt(lastTumor.get("dateOfDiagnosisDay"))));
-            }
+        if (otherRecords != null && !otherRecords.isEmpty()) {
+            Map<String, String> lastTumor = otherRecords.get(otherRecords.size() - 1);
+            minDxDates.add(LocalDate.of(Integer.parseInt(lastTumor.get("dateOfDiagnosisYear")), Integer.parseInt(lastTumor.get("dateOfDiagnosisMonth")),
+                    Integer.parseInt(lastTumor.get("dateOfDiagnosisDay"))));
+        }
 
         if (context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX) != null) {
             Integer birthYear = Integer.parseInt(record.get("birthDateYear"));

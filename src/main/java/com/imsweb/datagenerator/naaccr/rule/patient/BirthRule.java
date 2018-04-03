@@ -12,7 +12,6 @@ import com.imsweb.datagenerator.utils.RandomUtils;
 import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_MAX_AGE_GROUP;
 import static java.time.temporal.ChronoUnit.DAYS;
 
-
 public class BirthRule extends NaaccrDataGeneratorRule {
 
     // unique identifier for this rule
@@ -36,19 +35,21 @@ public class BirthRule extends NaaccrDataGeneratorRule {
 
         // Based on our tumors, pick an age that's possible for these sites.
         Integer maxAgeGroup = (Integer)context.get(CONTEXT_FLAG_MAX_AGE_GROUP);
-        if (maxAgeGroup != null)
-            if (maxAgeGroup >= 0) {
-                maxBirthDate = minBirthDate.plusYears(100 - (maxAgeGroup * 10));
-                if (options != null) {
-                    LocalDate minDxDate = options.getMinDxDate();
-                    LocalDate maxDxDate = options.getMaxDxDate();
-                    long daysBetween = minDxDate.until(maxDxDate, DAYS) - 1;
-                    if (daysBetween > 3650) daysBetween = 3650;
-
-                    minBirthDate = minDxDate.minusYears(maxAgeGroup * 10);
-                    maxBirthDate = minBirthDate.plusDays(daysBetween);
+        if (maxAgeGroup != null && maxAgeGroup >= 0) {
+            maxBirthDate = minBirthDate.plusYears(100 - (maxAgeGroup * 10));
+            if (options != null) {
+                LocalDate minDxDate = options.getMinDxDate();
+                LocalDate maxDxDate = options.getMaxDxDate();
+                long daysBetween = minDxDate.until(maxDxDate, DAYS) - 1;
+                // Check that there are no more than 10 years between (365 * 10 days).
+                if (daysBetween > 3650) {
+                    daysBetween = 3650;
                 }
+
+                minBirthDate = minDxDate.minusYears(maxAgeGroup * 10);
+                maxBirthDate = minBirthDate.plusDays(daysBetween);
             }
+        }
 
         LocalDate randomDate = RandomUtils.getRandomDateBetween(minBirthDate, maxBirthDate);
 
