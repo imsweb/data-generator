@@ -22,7 +22,7 @@ public class NhiaRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         NhiaInputRecordDto input = new NhiaInputRecordDto();
         input.setSpanishHispanicOrigin(record.get("spanishHispanicOrigin"));
         input.setBirthplaceCountry(record.get("birthplaceCountry"));

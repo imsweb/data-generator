@@ -18,20 +18,21 @@ public class RegistryIdRuleTest {
     @Test
     public void testExecute(){
         Map<String, String> record = new HashMap<>();
+        Map<String, Object> context = new HashMap<>();
         NaaccrDataGeneratorOptions options = new NaaccrDataGeneratorOptions();
 
         // options has no registryId
-        _rule.execute(record, null, options);
+        _rule.execute(record, null, options, context);
         Assert.assertFalse(record.containsKey("registryId"));
 
         // options has empty string
         options.setRegistryId("");
-        _rule.execute(record, null, options);
+        _rule.execute(record, null, options, context);
         Assert.assertFalse(record.containsKey("registryId"));
 
         // options has a valid value for registryId
         options.setRegistryId("REGISTRY");
-        _rule.execute(record, null, options);
+        _rule.execute(record, null, options, context);
         Assert.assertEquals("REGISTRY", record.get("registryId"));
     }
 }

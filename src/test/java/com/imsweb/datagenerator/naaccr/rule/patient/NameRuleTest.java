@@ -18,10 +18,11 @@ public class NameRuleTest {
             for (String race1 : Arrays.asList("01", "02", "03", "04", "05", "06", "07", "32", "96", "97", "98", "99")) {
                 for (String hispanicOrigin : Arrays.asList("0", "1", "7", "8", "9")) {
                     Map<String, String> rec = new HashMap<>();
+                    Map<String, Object> context = new HashMap<>();
                     rec.put("sex", sex);
                     rec.put("race1", race1);
                     rec.put("spanishHispanicOrigin", hispanicOrigin);
-                    _rule.execute(rec, new ArrayList<Map<String, String>>(), null);
+                    _rule.execute(rec, new ArrayList<>(), null, context);
 
                     // verify pattern of names
                     Assert.assertTrue(rec.get("nameFirst").matches("^[a-zA-Z]+$"));

@@ -17,7 +17,8 @@ public class AddressCurrentRuleTest {
 
         // if not state is available, address fields should be blank
         Map<String, String> rec = new HashMap<>();
-        _rule.execute(rec, null, null);
+        Map<String, Object> context = new HashMap<>();
+        _rule.execute(rec, null, null, context);
         Assert.assertNull(rec.get("addressCurrentCity"));
         Assert.assertNull(rec.get("addressCurrentState"));
         Assert.assertNull(rec.get("addressCurrentPostalCode"));
@@ -29,7 +30,7 @@ public class AddressCurrentRuleTest {
         options.setState("MD");
         for (int i = 0; i < 10; i++) {
             rec.clear();
-            _rule.execute(rec, null, options);
+            _rule.execute(rec, null, options, context);
 
             // verify city name pattern
             Assert.assertTrue(rec.get("addressCurrentCity").matches("^[\\w \\.]+$"));

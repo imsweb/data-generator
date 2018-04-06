@@ -16,16 +16,17 @@ public class SequenceNumberCentralRuleTest {
     public void testExecute() {
 
         List<Map<String, String>> otherRecords = new ArrayList<>();
+        Map<String, Object> context = new HashMap<>();
 
         // create a single tumor for the patient and verify sequence number is 00
         Map<String, String> rec = new HashMap<>();
-        _rule.execute(rec, otherRecords, null);
+        _rule.execute(rec, otherRecords, null, context);
         Assert.assertTrue(rec.get("sequenceNumberCentral").equals("00"));
         otherRecords.add(rec);
 
         // add a second tumor to the same patient
         rec = new HashMap<>();
-        _rule.execute(rec, otherRecords, null);
+        _rule.execute(rec, otherRecords, null, context);
         otherRecords.add(rec);
         // verify the previous tumor seq. no. changed from 00 to 01
         Assert.assertTrue(otherRecords.get(0).get("sequenceNumberCentral").equals("01"));
@@ -34,7 +35,7 @@ public class SequenceNumberCentralRuleTest {
 
         // add a third tumor to the same patient
         rec = new HashMap<>();
-        _rule.execute(rec, otherRecords, null);
+        _rule.execute(rec, otherRecords, null, context);
         otherRecords.add(rec);
         // verify sequence numbers of previous two tumors
         Assert.assertTrue(otherRecords.get(0).get("sequenceNumberCentral").equals("01"));

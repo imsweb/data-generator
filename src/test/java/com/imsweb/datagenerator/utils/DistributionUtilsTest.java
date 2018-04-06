@@ -82,4 +82,19 @@ public class DistributionUtilsTest {
     public void testGetStreetState() {
         Assert.assertNotNull(DistributionUtils.getState());
     }
+
+    @Test
+    public void testGetAgeGroup() {
+        Assert.assertNotNull(DistributionUtils.getAgeGroup(null));
+        Assert.assertNotNull(DistributionUtils.getAgeGroup("C000"));
+        Assert.assertNotNull(DistributionUtils.getAgeGroup("C779"));
+        Assert.assertNotNull(DistributionUtils.getAgeGroup("C900"));
+
+        int ageGroupVal = DistributionUtils.getAgeGroup("C900");
+        Assert.assertTrue(ageGroupVal == -1);
+        ageGroupVal = DistributionUtils.getAgeGroup("C002");
+        Assert.assertTrue(ageGroupVal >= 3 && ageGroupVal <= 8);
+    }
+
+
 }

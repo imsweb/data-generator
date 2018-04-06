@@ -27,7 +27,7 @@ public class AgeRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         Integer birthYear = Integer.valueOf(record.get("birthDateYear"));
         Integer birthMonth = Integer.valueOf(record.get("birthDateMonth"));
         Integer birthDay = Integer.valueOf(record.get("birthDateDay"));

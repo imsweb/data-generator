@@ -2,6 +2,7 @@ package com.imsweb.datagenerator.naaccr;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -143,6 +144,27 @@ public class NaaccrDataGeneratorTest {
         options.setConstantValuesPostProcessing(Collections.singletonMap("nameLast", "TEST"));
         patient = generator.generatePatient(1, options);
         Assert.assertEquals("TEST", patient.get(0).get("nameLast"));
+
+        // Test context
+        int numTumors = 2;
+        options = new NaaccrDataGeneratorOptions();
+        options.setMinDxYear(2000);
+        options.setMaxDxYear(2005);
+        patient = generator.generatePatient(numTumors, options);
+
+        LocalDate dateOfDx1 = LocalDate.of(Integer.valueOf(patient.get(0).get("dateOfDiagnosisYear")), Integer.valueOf(patient.get(0).get("dateOfDiagnosisMonth")),
+                Integer.valueOf(patient.get(0).get("dateOfDiagnosisDay")));
+        LocalDate dateOfDx2 = LocalDate.of(Integer.valueOf(patient.get(1).get("dateOfDiagnosisYear")), Integer.valueOf(patient.get(1).get("dateOfDiagnosisMonth")),
+                Integer.valueOf(patient.get(1).get("dateOfDiagnosisDay")));
+
+        boolean dateInRange1 = dateOfDx1.isAfter(options.getMinDxDate().minusDays(1)) && dateOfDx1.isBefore(options.getMaxDxDate().plusDays(1));
+        boolean dateInRange2 = dateOfDx2.isAfter(options.getMinDxDate().minusDays(1)) && dateOfDx2.isBefore(options.getMaxDxDate().plusDays(1));
+
+        Assert.assertTrue("Diagnosis Date outside options Minimum and Maximum.", dateInRange1 || dateInRange2);
+
+
+
+
     }
 
     @Test
@@ -213,7 +235,7 @@ public class NaaccrDataGeneratorTest {
         }
 
         @Override
-        public void execute(Map<String, String> patient, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options) {
+        public void execute(Map<String, String> patient, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
             patient.put("nameLast", _value);
         }
     }
@@ -231,8 +253,66 @@ public class NaaccrDataGeneratorTest {
         }
 
         @Override
-        public void execute(Map<String, String> tumor, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options) {
+        public void execute(Map<String, String> tumor, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
             tumor.put("primarySite", _value);
         }
     }
+
+    // *** TEMPORARY FOR TESTING ***
+    // ABH 3/16/18
+    /*
+    @Test
+    @SuppressWarnings("ConstantConditions")
+    public void testDisplayPatient() {
+        NaaccrDataGenerator generator = new NaaccrDataGenerator(_LAYOUT.getLayoutId());
+        NaaccrDataGeneratorOptions options = new NaaccrDataGeneratorOptions();
+
+        //options.setMinDxYear(2003);
+        //options.setMaxDxYear(2004);
+
+        List<Map<String, String>> patient;
+
+        final int NUM_PATIENTS = 1000;
+
+        String header = "Patient Num \tpatientIdNumber \tnameFirst \tnameLast \tsex \tbirthDateYear \tbirthDateMonth \tbirthDateDay \t";
+        header += "Tumor Num \tseerRecordNumber \ttumorRecordNumber \tprimarySite \thistologyIcdO3 \tbehaviorIcdO3 \tageAtDx \tdateOfDiagnosisYear \tdateOfDiagnosisMonth \tdateOfDiagnosisDay";
+
+        System.out.println(header);
+        String line;
+        for (int i = 0; i < NUM_PATIENTS; i++) {
+            int numTumors = RandomUtils.nextInt(2) + 1;
+
+            patient = generator.generatePatient(numTumors, options);
+
+            int tumorCount = 0;
+            for (Map<String, String> m : patient) {
+                tumorCount++;
+
+                line = "";
+                line += i + "\t";
+                line += m.get("patientIdNumber") + "\t";
+                line += m.get("nameFirst") + "\t";
+                line += m.get("nameLast") + "\t";
+                line += m.get("sex") + "\t";
+                line += m.get("birthDateYear") + "\t";
+                line += m.get("birthDateMonth") + "\t";
+                line += m.get("birthDateDay") + "\t";
+
+                line += tumorCount + "\t";
+                line += m.get("seerRecordNumber") + "\t";
+                line += m.get("tumorRecordNumber") + "\t";
+                line += m.get("primarySite") + "\t";
+                line += m.get("histologyIcdO3") + "\t";
+                line += m.get("behaviorIcdO3") + "\t";
+                line += m.get("ageAtDx") + "\t";
+                line += m.get("dateOfDiagnosisYear") + "\t";
+                line += m.get("dateOfDiagnosisMonth") + "\t";
+                line += m.get("dateOfDiagnosisDay") + "\t";
+                System.out.println(line);
+            }
+        }
+
+    }
+    */
+
 }

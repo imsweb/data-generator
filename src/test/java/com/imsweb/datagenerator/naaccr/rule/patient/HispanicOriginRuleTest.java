@@ -15,7 +15,8 @@ public class HispanicOriginRuleTest {
         // test the rule ten times
         for (int i = 0; i < 10; i++) {
             Map<String, String> rec = new HashMap<>();
-            _rule.execute(rec, null, null);
+            Map<String, Object> context = new HashMap<>();
+            _rule.execute(rec, null, null, context);
             Assert.assertTrue(rec.get("spanishHispanicOrigin").matches("^\\d$"));
         }
     }
