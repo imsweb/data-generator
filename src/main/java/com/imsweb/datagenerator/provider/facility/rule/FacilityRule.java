@@ -10,7 +10,7 @@ import com.imsweb.datagenerator.provider.ProviderDataGeneratorRule;
 import com.imsweb.datagenerator.utils.DistributionUtils;
 import com.imsweb.datagenerator.utils.dto.FacilityFrequencyDto;
 
-public class NameRule extends ProviderDataGeneratorRule {
+public class FacilityRule extends ProviderDataGeneratorRule {
 
     // unique identifier for this rule
     public static final String ID = "facility-name";
@@ -18,7 +18,7 @@ public class NameRule extends ProviderDataGeneratorRule {
     /**
      * Constructor.
      */
-    public NameRule() {
+    public FacilityRule() {
         super(ID, "Facility Name");
     }
 
@@ -37,11 +37,9 @@ public class NameRule extends ProviderDataGeneratorRule {
         provider.put("addressState", dto.getAddressState());
         provider.put("addressPostalCode", dto.getAddressPostalCode());
         provider.put("addressTelephone", dto.getAddressTelephone());
-        for (int i = 0; i < 15; i++) {
-            String thisSpecialty = dto.getSpecialty(i);
-            if ((thisSpecialty != null) && (!thisSpecialty.trim().equals("")))
-                provider.put("specialty" + (i + 1), thisSpecialty);
-        }
+        provider.put("specialty1", dto.getSpecialty(0));
+        provider.put("specialty2", dto.getSpecialty(1));
+        provider.put("specialty3", dto.getSpecialty(2));
     }
 
 }

@@ -34,9 +34,6 @@ public class DistributionUtils {
     private static Map<String, Distribution<FacilityFrequencyDto>> _DIST_FACILITIES = new HashMap<>();
     private static Map<String, Distribution<PhysicianFrequencyDto>> _DIST_PHYSICIANS = new HashMap<>();
 
-
-
-
     // API races
     private static List<String> _API_RACES = Arrays.asList("04", "05", "06", "07", "08", "10", "11", "12", "13", "14", "15", "16", "17", "20", "21", "22", "25", "26", "27", "28", "30", "31", "32",
             "96", "97");
@@ -211,18 +208,6 @@ public class DistributionUtils {
             mapping.put(9, "specialty01");
             mapping.put(10, "specialty02");
             mapping.put(11, "specialty03");
-            mapping.put(12, "specialty04");
-            mapping.put(13, "specialty05");
-            mapping.put(14, "specialty06");
-            mapping.put(15, "specialty07");
-            mapping.put(16, "specialty08");
-            mapping.put(17, "specialty09");
-            mapping.put(18, "specialty10");
-            mapping.put(19, "specialty11");
-            mapping.put(20, "specialty12");
-            mapping.put(21, "specialty13");
-            mapping.put(22, "specialty14");
-            mapping.put(23, "specialty15");
 
             distribution = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/providers/Facility_" + state.toUpperCase() + ".csv"), FacilityFrequencyDto.class,
                     mapping);
@@ -258,18 +243,6 @@ public class DistributionUtils {
             mapping.put(14, "specialty01");
             mapping.put(15, "specialty02");
             mapping.put(16, "specialty03");
-            mapping.put(17, "specialty04");
-            mapping.put(18, "specialty05");
-            mapping.put(19, "specialty06");
-            mapping.put(20, "specialty07");
-            mapping.put(21, "specialty08");
-            mapping.put(22, "specialty09");
-            mapping.put(23, "specialty10");
-            mapping.put(24, "specialty11");
-            mapping.put(25, "specialty12");
-            mapping.put(26, "specialty13");
-            mapping.put(27, "specialty14");
-            mapping.put(28, "specialty15");
 
             distribution = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/providers/Physician_" + state.toUpperCase() + ".csv"), PhysicianFrequencyDto.class,
                     mapping);
@@ -277,6 +250,5 @@ public class DistributionUtils {
         }
         return distribution.getValue();
     }
-
 
 }

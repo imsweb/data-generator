@@ -101,5 +101,4 @@ public class DistributionUtilsTest {
         Assert.assertNotNull(DistributionUtils.getPhysician("AK"));
     }
 
-
 }

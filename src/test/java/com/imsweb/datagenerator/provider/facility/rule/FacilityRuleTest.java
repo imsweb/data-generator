@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2018 Information Management Services, Inc.
  */
-package com.imsweb.datagenerator.provider.physician.rule;
+package com.imsweb.datagenerator.provider.facility.rule;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,14 +12,14 @@ import org.junit.Test;
 
 import com.imsweb.datagenerator.provider.ProviderDataGeneratorOptions;
 
-public class NameRuleTest {
+public class FacilityRuleTest {
 
-    private NameRule _rule = new NameRule();
+    private FacilityRule _rule = new FacilityRule();
 
     @Test
     public void testExecute() {
 
-        for (String state : Arrays.asList("WA", "ND", "MD")) {
+        for (String state : Arrays.asList("CA", "AK", "NV")) {
 
             Map<String, String> provider = new HashMap<>();
             ProviderDataGeneratorOptions options = new ProviderDataGeneratorOptions();
@@ -27,10 +27,8 @@ public class NameRuleTest {
             _rule.execute(provider, options);
 
             Assert.assertTrue(provider.get("npi").matches("\\d{10}"));
-            Assert.assertTrue(provider.get("nameLast").length() > 0);
-            Assert.assertTrue(provider.get("nameFirst").length() > 0);
+            Assert.assertTrue(provider.get("name").length() > 0);
             Assert.assertTrue(provider.get("addressState").equals(state));
-
         }
     }
 }

@@ -4,7 +4,7 @@
 package com.imsweb.datagenerator.provider.physician;
 
 import com.imsweb.datagenerator.provider.ProviderDataGenerator;
-import com.imsweb.datagenerator.provider.physician.rule.NameRule;
+import com.imsweb.datagenerator.provider.physician.rule.PhysicianRule;
 
 /**
  * A data generator that can be used to create physicians.
@@ -17,7 +17,12 @@ public class PhysicianDataGenerator extends ProviderDataGenerator {
     public PhysicianDataGenerator() {
         super();
 
-        _rules.add(new NameRule());
+        _rules.add(new PhysicianRule());
+    }
+
+    @Override
+    public String getId() {
+        return "PhysicianDataGenerator";
     }
 
 }

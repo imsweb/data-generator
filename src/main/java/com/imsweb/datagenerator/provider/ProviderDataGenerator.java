@@ -20,9 +20,7 @@ public abstract class ProviderDataGenerator implements DataGenerator {
     }
 
     @Override
-    public String getId() {
-        return "0";
-    }
+    public abstract String getId();
 
     /**
      * Returns all the provider rules from this generator.
@@ -39,19 +37,16 @@ public abstract class ProviderDataGenerator implements DataGenerator {
      */
     public Map<String, String> generateProvider(ProviderDataGeneratorOptions options) {
         // make sure options are never null
-        if (options == null) {
+        if (options == null)
             options = new ProviderDataGeneratorOptions();
-        }
 
-        if ((options.getState() == null) || (options.getState().equals(""))) {
+        if ((options.getState() == null) || (options.getState().equals("")))
             options.setState("MD");
-        }
 
         // execute the facility rules once
         Map<String, String> provider = new HashMap<>();
         for (ProviderDataGeneratorRule rule : _rules)
-            if (allPropertiesHaveValue(provider, rule.getRequiredProperties()))
-                rule.execute(provider, options);
+            rule.execute(provider, options);
 
         return provider;
     }
@@ -76,18 +71,6 @@ public abstract class ProviderDataGenerator implements DataGenerator {
         }
 
         return providers;
-    }
-
-    /**
-     * Returns true if all the requested properties have a non-blank value on the provided record.
-     */
-    private boolean allPropertiesHaveValue(Map<String, String> record, List<String> properties) {
-        for (String property : properties) {
-            String val = record.get(property);
-            if (val == null || val.trim().isEmpty())
-                return false;
-        }
-        return true;
     }
 
 }
