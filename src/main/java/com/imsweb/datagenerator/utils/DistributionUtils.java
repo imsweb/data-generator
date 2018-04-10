@@ -224,7 +224,7 @@ public class DistributionUtils {
             mapping.put(22, "specialty14");
             mapping.put(23, "specialty15");
 
-            distribution = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/providers/Facility_" + state.toLowerCase() + ".csv"), FacilityFrequencyDto.class,
+            distribution = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/providers/Facility_" + state.toUpperCase() + ".csv"), FacilityFrequencyDto.class,
                     mapping);
             _DIST_FACILITIES.put(state.toLowerCase(), distribution);
         }
@@ -271,7 +271,7 @@ public class DistributionUtils {
             mapping.put(27, "specialty14");
             mapping.put(28, "specialty15");
 
-            distribution = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/providers/Physician_" + state.toLowerCase() + ".csv"), PhysicianFrequencyDto.class,
+            distribution = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/providers/Physician_" + state.toUpperCase() + ".csv"), PhysicianFrequencyDto.class,
                     mapping);
             _DIST_PHYSICIANS.put(state.toLowerCase(), distribution);
         }

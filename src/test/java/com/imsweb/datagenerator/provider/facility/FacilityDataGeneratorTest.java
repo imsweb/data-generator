@@ -3,14 +3,10 @@
  */
 package com.imsweb.datagenerator.provider.facility;
 
-import java.io.IOException;
-import java.util.Map;
-
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.imsweb.datagenerator.provider.ProviderDataGenerator;
-import com.imsweb.datagenerator.provider.ProviderDataGeneratorOptions;
 import com.imsweb.datagenerator.provider.ProviderDataGeneratorRule;
 
 public class FacilityDataGeneratorTest {

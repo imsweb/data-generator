@@ -327,6 +327,7 @@ public class NaaccrDataGeneratorTest {
 
     }
 
+    /*
     private Map<String, String> getFacilityForNPI(String npi, List<Map<String, String>> facilityList) {
         for (Map<String, String> facility : facilityList) {
             if (facility.get("npi").equals(npi)) {
@@ -344,6 +345,7 @@ public class NaaccrDataGeneratorTest {
         }
         return null;
     }
+    */
 
     /**
      * Testing patient rule. only assigns a single value to the nameLast field in the output file.
