@@ -82,4 +82,24 @@ public class DistributionUtilsTest {
     public void testGetStreetState() {
         Assert.assertNotNull(DistributionUtils.getState());
     }
+
+    @Test
+    public void testGetFacility() {
+        Assert.assertNotNull(DistributionUtils.getFacility());
+        Assert.assertNotNull(DistributionUtils.getFacility(null));
+        Assert.assertNotNull(DistributionUtils.getFacility("?"));
+        Assert.assertNotNull(DistributionUtils.getFacility("ak"));
+        Assert.assertNotNull(DistributionUtils.getFacility("AK"));
+    }
+
+    @Test
+    public void testGetPhysician() {
+        Assert.assertNotNull(DistributionUtils.getPhysician());
+        Assert.assertNotNull(DistributionUtils.getPhysician(null));
+        Assert.assertNotNull(DistributionUtils.getPhysician("?"));
+        Assert.assertNotNull(DistributionUtils.getPhysician("ak"));
+        Assert.assertNotNull(DistributionUtils.getPhysician("AK"));
+    }
+
+
 }

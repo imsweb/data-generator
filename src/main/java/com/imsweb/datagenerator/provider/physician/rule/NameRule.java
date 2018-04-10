@@ -43,9 +43,9 @@ public class NameRule extends ProviderDataGeneratorRule {
         provider.put("addressPostalCode", dto.getAddressPostalCode());
         provider.put("addressTelephone", dto.getAddressTelephone());
         for (int i = 0; i < 15; i++) {
-            if (dto.getSpecialty(i) != null)
-                if (dto.getSpecialty(i).trim().equals(""))
-                    provider.put("specialty" + (i + 1), dto.getSpecialty(i));
+            String thisSpecialty = dto.getSpecialty(i);
+            if ((thisSpecialty != null) && (!thisSpecialty.trim().equals("")))
+                provider.put("specialty" + (i + 1), thisSpecialty);
         }
     }
 }

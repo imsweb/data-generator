@@ -10,7 +10,7 @@ public class ProviderDataGeneratorOptions {
     // the state abbreviation (upper-cased) to use to generate the address information (no address info will be generated if left null)
     private String _state;
 
-    ProviderDataGeneratorOptions() { }
+    public ProviderDataGeneratorOptions() { }
 
     public String getState() {
         return _state;

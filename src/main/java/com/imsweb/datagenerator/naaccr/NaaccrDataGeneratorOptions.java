@@ -4,6 +4,7 @@
 package com.imsweb.datagenerator.naaccr;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 import com.imsweb.datagenerator.utils.DistributionUtils;
@@ -33,6 +34,12 @@ public class NaaccrDataGeneratorOptions {
 
     // Registry ID (NAACCR Item #40)
     protected String _registryId;
+
+    // List of pre-created Facilities.
+    protected List<Map<String, String>> _facilityList;
+
+    // List of pre-created Physicians.
+    protected List<Map<String, String>> _physicianList;
 
     public Integer getNumTumorsPerPatient() {
         return _numTumorsPerPatient;
@@ -141,4 +148,27 @@ public class NaaccrDataGeneratorOptions {
     public String getRegistryId() {
         return _registryId;
     }
+
+    public void setFacilities(List<Map<String, String>> facilityList) {
+        _facilityList = facilityList;
+    }
+
+    public void setPhysicians(List<Map<String, String>> physicianList) {
+        _physicianList = physicianList;
+    }
+
+    /**
+     * Returns a list of pre-created Facilities for this state.
+     */
+    public List<Map<String, String>> getFacilities() {
+        return _facilityList;
+    }
+
+    /**
+     * Returns a list of pre-created Physicians for this state.
+     */
+    public List<Map<String, String>> getPhysicians() {
+        return _physicianList;
+    }
+
 }

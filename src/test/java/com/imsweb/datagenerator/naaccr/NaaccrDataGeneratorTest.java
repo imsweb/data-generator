@@ -13,6 +13,10 @@ import org.junit.Test;
 
 import testing.TestingUtils;
 
+import com.imsweb.datagenerator.provider.ProviderDataGenerator;
+import com.imsweb.datagenerator.provider.ProviderDataGeneratorOptions;
+import com.imsweb.datagenerator.provider.facility.FacilityDataGenerator;
+import com.imsweb.datagenerator.provider.physician.PhysicianDataGenerator;
 import com.imsweb.layout.Layout;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.FixedColumnsField;
@@ -198,6 +202,147 @@ public class NaaccrDataGeneratorTest {
         catch (RuntimeException e) {
             // expected
         }
+    }
+
+    @Test
+    @SuppressWarnings("ConstantConditions")
+    public void testGenerateWithProviders() {
+        NaaccrDataGenerator generator = new NaaccrDataGenerator(_LAYOUT.getLayoutId());
+        NaaccrDataGeneratorOptions genOptions = new NaaccrDataGeneratorOptions();
+        genOptions.setState("CA");
+
+        // Test Generation with no Facilities or Physicians
+        List<Map<String, String>> patient = generator.generatePatient(1, null);
+
+        Assert.assertEquals(1, patient.size());
+        Assert.assertNotNull(patient.get(0).get("primarySite"));
+        Assert.assertNull(patient.get(0).get("reportingFacilityNpi"));
+        Assert.assertNull(patient.get(0).get("physicianManagingNpi"));
+        Assert.assertNull(patient.get(0).get("physicianFollowUpNpi"));
+        Assert.assertNull(patient.get(0).get("physicianPrimarySurgNpi"));
+        Assert.assertNull(patient.get(0).get("physicianManaging"));
+        Assert.assertNull(patient.get(0).get("physicianFollowUp"));
+        Assert.assertNull(patient.get(0).get("physicianPrimarySurg"));
+
+        // Provider Options
+        ProviderDataGeneratorOptions providerOptions = new ProviderDataGeneratorOptions();
+        providerOptions.setState(genOptions.getState());
+
+        // Create Facilities
+        ProviderDataGenerator providerFacilityGenerator = new FacilityDataGenerator();
+        List<Map<String, String>> facilityList = providerFacilityGenerator.generateProviders(20, providerOptions);
+
+        // Create Physicians
+        ProviderDataGenerator providerPhysicianGenerator = new PhysicianDataGenerator();
+        List<Map<String, String>> physicianList = providerPhysicianGenerator.generateProviders(20, providerOptions);
+
+        genOptions.setFacilities(facilityList);
+        genOptions.setPhysicians(physicianList);
+
+        // Test Generation with Facilities and Physicians
+        for (int i = 0; i < 10; i++) {
+            patient = generator.generatePatient(1, genOptions);
+            Assert.assertEquals(1, patient.size());
+            Assert.assertNotNull(patient.get(0).get("primarySite"));
+            Assert.assertNotNull(patient.get(0).get("reportingFacilityNpi"));
+            Assert.assertNotNull(patient.get(0).get("physicianManagingNpi"));
+            Assert.assertNotNull(patient.get(0).get("physicianFollowUpNpi"));
+            Assert.assertNotNull(patient.get(0).get("physicianPrimarySurgNpi"));
+            Assert.assertNotNull(patient.get(0).get("physicianManaging"));
+            Assert.assertNotNull(patient.get(0).get("physicianFollowUp"));
+            Assert.assertNotNull(patient.get(0).get("physicianPrimarySurg"));
+
+            /*
+            System.out.println("Patient --------------------------------");
+            System.out.println(patient.get(0).get("nameLast") + ", " + patient.get(0).get("nameFirst"));
+
+            System.out.println("  Facility NPI:             " + patient.get(0).get("reportingFacilityNpi"));
+            Map<String, String> facility = getFacilityForNPI(patient.get(0).get("reportingFacilityNpi"), facilityList);
+            System.out.println("    Facility --------------------------------");
+            System.out.println("      NPI:               " + facility.get("npi"));
+            System.out.println("      Name:              " + facility.get("name"));
+            System.out.println("      addressFirstLine:  " + facility.get("addressFirstLine"));
+            System.out.println("      addressSecondLine: " + facility.get("addressSecondLine"));
+            System.out.println("      addressCity:       " + facility.get("addressCity"));
+            System.out.println("      addressState:      " + facility.get("addressState"));
+            System.out.println("      addressPostalCode: " + facility.get("addressPostalCode"));
+            System.out.println("      addressTelephone:  " + facility.get("addressTelephone"));
+
+
+            System.out.println("  Physician Managing NPI:   " + patient.get(0).get("physicianManagingNpi"));
+            System.out.println("  Physician Managing Name:  " + patient.get(0).get("physicianManaging"));
+            Map<String, String> physician = getPhysicianForNPI(patient.get(0).get("physicianManagingNpi"), physicianList);
+            System.out.println("    Physician --------------------------------");
+            System.out.println("      NPI:               " + physician.get("npi"));
+            System.out.println("      nameLast:          " + physician.get("nameLast"));
+            System.out.println("      nameFirst:         " + physician.get("nameFirst"));
+            System.out.println("      nameMiddle:        " + physician.get("nameMiddle"));
+            System.out.println("      namePrefix:        " + physician.get("namePrefix"));
+            System.out.println("      nameSuffix:        " + physician.get("nameSuffix"));
+            System.out.println("      credentials:       " + physician.get("credentials"));
+            System.out.println("      addressFirstLine:  " + physician.get("addressFirstLine"));
+            System.out.println("      addressSecondLine: " + physician.get("addressSecondLine"));
+            System.out.println("      addressCity:       " + physician.get("addressCity"));
+            System.out.println("      addressState:      " + physician.get("addressState"));
+            System.out.println("      addressPostalCode: " + physician.get("addressPostalCode"));
+            System.out.println("      addressTelephone:  " + physician.get("addressTelephone"));
+
+            System.out.println("  Physician Follow Up NPI:  " + patient.get(0).get("physicianFollowUpNpi"));
+            System.out.println("  Physician Follow Up Name: " + patient.get(0).get("physicianFollowUp"));
+            physician = getPhysicianForNPI(patient.get(0).get("physicianFollowUpNpi"), physicianList);
+            System.out.println("    Physician --------------------------------");
+            System.out.println("      NPI:               " + physician.get("npi"));
+            System.out.println("      nameLast:          " + physician.get("nameLast"));
+            System.out.println("      nameFirst:         " + physician.get("nameFirst"));
+            System.out.println("      nameMiddle:        " + physician.get("nameMiddle"));
+            System.out.println("      namePrefix:        " + physician.get("namePrefix"));
+            System.out.println("      nameSuffix:        " + physician.get("nameSuffix"));
+            System.out.println("      credentials:       " + physician.get("credentials"));
+            System.out.println("      addressFirstLine:  " + physician.get("addressFirstLine"));
+            System.out.println("      addressSecondLine: " + physician.get("addressSecondLine"));
+            System.out.println("      addressCity:       " + physician.get("addressCity"));
+            System.out.println("      addressState:      " + physician.get("addressState"));
+            System.out.println("      addressPostalCode: " + physician.get("addressPostalCode"));
+            System.out.println("      addressTelephone:  " + physician.get("addressTelephone"));
+
+            System.out.println("  Physician Primary NPI:    " + patient.get(0).get("physicianPrimarySurgNpi"));
+            System.out.println("  Physician Primary Name:   " + patient.get(0).get("physicianPrimarySurg"));
+            physician = getPhysicianForNPI(patient.get(0).get("physicianPrimarySurgNpi"), physicianList);
+            System.out.println("    Physician --------------------------------");
+            System.out.println("      NPI:               " + physician.get("npi"));
+            System.out.println("      nameLast:          " + physician.get("nameLast"));
+            System.out.println("      nameFirst:         " + physician.get("nameFirst"));
+            System.out.println("      nameMiddle:        " + physician.get("nameMiddle"));
+            System.out.println("      namePrefix:        " + physician.get("namePrefix"));
+            System.out.println("      nameSuffix:        " + physician.get("nameSuffix"));
+            System.out.println("      credentials:       " + physician.get("credentials"));
+            System.out.println("      addressFirstLine:  " + physician.get("addressFirstLine"));
+            System.out.println("      addressSecondLine: " + physician.get("addressSecondLine"));
+            System.out.println("      addressCity:       " + physician.get("addressCity"));
+            System.out.println("      addressState:      " + physician.get("addressState"));
+            System.out.println("      addressPostalCode: " + physician.get("addressPostalCode"));
+            System.out.println("      addressTelephone:  " + physician.get("addressTelephone"));
+            */
+        }
+
+    }
+
+    private Map<String, String> getFacilityForNPI(String npi, List<Map<String, String>> facilityList) {
+        for (Map<String, String> facility : facilityList) {
+            if (facility.get("npi").equals(npi)) {
+                return facility;
+            }
+        }
+        return null;
+    }
+
+    private Map<String, String> getPhysicianForNPI(String npi, List<Map<String, String>> physicianList) {
+        for (Map<String, String> physician : physicianList) {
+            if (physician.get("npi").equals(npi)) {
+                return physician;
+            }
+        }
+        return null;
     }
 
     /**

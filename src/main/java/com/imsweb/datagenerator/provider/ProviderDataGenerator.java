@@ -48,10 +48,15 @@ public abstract class ProviderDataGenerator implements DataGenerator {
      * @param options options
      * @return generated provider
      */
-    private Map<String, String> generateProvider(ProviderDataGeneratorOptions options) {
+    public Map<String, String> generateProvider(ProviderDataGeneratorOptions options) {
         // make sure options are never null
-        if (options == null)
+        if (options == null) {
             options = new ProviderDataGeneratorOptions();
+        }
+
+        if ((options.getState() == null) || (options.getState().equals(""))) {
+            options.setState("MD");
+        }
 
         // execute the facility rules once
         Map<String, String> provider = new HashMap<>();

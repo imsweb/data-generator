@@ -6,6 +6,7 @@ package com.imsweb.datagenerator.provider;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.imsweb.datagenerator.provider.facility.FacilityDataGenerator;
@@ -14,6 +15,57 @@ import com.imsweb.datagenerator.provider.physician.PhysicianDataGenerator;
 public class ProviderDataGeneratorTest {
 
     @Test
+    @SuppressWarnings("ConstantConditions")
+    public void testGenerateProvider() {
+        // Facility ---------------------------------------------------------------
+        ProviderDataGenerator generator = new FacilityDataGenerator();
+        ProviderDataGeneratorOptions options = new ProviderDataGeneratorOptions();
+
+        // null options
+        List<Map<String, String>> providers = generator.generateProviders(1, options);
+        Assert.assertEquals(1, providers.size());
+        Assert.assertNotNull(providers.get(0).get("npi"));
+        Assert.assertNull(providers.get(0).get("addressAtDxState"));
+
+        // null options, several tumors
+        providers = generator.generateProviders(3, options);
+        Assert.assertEquals(3, providers.size());
+        Assert.assertNotNull(providers.get(0).get("npi"));
+        Assert.assertNotNull(providers.get(1).get("npi"));
+        Assert.assertNotNull(providers.get(2).get("npi"));
+
+        // test state option
+        options.setState("HI");
+        providers = generator.generateProviders(1, options);
+        Assert.assertEquals("HI", providers.get(0).get("addressState"));
+
+        // Physician ---------------------------------------------------------------
+        generator = new PhysicianDataGenerator();
+        options = new ProviderDataGeneratorOptions();
+
+        // null options
+        providers = generator.generateProviders(1, options);
+        Assert.assertEquals(1, providers.size());
+        Assert.assertNotNull(providers.get(0).get("npi"));
+        Assert.assertNull(providers.get(0).get("addressAtDxState"));
+
+        // null options, several tumors
+        providers = generator.generateProviders(3, options);
+        Assert.assertEquals(3, providers.size());
+        Assert.assertNotNull(providers.get(0).get("npi"));
+        Assert.assertNotNull(providers.get(1).get("npi"));
+        Assert.assertNotNull(providers.get(2).get("npi"));
+
+        // test state option
+        options.setState("HI");
+        providers = generator.generateProviders(1, options);
+        Assert.assertEquals("HI", providers.get(0).get("addressState"));
+
+    }
+
+
+    /*
+    @Test
     public void testGenerator() {
 
         // Generate Facilities
@@ -21,7 +73,7 @@ public class ProviderDataGeneratorTest {
         ProviderDataGeneratorOptions options = new ProviderDataGeneratorOptions();
         options.setState("AK");
         FacilityDataGenerator genFacility = new FacilityDataGenerator();
-
+        String thisSpecialty;
         List<Map<String, String>> facilitiesList = genFacility.generateProviders(10, options);
 
         for (Map<String, String> facility : facilitiesList) {
@@ -34,21 +86,14 @@ public class ProviderDataGeneratorTest {
             System.out.println("addressState:      " + facility.get("addressState"));
             System.out.println("addressPostalCode: " + facility.get("addressPostalCode"));
             System.out.println("addressTelephone:  " + facility.get("addressTelephone"));
-            System.out.println("specialty1:        " + facility.get("specialty1"));
-            System.out.println("specialty2:        " + facility.get("specialty2"));
-            System.out.println("specialty3:        " + facility.get("specialty3"));
-            System.out.println("specialty4:        " + facility.get("specialty4"));
-            System.out.println("specialty5:        " + facility.get("specialty5"));
-            System.out.println("specialty6:        " + facility.get("specialty6"));
-            System.out.println("specialty7:        " + facility.get("specialty7"));
-            System.out.println("specialty8:        " + facility.get("specialty8"));
-            System.out.println("specialty9:        " + facility.get("specialty9"));
-            System.out.println("specialty10:       " + facility.get("specialty10"));
-            System.out.println("specialty11:       " + facility.get("specialty11"));
-            System.out.println("specialty12:       " + facility.get("specialty12"));
-            System.out.println("specialty13:       " + facility.get("specialty13"));
-            System.out.println("specialty14:       " + facility.get("specialty14"));
-            System.out.println("specialty15:       " + facility.get("specialty15"));
+
+            for (int i=1; i <= 15; i++)
+            {
+                thisSpecialty = facility.get("specialty" + i);
+                if (thisSpecialty != null) {
+                    System.out.println("specialty" + i + ":        " + thisSpecialty);
+                }
+            }
         }
 
         // Generate Physicians
@@ -73,106 +118,16 @@ public class ProviderDataGeneratorTest {
             System.out.println("addressState:      " + physician.get("addressState"));
             System.out.println("addressPostalCode: " + physician.get("addressPostalCode"));
             System.out.println("addressTelephone:  " + physician.get("addressTelephone"));
-            System.out.println("specialty1:        " + physician.get("specialty1"));
-            System.out.println("specialty2:        " + physician.get("specialty2"));
-            System.out.println("specialty3:        " + physician.get("specialty3"));
-            System.out.println("specialty4:        " + physician.get("specialty4"));
-            System.out.println("specialty5:        " + physician.get("specialty5"));
-            System.out.println("specialty6:        " + physician.get("specialty6"));
-            System.out.println("specialty7:        " + physician.get("specialty7"));
-            System.out.println("specialty8:        " + physician.get("specialty8"));
-            System.out.println("specialty9:        " + physician.get("specialty9"));
-            System.out.println("specialty10:       " + physician.get("specialty10"));
-            System.out.println("specialty11:       " + physician.get("specialty11"));
-            System.out.println("specialty12:       " + physician.get("specialty12"));
-            System.out.println("specialty13:       " + physician.get("specialty13"));
-            System.out.println("specialty14:       " + physician.get("specialty14"));
-            System.out.println("specialty15:       " + physician.get("specialty15"));
+
+            for (int i=1; i <= 15; i++)
+            {
+                thisSpecialty = physician.get("specialty" + i);
+                if (thisSpecialty != null) {
+                    System.out.println("specialty" + i + ":        " + thisSpecialty);
+                }
+            }
         }
-
-
-
-        /*
-        // default generator comes with some patient and tumor rules
-        Assert.assertFalse(generator.getPatientRules().isEmpty());
-        for (NaaccrDataGeneratorRule rule : generator.getPatientRules()) {
-            Assert.assertNotNull(rule.getId());
-            Assert.assertNotNull(rule.getName());
-        }
-        Assert.assertFalse(generator.getTumorRules().isEmpty());
-        for (NaaccrDataGeneratorRule rule : generator.getTumorRules()) {
-            Assert.assertNotNull(rule.getId());
-            Assert.assertNotNull(rule.getName());
-        }
-
-        // test no rules
-        generator.getPatientRules().clear();
-        Assert.assertTrue(generator.getPatientRules().isEmpty());
-        generator.getTumorRules().clear();
-        Assert.assertTrue(generator.getTumorRules().isEmpty());
-
-        // a layout is required
-        try {
-            //noinspection ConstantConditions
-            new NaaccrDataGenerator((Layout)null);
-            Assert.fail();
-        }
-        catch (RuntimeException e) {
-            // expected
-        }
-
-        // ********** test patient operations
-
-        // add a patient rule
-        generator.addPatientRule(new TestPatientRule("val1"));
-        Assert.assertNotNull(generator.getPatientRule("test-patient"));
-
-        // execute the rule
-        Assert.assertEquals("val1", generator.generatePatient(1, null).get(0).get("nameLast"));
-
-        // replace a patient rule
-        Assert.assertTrue(generator.replacePatientRule(new TestPatientRule("val2")));
-        Assert.assertEquals("val2", generator.generatePatient(1, null).get(0).get("nameLast"));
-
-        // remove a patient rule
-        Assert.assertTrue(generator.removePatientRule("test-patient"));
-        Assert.assertNull(generator.getPatientRule("test-patient"));
-
-        // get unknown patient rule
-        Assert.assertNull(generator.getPatientRule("hum?"));
-
-        // remove unknown patient rule
-        Assert.assertFalse(generator.removePatientRule("hum?"));
-
-        // replace unknown patient rule
-        Assert.assertFalse(generator.replacePatientRule(new TestPatientRule(null)));
-
-        // ********** test tumor operations
-
-        // add a tumor rule
-        generator.addTumorRule(new TestTumorRule("C123"));
-        Assert.assertNotNull(generator.getTumorRule("test-tumor"));
-
-        // execute the rule
-        Assert.assertEquals("C123", generator.generatePatient(1, null).get(0).get("primarySite"));
-
-        // replace a tumor rule
-        Assert.assertTrue(generator.replaceTumorRule(new TestTumorRule("C456")));
-        Assert.assertEquals("C456", generator.generatePatient(1, null).get(0).get("primarySite"));
-
-        // remove a tumor rule
-        Assert.assertTrue(generator.removeTumorRule("test-tumor"));
-        Assert.assertNull(generator.getTumorRule("test-tumor"));
-
-        // get unknown tumor rule
-        Assert.assertNull(generator.getTumorRule("hum?"));
-
-        // remove unknown tumor rule
-        Assert.assertFalse(generator.removeTumorRule("hum?"));
-
-        // replace unknown tumor rule
-        Assert.assertFalse(generator.replacePatientRule(new TestTumorRule(null)));
-        */
     }
+    */
 
 }

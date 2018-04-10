@@ -5,6 +5,7 @@
  - Updated Layout library from version 1.6 to version 1.8.
  - Updated Staging library from version 2.12 to version 2.14. 
  - Updated Algorithm library from version 1.10 to version 1.12.
+ - Added a Facility and Physician generator. These providers will be used for specific NAACCR fields.
 
 **Changes in version 1.3**
 
