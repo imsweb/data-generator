@@ -23,7 +23,7 @@ public class PhysicianRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         if ((options != null) && (options.getPhysicians() != null)) {
 
             // Pick a random physician for each visit.

@@ -23,7 +23,7 @@ public class FacilityRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         if ((options != null) && (options.getFacilities() != null)) {
 
             // Pick a random facility and add it to the record.
