@@ -94,84 +94,99 @@ public class FacilityFrequencyDto {
     }
 
     public String getSpecialty(int index) {
-        String retval = "";
         switch (index) {
             case 0:
-                retval = _specialty01;
-                break;
+                return _specialty01;
             case 1:
-                retval = _specialty02;
-                break;
+                return _specialty02;
             case 2:
-                retval = _specialty03;
-                break;
+                return _specialty03;
             case 3:
-                retval = _specialty04;
-                break;
+                return _specialty04;
             case 4:
-                retval = _specialty05;
-                break;
+                return _specialty05;
             case 5:
-                retval = _specialty06;
-                break;
+                return _specialty06;
             case 6:
-                retval = _specialty07;
-                break;
+                return _specialty07;
             case 7:
-                retval = _specialty08;
-                break;
+                return _specialty08;
             case 8:
-                retval = _specialty09;
-                break;
+                return _specialty09;
             case 9:
-                retval = _specialty10;
-                break;
+                return _specialty10;
             case 10:
-                retval = _specialty11;
-                break;
+                return _specialty11;
             case 11:
-                retval = _specialty12;
-                break;
+                return _specialty12;
             case 12:
-                retval = _specialty13;
-                break;
+                return _specialty13;
             case 13:
-                retval = _specialty14;
-                break;
+                return _specialty14;
             case 14:
-                retval = _specialty15;
-                break;
+                return _specialty15;
+            default:
+                return "";
         }
-        return retval;
     }
 
-    public void setSpecialty01(String specialty) { _specialty01 = specialty; }
+    public void setSpecialty01(String specialty) {
+        _specialty01 = specialty;
+    }
 
-    public void setSpecialty02(String specialty) { _specialty02 = specialty; }
+    public void setSpecialty02(String specialty) {
+        _specialty02 = specialty;
+    }
 
-    public void setSpecialty03(String specialty) { _specialty03 = specialty; }
+    public void setSpecialty03(String specialty) {
+        _specialty03 = specialty;
+    }
 
-    public void setSpecialty04(String specialty) { _specialty04 = specialty; }
+    public void setSpecialty04(String specialty) {
+        _specialty04 = specialty;
+    }
 
-    public void setSpecialty05(String specialty) { _specialty05 = specialty; }
+    public void setSpecialty05(String specialty) {
+        _specialty05 = specialty;
+    }
 
-    public void setSpecialty06(String specialty) { _specialty06 = specialty; }
+    public void setSpecialty06(String specialty) {
+        _specialty06 = specialty;
+    }
 
-    public void setSpecialty07(String specialty) { _specialty07 = specialty; }
+    public void setSpecialty07(String specialty) {
+        _specialty07 = specialty;
+    }
 
-    public void setSpecialty08(String specialty) { _specialty08 = specialty; }
+    public void setSpecialty08(String specialty) {
+        _specialty08 = specialty;
+    }
 
-    public void setSpecialty09(String specialty) { _specialty09 = specialty; }
+    public void setSpecialty09(String specialty) {
+        _specialty09 = specialty;
+    }
 
-    public void setSpecialty10(String specialty) { _specialty10 = specialty; }
+    public void setSpecialty10(String specialty) {
+        _specialty10 = specialty;
+    }
 
-    public void setSpecialty11(String specialty) { _specialty11 = specialty; }
+    public void setSpecialty11(String specialty) {
+        _specialty11 = specialty;
+    }
 
-    public void setSpecialty12(String specialty) { _specialty12 = specialty; }
+    public void setSpecialty12(String specialty) {
+        _specialty12 = specialty;
+    }
 
-    public void setSpecialty13(String specialty) { _specialty13 = specialty; }
+    public void setSpecialty13(String specialty) {
+        _specialty13 = specialty;
+    }
 
-    public void setSpecialty14(String specialty) { _specialty14 = specialty; }
+    public void setSpecialty14(String specialty) {
+        _specialty14 = specialty;
+    }
 
-    public void setSpecialty15(String specialty) { _specialty15 = specialty; }
+    public void setSpecialty15(String specialty) {
+        _specialty15 = specialty;
+    }
 }
