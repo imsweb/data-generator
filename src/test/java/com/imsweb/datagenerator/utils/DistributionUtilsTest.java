@@ -83,6 +83,18 @@ public class DistributionUtilsTest {
         Assert.assertNotNull(DistributionUtils.getState());
     }
 
+    public void testGetAgeGroup() {
+        Assert.assertNotNull(DistributionUtils.getAgeGroup(null));
+        Assert.assertNotNull(DistributionUtils.getAgeGroup("C000"));
+        Assert.assertNotNull(DistributionUtils.getAgeGroup("C779"));
+        Assert.assertNotNull(DistributionUtils.getAgeGroup("C900"));
+
+        int ageGroupVal = DistributionUtils.getAgeGroup("C900");
+        Assert.assertTrue(ageGroupVal == -1);
+        ageGroupVal = DistributionUtils.getAgeGroup("C002");
+        Assert.assertTrue(ageGroupVal >= 3 && ageGroupVal <= 8);
+    }
+  
     @Test
     public void testGetFacility() {
         Assert.assertNotNull(DistributionUtils.getFacility());
@@ -100,5 +112,4 @@ public class DistributionUtilsTest {
         Assert.assertNotNull(DistributionUtils.getPhysician("ak"));
         Assert.assertNotNull(DistributionUtils.getPhysician("AK"));
     }
-
 }

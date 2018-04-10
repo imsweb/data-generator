@@ -19,7 +19,7 @@ public class TumorRecordNumberRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         record.put("tumorRecordNumber", String.format("%02d", otherRecords.size() + 1));
     }
 }

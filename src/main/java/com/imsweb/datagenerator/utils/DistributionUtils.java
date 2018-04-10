@@ -3,6 +3,7 @@
  */
 package com.imsweb.datagenerator.utils;
 
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,7 @@ public class DistributionUtils {
     private static Distribution<String> _DIST_STREET_SUFFIX;
     private static Map<String, Distribution<CityFrequencyDto>> _DIST_CITIES = new HashMap<>();
     private static Distribution<String> _DIST_STATE;
+    private static Map<String, Distribution<String>> _DIST_SITE_AGE_GROUPS = new HashMap<>();
     private static Map<String, Distribution<FacilityFrequencyDto>> _DIST_FACILITIES = new HashMap<>();
     private static Map<String, Distribution<PhysicianFrequencyDto>> _DIST_PHYSICIANS = new HashMap<>();
 
@@ -62,6 +64,7 @@ public class DistributionUtils {
         _DIST_STREET_SUFFIX = null;
         _DIST_CITIES.clear();
         _DIST_STATE = null;
+        _DIST_SITE_AGE_GROUPS.clear();
         _DIST_FACILITIES.clear();
         _DIST_PHYSICIANS.clear();
     }
@@ -186,6 +189,22 @@ public class DistributionUtils {
         return _DIST_STATE.getValue();
     }
 
+    public static int getAgeGroup(String site) {
+        if (site == null)
+            return -1;
+
+        Distribution<String> distribution = _DIST_SITE_AGE_GROUPS.get(site.toUpperCase());
+        if (distribution == null) {
+            URL url = Thread.currentThread().getContextClassLoader().getResource("frequencies/sites/" + site.toUpperCase() + ".csv");
+            if (url == null)
+                return -1;
+            distribution = Distribution.of(url);
+            _DIST_SITE_AGE_GROUPS.put(site.toUpperCase(), distribution);
+        }
+
+        return Integer.parseInt(distribution.getValue());
+    }
+  
     public static FacilityFrequencyDto getFacility() {
         return getFacility(null);
     }
@@ -250,5 +269,4 @@ public class DistributionUtils {
         }
         return distribution.getValue();
     }
-
 }

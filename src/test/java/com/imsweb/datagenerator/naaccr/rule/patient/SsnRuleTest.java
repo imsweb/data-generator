@@ -16,7 +16,8 @@ public class SsnRuleTest {
         // test the social security number rule 10 times
         for (int i = 0; i < 10; i++) {
             Map<String, String> rec = new HashMap<>();
-            _rule.execute(rec, new ArrayList<Map<String, String>>(), null);
+            Map<String, Object> context = new HashMap<>();
+            _rule.execute(rec, new ArrayList<>(), null, context);
             String ssn = rec.get("socialSecurityNumber");
 
             // verify SSN is non-null and nine digits long

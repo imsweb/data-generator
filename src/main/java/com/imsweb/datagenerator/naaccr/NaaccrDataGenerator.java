@@ -57,6 +57,8 @@ import com.imsweb.datagenerator.naaccr.rule.tumor.SiteRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.TumorMarkerRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.TumorRecordNumberRule;
 import com.imsweb.datagenerator.utils.Distribution;
+import com.imsweb.datagenerator.utils.DistributionUtils;
+import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
 import com.imsweb.layout.Layout;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
@@ -274,16 +276,21 @@ public class NaaccrDataGenerator implements DataGenerator {
         if (options == null)
             options = new NaaccrDataGeneratorOptions();
 
+        // Context contains information that is shared amongst the rules. Contains values we want to use for this patient.
+        Map<String, Object> context = generateInitialPatientContext(numTumors);
+
         List<Map<String, String>> tumors = new ArrayList<>();
 
         // execute the patient rules once; we will copy the resulting values in each tumor
         Map<String, String> patient = new HashMap<>();
         for (NaaccrDataGeneratorRule rule : _patientRules)
             if (allPropertiesHaveValue(patient, rule.getRequiredProperties()))
-                rule.execute(patient, null, options);
+                rule.execute(patient, null, options, context);
 
         // create each tumor and add it to the return list
         for (int i = 0; i < numTumors; i++) {
+            context.put(CONTEXT_FLAG_CURRENT_TUMOR_INDEX, i);
+
             Map<String, String> tumor = new HashMap<>();
 
             // if there is pre-processing constant values, set them
@@ -296,7 +303,7 @@ public class NaaccrDataGenerator implements DataGenerator {
             // execute the tumor rules
             for (NaaccrDataGeneratorRule rule : _tumorRules)
                 if (allPropertiesHaveValue(tumor, rule.getRequiredProperties()))
-                    rule.execute(tumor, tumors, options);
+                    rule.execute(tumor, tumors, options, context);
 
             // if there is post-processing constant values, set them
             if (options.getConstantValuesPostProcessing() != null)
@@ -307,6 +314,46 @@ public class NaaccrDataGenerator implements DataGenerator {
         }
 
         return tumors;
+    }
+
+    public static final String CONTEXT_FLAG_SEX = "sex";
+    public static final String CONTEXT_FLAG_CURRENT_TUMOR_INDEX = "currentTumorIndex";
+    public static final String CONTEXT_FLAG_SITE_FREQ_MAP = "siteFreqMap";
+    public static final String CONTEXT_FLAG_AGE_GROUP_MAP = "ageGroupMap";
+    public static final String CONTEXT_FLAG_MAX_AGE_GROUP = "maxAgeGroup";
+
+    /**
+     * Generates a list of values that we want this patient to have.
+     * Specifically the sex of the patient and the sites for the tumors.
+     * <br/><br/>
+     * @param numTumors number of tumors to generate, must be greater than 0
+     */
+    private Map<String, Object> generateInitialPatientContext(int numTumors) {
+
+        // Context contains information that is shared amongst the rules. Contains values we want to use for this patient.
+        Map<String, Object> context = new HashMap<>();
+
+        // Pick the patient sex. The sex of the patient will influence the tumor sites.
+        context.put(CONTEXT_FLAG_SEX, DistributionUtils.getSex());
+
+        // Pick the sites we want for the tumors. The Tumor sites can influence the patient's age.
+        context.put(CONTEXT_FLAG_CURRENT_TUMOR_INDEX, -1);
+
+        Map<Integer, SiteFrequencyDto> siteFreqMap = new HashMap<>();
+        Map<Integer, Integer> ageGroupMap = new HashMap<>();
+        int maxAgeGroup = -1;
+        for (int i = 0; i < numTumors; i++) {
+            SiteFrequencyDto dto = DistributionUtils.getSite((String)context.get(CONTEXT_FLAG_SEX));
+            siteFreqMap.put(i, dto);
+            int iAgeGroup = DistributionUtils.getAgeGroup(dto.getSite());
+            ageGroupMap.put(i, iAgeGroup);
+            maxAgeGroup = Integer.max(maxAgeGroup, iAgeGroup);
+        }
+        context.put(CONTEXT_FLAG_SITE_FREQ_MAP, siteFreqMap);
+        context.put(CONTEXT_FLAG_AGE_GROUP_MAP, ageGroupMap);
+        context.put(CONTEXT_FLAG_MAX_AGE_GROUP, maxAgeGroup);
+
+        return context;
     }
 
     /**

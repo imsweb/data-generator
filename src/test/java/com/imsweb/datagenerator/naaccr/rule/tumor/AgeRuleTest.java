@@ -26,20 +26,21 @@ public class AgeRuleTest {
         rec.put("dateOfDiagnosisMonth", "11");
         rec.put("dateOfDiagnosisDay", "05");
         rec.put("dateOfDiagnosisFlag", "");
-        _rule.execute(rec, otherRecords, null);
+        Map<String, Object> context = new HashMap<>();
+        _rule.execute(rec, otherRecords, null, context);
         Assert.assertEquals("035", rec.get("ageAtDx"));
 
         // set DX day/month to birthday in 2015 and verify still 35
         rec.remove("ageAtDx");
         rec.put("dateOfDiagnosisMonth", "07");
         rec.put("dateOfDiagnosisDay", "05");
-        _rule.execute(rec, otherRecords, null);
+        _rule.execute(rec, otherRecords, null, context);
         Assert.assertEquals("035", rec.get("ageAtDx"));
 
         // set DX day/month to day before birthday in 2015 and verify age is now 34
         rec.remove("ageAtDx");
         rec.put("dateOfDiagnosisDay", "04");
-        _rule.execute(rec, otherRecords, null);
+        _rule.execute(rec, otherRecords, null, context);
         Assert.assertEquals("034", rec.get("ageAtDx"));
     }
 }

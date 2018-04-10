@@ -5,6 +5,7 @@
  - Updated Layout library from version 1.6 to version 1.8.
  - Updated Staging library from version 2.12 to version 2.14. 
  - Updated Algorithm library from version 1.10 to version 1.12.
+ - Added Patient context and Site frequency so that patient's Age and Age At Diagnosis is more appropriate for their tumors.
  - Added a Facility and Physician generator. These providers will be used for specific NAACCR fields.
 
 **Changes in version 1.3**

@@ -25,7 +25,8 @@ public class RaceRuleTest {
         // test the rule 5 times, asserting that the execute() method always assigns a valid race code to the patient
         for (int i = 0; i < 5; i++) {
             Map<String, String> rec = new HashMap<>();
-            _rule.execute(rec, null, null);
+            Map<String, Object> context = new HashMap<>();
+            _rule.execute(rec, null, null, context);
             Assert.assertTrue("race1 valid code", validRace1.contains(rec.get("race1")));
             Assert.assertTrue("race2 valid code", validRace2345.contains(rec.get("race2")));
             Assert.assertTrue("race3 valid code", validRace2345.contains(rec.get("race3")));

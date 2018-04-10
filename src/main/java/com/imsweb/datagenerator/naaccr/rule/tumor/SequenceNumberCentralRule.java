@@ -19,7 +19,7 @@ public class SequenceNumberCentralRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options) {
+    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         if (otherRecords.isEmpty())
             // if this is the only tumor, set sequence number to 00
             record.put("sequenceNumberCentral", "00");

@@ -50,8 +50,9 @@ public abstract class NaaccrDataGeneratorRule {
      * @param record current record
      * @param otherRecords other records for patient
      * @param options generator options
+     * @param context communication between the rules (must not be null)
      */
-    public abstract void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options);
+    public abstract void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context);
 
     /**
      * Checks that the provided records contains a non-blank value for each requested property.
