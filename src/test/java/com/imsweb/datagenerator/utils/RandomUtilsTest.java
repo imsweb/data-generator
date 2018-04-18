@@ -16,7 +16,7 @@ public class RandomUtilsTest {
         Assert.assertTrue(i >= 0 && i < 10);
 
         i = RandomUtils.nextInt(100);
-        Assert.assertTrue(i > 0 && i < 100);
+        Assert.assertTrue(i >= 0 && i < 100);
     }
 
     @Test

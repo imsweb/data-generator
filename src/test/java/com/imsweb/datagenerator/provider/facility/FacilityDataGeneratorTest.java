@@ -9,7 +9,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.imsweb.datagenerator.provider.ProviderDataGeneratorOptions;
-import com.imsweb.datagenerator.utils.dto.FacilityFrequencyDto;
 
 public class FacilityDataGeneratorTest {
 
