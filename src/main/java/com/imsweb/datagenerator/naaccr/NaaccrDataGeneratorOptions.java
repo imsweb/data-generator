@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.imsweb.datagenerator.utils.DistributionUtils;
+import com.imsweb.datagenerator.utils.dto.FacilityFrequencyDto;
+import com.imsweb.datagenerator.utils.dto.PhysicianFrequencyDto;
 
 public class NaaccrDataGeneratorOptions {
 
@@ -36,10 +38,10 @@ public class NaaccrDataGeneratorOptions {
     protected String _registryId;
 
     // List of pre-created Facilities.
-    protected List<Map<String, String>> _facilityList;
+    protected List<FacilityFrequencyDto> _facilityList;
 
     // List of pre-created Physicians.
-    protected List<Map<String, String>> _physicianList;
+    protected List<PhysicianFrequencyDto> _physicianList;
 
     public Integer getNumTumorsPerPatient() {
         return _numTumorsPerPatient;
@@ -149,25 +151,25 @@ public class NaaccrDataGeneratorOptions {
         return _registryId;
     }
 
-    public void setFacilities(List<Map<String, String>> facilityList) {
+    public void setFacilities(List<FacilityFrequencyDto> facilityList) {
         _facilityList = facilityList;
     }
 
-    public void setPhysicians(List<Map<String, String>> physicianList) {
+    public void setPhysicians(List<PhysicianFrequencyDto> physicianList) {
         _physicianList = physicianList;
     }
 
     /**
      * Returns a list of pre-created Facilities for this state.
      */
-    public List<Map<String, String>> getFacilities() {
+    public List<FacilityFrequencyDto> getFacilities() {
         return _facilityList;
     }
 
     /**
      * Returns a list of pre-created Physicians for this state.
      */
-    public List<Map<String, String>> getPhysicians() {
+    public List<PhysicianFrequencyDto> getPhysicians() {
         return _physicianList;
     }
 

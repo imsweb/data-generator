@@ -14,10 +14,11 @@ import org.junit.Test;
 
 import testing.TestingUtils;
 
-import com.imsweb.datagenerator.provider.ProviderDataGenerator;
 import com.imsweb.datagenerator.provider.ProviderDataGeneratorOptions;
 import com.imsweb.datagenerator.provider.facility.FacilityDataGenerator;
 import com.imsweb.datagenerator.provider.physician.PhysicianDataGenerator;
+import com.imsweb.datagenerator.utils.dto.FacilityFrequencyDto;
+import com.imsweb.datagenerator.utils.dto.PhysicianFrequencyDto;
 import com.imsweb.layout.Layout;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.FixedColumnsField;
@@ -166,9 +167,6 @@ public class NaaccrDataGeneratorTest {
 
         Assert.assertTrue("Diagnosis Date outside options Minimum and Maximum.", dateInRange1 || dateInRange2);
 
-
-
-
     }
 
     @Test
@@ -251,12 +249,12 @@ public class NaaccrDataGeneratorTest {
         providerOptions.setState(genOptions.getState());
 
         // Create Facilities
-        ProviderDataGenerator providerFacilityGenerator = new FacilityDataGenerator();
-        List<Map<String, String>> facilityList = providerFacilityGenerator.generateProviders(20, providerOptions);
+        FacilityDataGenerator providerFacilityGenerator = new FacilityDataGenerator();
+        List<FacilityFrequencyDto> facilityList = providerFacilityGenerator.generateFacilities(20, providerOptions);
 
         // Create Physicians
-        ProviderDataGenerator providerPhysicianGenerator = new PhysicianDataGenerator();
-        List<Map<String, String>> physicianList = providerPhysicianGenerator.generateProviders(20, providerOptions);
+        PhysicianDataGenerator providerPhysicianGenerator = new PhysicianDataGenerator();
+        List<PhysicianFrequencyDto> physicianList = providerPhysicianGenerator.generatePhysicians(20, providerOptions);
 
         genOptions.setFacilities(facilityList);
         genOptions.setPhysicians(physicianList);

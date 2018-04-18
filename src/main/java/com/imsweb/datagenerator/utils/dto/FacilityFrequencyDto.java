@@ -103,4 +103,18 @@ public class FacilityFrequencyDto {
         _specialty03 = specialty;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FacilityFrequencyDto)) return false;
+
+        FacilityFrequencyDto that = (FacilityFrequencyDto)o;
+
+        return hashCode() == that.hashCode();
+    }
+
+    @Override
+    public int hashCode() {
+        return (_npi + _name).hashCode();
+    }
 }

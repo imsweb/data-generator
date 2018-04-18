@@ -3,28 +3,38 @@
  */
 package com.imsweb.datagenerator.provider.physician;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.imsweb.datagenerator.provider.ProviderDataGenerator;
-import com.imsweb.datagenerator.provider.ProviderDataGeneratorRule;
+import com.imsweb.datagenerator.provider.ProviderDataGeneratorOptions;
+import com.imsweb.datagenerator.utils.dto.PhysicianFrequencyDto;
 
 public class PhysicianDataGeneratorTest {
 
     @Test
     public void testGenerator() {
-        ProviderDataGenerator generator = new PhysicianDataGenerator();
+        // Physician ---------------------------------------------------------------
+        PhysicianDataGenerator generatorPhysician = new PhysicianDataGenerator();
+        ProviderDataGeneratorOptions options = new ProviderDataGeneratorOptions();
 
-        // default generator comes with some patient and tumor rules
-        Assert.assertFalse(generator.getRules().isEmpty());
-        for (ProviderDataGeneratorRule rule : generator.getRules()) {
-            Assert.assertNotNull(rule.getId());
-            Assert.assertNotNull(rule.getName());
-        }
+        // null options
+        List<PhysicianFrequencyDto> physicians = generatorPhysician.generatePhysicians(1, options);
+        Assert.assertEquals(1, physicians.size());
+        Assert.assertNotNull(physicians.get(0).getNpi());
 
-        // test no rules
-        generator.getRules().clear();
-        Assert.assertTrue(generator.getRules().isEmpty());
+        // null options, several tumors
+        physicians = generatorPhysician.generatePhysicians(3, options);
+        Assert.assertEquals(3, physicians.size());
+        Assert.assertNotNull(physicians.get(0).getNpi());
+        Assert.assertNotNull(physicians.get(1).getNpi());
+        Assert.assertNotNull(physicians.get(2).getNpi());
+
+        // test state option
+        options.setState("HI");
+        physicians = generatorPhysician.generatePhysicians(1, options);
+        Assert.assertEquals("HI", physicians.get(0).getAddressState());
     }
 
 }

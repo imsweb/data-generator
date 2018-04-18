@@ -3,28 +3,38 @@
  */
 package com.imsweb.datagenerator.provider.facility;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.imsweb.datagenerator.provider.ProviderDataGenerator;
-import com.imsweb.datagenerator.provider.ProviderDataGeneratorRule;
+import com.imsweb.datagenerator.provider.ProviderDataGeneratorOptions;
+import com.imsweb.datagenerator.utils.dto.FacilityFrequencyDto;
 
 public class FacilityDataGeneratorTest {
 
     @Test
     public void testGenerator() {
-        ProviderDataGenerator generator = new FacilityDataGenerator();
+        // Facility ---------------------------------------------------------------
+        FacilityDataGenerator generatorFacility = new FacilityDataGenerator();
+        ProviderDataGeneratorOptions options = new ProviderDataGeneratorOptions();
 
-        // default generator comes with some patient and tumor rules
-        Assert.assertFalse(generator.getRules().isEmpty());
-        for (ProviderDataGeneratorRule rule : generator.getRules()) {
-            Assert.assertNotNull(rule.getId());
-            Assert.assertNotNull(rule.getName());
-        }
+        // null options
+        List<FacilityFrequencyDto> facilities = generatorFacility.generateFacilities(1, options);
+        Assert.assertEquals(1, facilities.size());
+        Assert.assertNotNull(facilities.get(0).getNpi());
 
-        // test no rules
-        generator.getRules().clear();
-        Assert.assertTrue(generator.getRules().isEmpty());
+        // null options, several tumors
+        facilities = generatorFacility.generateFacilities(3, options);
+        Assert.assertEquals(3, facilities.size());
+        Assert.assertNotNull(facilities.get(0).getNpi());
+        Assert.assertNotNull(facilities.get(1).getNpi());
+        Assert.assertNotNull(facilities.get(2).getNpi());
+
+        // test state option
+        options.setState("HI");
+        facilities = generatorFacility.generateFacilities(1, options);
+        Assert.assertEquals("HI", facilities.get(0).getAddressState());
     }
 
 }
