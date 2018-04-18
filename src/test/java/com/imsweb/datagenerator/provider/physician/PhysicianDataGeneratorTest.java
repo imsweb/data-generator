@@ -20,7 +20,7 @@ public class PhysicianDataGeneratorTest {
         ProviderDataGeneratorOptions options = new ProviderDataGeneratorOptions();
 
         // null options
-        List<PhysicianFrequencyDto> physicians = generatorPhysician.generatePhysicians(1, options);
+        List<PhysicianDto> physicians = generatorPhysician.generatePhysicians(1, options);
         Assert.assertEquals(1, physicians.size());
         Assert.assertNotNull(physicians.get(0).getNpi());
 

@@ -148,19 +148,5 @@ public class PhysicianFrequencyDto {
         _specialty03 = specialty;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof PhysicianFrequencyDto)) return false;
-
-        PhysicianFrequencyDto that = (PhysicianFrequencyDto)o;
-
-        return hashCode() == that.hashCode();
-    }
-
-    @Override
-    public int hashCode() {
-        return (_npi + _lastName + _firstName + _middleName + _namePrefix + _nameSuffix).hashCode();
-    }
 }
 

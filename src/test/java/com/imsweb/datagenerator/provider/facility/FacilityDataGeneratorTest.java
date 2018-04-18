@@ -20,7 +20,7 @@ public class FacilityDataGeneratorTest {
         ProviderDataGeneratorOptions options = new ProviderDataGeneratorOptions();
 
         // null options
-        List<FacilityFrequencyDto> facilities = generatorFacility.generateFacilities(1, options);
+        List<FacilityDto> facilities = generatorFacility.generateFacilities(1, options);
         Assert.assertEquals(1, facilities.size());
         Assert.assertNotNull(facilities.get(0).getNpi());
 

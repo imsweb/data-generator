@@ -8,8 +8,8 @@ import java.util.Map;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
+import com.imsweb.datagenerator.provider.facility.FacilityDto;
 import com.imsweb.datagenerator.utils.RandomUtils;
-import com.imsweb.datagenerator.utils.dto.FacilityFrequencyDto;
 
 public class FacilityRule extends NaaccrDataGeneratorRule {
 
@@ -27,7 +27,7 @@ public class FacilityRule extends NaaccrDataGeneratorRule {
     public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         if (options != null && options.getFacilities() != null && !options.getFacilities().isEmpty()) {
             // Pick a random facility and add it to the record.
-            FacilityFrequencyDto facility = options.getFacilities().get(RandomUtils.nextInt(options.getFacilities().size()));
+            FacilityDto facility = options.getFacilities().get(RandomUtils.nextInt(options.getFacilities().size()));
             record.put("reportingFacilityNpi", facility.getNpi());
         }
     }

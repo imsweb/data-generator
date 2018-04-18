@@ -8,8 +8,8 @@ import java.util.Map;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
+import com.imsweb.datagenerator.provider.physician.PhysicianDto;
 import com.imsweb.datagenerator.utils.RandomUtils;
-import com.imsweb.datagenerator.utils.dto.PhysicianFrequencyDto;
 
 public class PhysicianRule extends NaaccrDataGeneratorRule {
 
@@ -27,15 +27,15 @@ public class PhysicianRule extends NaaccrDataGeneratorRule {
     public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         if (options != null && options.getPhysicians() != null && !options.getPhysicians().isEmpty()) {
             // Pick a random physician for each visit.
-            PhysicianFrequencyDto physicianManaging = options.getPhysicians().get(RandomUtils.nextInt(options.getPhysicians().size()));
+            PhysicianDto physicianManaging = options.getPhysicians().get(RandomUtils.nextInt(options.getPhysicians().size()));
             record.put("physicianManagingNpi", physicianManaging.getNpi());
             record.put("physicianManaging", physicianManaging.getLastName() + ", " + physicianManaging.getFirstName());
 
-            PhysicianFrequencyDto physicianFollowup = options.getPhysicians().get(RandomUtils.nextInt(options.getPhysicians().size()));
+            PhysicianDto physicianFollowup = options.getPhysicians().get(RandomUtils.nextInt(options.getPhysicians().size()));
             record.put("physicianFollowUpNpi", physicianFollowup.getNpi());
             record.put("physicianFollowUp", physicianFollowup.getLastName() + ", " + physicianFollowup.getFirstName());
 
-            PhysicianFrequencyDto physicianPrimary = options.getPhysicians().get(RandomUtils.nextInt(options.getPhysicians().size()));
+            PhysicianDto physicianPrimary = options.getPhysicians().get(RandomUtils.nextInt(options.getPhysicians().size()));
             record.put("physicianPrimarySurgNpi", physicianPrimary.getNpi());
             record.put("physicianPrimarySurg", physicianPrimary.getLastName() + ", " + physicianPrimary.getFirstName());
         }

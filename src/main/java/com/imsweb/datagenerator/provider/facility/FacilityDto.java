@@ -1,9 +1,9 @@
 /*
  * Copyright (C) 2018 Information Management Services, Inc.
  */
-package com.imsweb.datagenerator.utils.dto;
+package com.imsweb.datagenerator.provider.facility;
 
-public class FacilityFrequencyDto {
+public class FacilityDto {
 
     private String _npi;
     private String _name;
@@ -103,4 +103,18 @@ public class FacilityFrequencyDto {
         _specialty03 = specialty;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FacilityDto)) return false;
+
+        FacilityDto that = (FacilityDto)o;
+
+        return hashCode() == that.hashCode();
+    }
+
+    @Override
+    public int hashCode() {
+        return (_npi + _name).hashCode();
+    }
 }

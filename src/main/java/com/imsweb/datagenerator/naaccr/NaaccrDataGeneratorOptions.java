@@ -7,9 +7,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+import com.imsweb.datagenerator.provider.facility.FacilityDto;
+import com.imsweb.datagenerator.provider.physician.PhysicianDto;
 import com.imsweb.datagenerator.utils.DistributionUtils;
-import com.imsweb.datagenerator.utils.dto.FacilityFrequencyDto;
-import com.imsweb.datagenerator.utils.dto.PhysicianFrequencyDto;
 
 public class NaaccrDataGeneratorOptions {
 
@@ -38,10 +38,10 @@ public class NaaccrDataGeneratorOptions {
     protected String _registryId;
 
     // List of pre-created Facilities.
-    protected List<FacilityFrequencyDto> _facilityList;
+    protected List<FacilityDto> _facilityList;
 
     // List of pre-created Physicians.
-    protected List<PhysicianFrequencyDto> _physicianList;
+    protected List<PhysicianDto> _physicianList;
 
     public Integer getNumTumorsPerPatient() {
         return _numTumorsPerPatient;
@@ -151,25 +151,25 @@ public class NaaccrDataGeneratorOptions {
         return _registryId;
     }
 
-    public void setFacilities(List<FacilityFrequencyDto> facilityList) {
+    public void setFacilities(List<FacilityDto> facilityList) {
         _facilityList = facilityList;
     }
 
-    public void setPhysicians(List<PhysicianFrequencyDto> physicianList) {
+    public void setPhysicians(List<PhysicianDto> physicianList) {
         _physicianList = physicianList;
     }
 
     /**
      * Returns a list of pre-created Facilities for this state.
      */
-    public List<FacilityFrequencyDto> getFacilities() {
+    public List<FacilityDto> getFacilities() {
         return _facilityList;
     }
 
     /**
      * Returns a list of pre-created Physicians for this state.
      */
-    public List<PhysicianFrequencyDto> getPhysicians() {
+    public List<PhysicianDto> getPhysicians() {
         return _physicianList;
     }
 

@@ -1,12 +1,17 @@
 /*
  * Copyright (C) 2018 Information Management Services, Inc.
  */
-package com.imsweb.datagenerator.utils.dto;
+package com.imsweb.datagenerator.provider.physician;
 
-public class FacilityFrequencyDto {
+public class PhysicianDto {
 
     private String _npi;
-    private String _name;
+    private String _lastName;
+    private String _firstName;
+    private String _middleName;
+    private String _namePrefix;
+    private String _nameSuffix;
+    private String _credentials;
     private String _addressFirstLine;
     private String _addressSecondLine;
     private String _addressCity;
@@ -25,12 +30,52 @@ public class FacilityFrequencyDto {
         _npi = npi;
     }
 
-    public String getName() {
-        return _name;
+    public String getLastName() {
+        return _lastName;
     }
 
-    public void setName(String name) {
-        _name = name;
+    public void setLastName(String lastName) {
+        _lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return _firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        _firstName = firstName;
+    }
+
+    public String getMiddleName() {
+        return _middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        _middleName = middleName;
+    }
+
+    public String getNamePrefix() {
+        return _namePrefix;
+    }
+
+    public void setNamePrefix(String namePrefix) {
+        _namePrefix = namePrefix;
+    }
+
+    public String getNameSuffix() {
+        return _nameSuffix;
+    }
+
+    public void setNameSuffix(String nameSuffix) {
+        _nameSuffix = nameSuffix;
+    }
+
+    public String getCredentials() {
+        return _credentials;
+    }
+
+    public void setCredentials(String credentials) {
+        _credentials = credentials;
     }
 
     public String getAddressFirstLine() {
@@ -101,6 +146,21 @@ public class FacilityFrequencyDto {
 
     public void setSpecialty03(String specialty) {
         _specialty03 = specialty;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PhysicianDto)) return false;
+
+        PhysicianDto that = (PhysicianDto)o;
+
+        return hashCode() == that.hashCode();
+    }
+
+    @Override
+    public int hashCode() {
+        return (_npi + _lastName + _firstName + _middleName).hashCode();
     }
 
 }

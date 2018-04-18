@@ -16,9 +16,9 @@ import testing.TestingUtils;
 
 import com.imsweb.datagenerator.provider.ProviderDataGeneratorOptions;
 import com.imsweb.datagenerator.provider.facility.FacilityDataGenerator;
+import com.imsweb.datagenerator.provider.facility.FacilityDto;
 import com.imsweb.datagenerator.provider.physician.PhysicianDataGenerator;
-import com.imsweb.datagenerator.utils.dto.FacilityFrequencyDto;
-import com.imsweb.datagenerator.utils.dto.PhysicianFrequencyDto;
+import com.imsweb.datagenerator.provider.physician.PhysicianDto;
 import com.imsweb.layout.Layout;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.FixedColumnsField;
@@ -250,11 +250,11 @@ public class NaaccrDataGeneratorTest {
 
         // Create Facilities
         FacilityDataGenerator providerFacilityGenerator = new FacilityDataGenerator();
-        List<FacilityFrequencyDto> facilityList = providerFacilityGenerator.generateFacilities(20, providerOptions);
+        List<FacilityDto> facilityList = providerFacilityGenerator.generateFacilities(20, providerOptions);
 
         // Create Physicians
         PhysicianDataGenerator providerPhysicianGenerator = new PhysicianDataGenerator();
-        List<PhysicianFrequencyDto> physicianList = providerPhysicianGenerator.generatePhysicians(20, providerOptions);
+        List<PhysicianDto> physicianList = providerPhysicianGenerator.generatePhysicians(20, providerOptions);
 
         genOptions.setFacilities(facilityList);
         genOptions.setPhysicians(physicianList);
