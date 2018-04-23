@@ -39,10 +39,12 @@ import com.imsweb.datagenerator.naaccr.rule.tumor.DateOfDiagnosisRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.DateOfInitialRxRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.DateOfLastContactRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.DxConfirmationRule;
+import com.imsweb.datagenerator.naaccr.rule.tumor.FacilityRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.MaritalStatusRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.MultiTumorsRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.NapiiaRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.NhiaRule;
+import com.imsweb.datagenerator.naaccr.rule.tumor.PhysicianRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.PrimaryPayerRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.RegistryIdRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.ReportingSourceRule;
@@ -141,6 +143,8 @@ public class NaaccrDataGenerator implements DataGenerator {
         _tumorRules.add(new CollaborativeStageRule());
         _tumorRules.add(new NhiaRule());
         _tumorRules.add(new NapiiaRule());
+        _tumorRules.add(new FacilityRule());
+        _tumorRules.add(new PhysicianRule());
     }
 
     @Override

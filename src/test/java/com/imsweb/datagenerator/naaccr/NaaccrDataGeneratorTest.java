@@ -14,6 +14,11 @@ import org.junit.Test;
 
 import testing.TestingUtils;
 
+import com.imsweb.datagenerator.provider.ProviderDataGeneratorOptions;
+import com.imsweb.datagenerator.provider.facility.FacilityDataGenerator;
+import com.imsweb.datagenerator.provider.facility.FacilityDto;
+import com.imsweb.datagenerator.provider.physician.PhysicianDataGenerator;
+import com.imsweb.datagenerator.provider.physician.PhysicianDto;
 import com.imsweb.layout.Layout;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.FixedColumnsField;
@@ -162,9 +167,6 @@ public class NaaccrDataGeneratorTest {
 
         Assert.assertTrue("Diagnosis Date outside options Minimum and Maximum.", dateInRange1 || dateInRange2);
 
-
-
-
     }
 
     @Test
@@ -220,6 +222,55 @@ public class NaaccrDataGeneratorTest {
         catch (RuntimeException e) {
             // expected
         }
+    }
+
+    @Test
+    @SuppressWarnings("ConstantConditions")
+    public void testGenerateWithProviders() {
+        NaaccrDataGenerator generator = new NaaccrDataGenerator(_LAYOUT.getLayoutId());
+        NaaccrDataGeneratorOptions genOptions = new NaaccrDataGeneratorOptions();
+        genOptions.setState("CA");
+
+        // Test Generation with no Facilities or Physicians
+        List<Map<String, String>> patient = generator.generatePatient(1, null);
+
+        Assert.assertEquals(1, patient.size());
+        Assert.assertNotNull(patient.get(0).get("primarySite"));
+        Assert.assertNull(patient.get(0).get("reportingFacilityNpi"));
+        Assert.assertNull(patient.get(0).get("physicianManagingNpi"));
+        Assert.assertNull(patient.get(0).get("physicianFollowUpNpi"));
+        Assert.assertNull(patient.get(0).get("physicianPrimarySurgNpi"));
+        Assert.assertNull(patient.get(0).get("physicianManaging"));
+        Assert.assertNull(patient.get(0).get("physicianFollowUp"));
+        Assert.assertNull(patient.get(0).get("physicianPrimarySurg"));
+
+        // Provider Options
+        ProviderDataGeneratorOptions providerOptions = new ProviderDataGeneratorOptions();
+        providerOptions.setState(genOptions.getState());
+
+        // Create Facilities
+        FacilityDataGenerator providerFacilityGenerator = new FacilityDataGenerator();
+        List<FacilityDto> facilityList = providerFacilityGenerator.generateFacilities(20, providerOptions);
+
+        // Create Physicians
+        PhysicianDataGenerator providerPhysicianGenerator = new PhysicianDataGenerator();
+        List<PhysicianDto> physicianList = providerPhysicianGenerator.generatePhysicians(20, providerOptions);
+
+        genOptions.setFacilities(facilityList);
+        genOptions.setPhysicians(physicianList);
+
+        // Test Generation with Facilities and Physicians
+        patient = generator.generatePatient(1, genOptions);
+        Assert.assertEquals(1, patient.size());
+        Assert.assertNotNull(patient.get(0).get("primarySite"));
+        Assert.assertNotNull(patient.get(0).get("reportingFacilityNpi"));
+        Assert.assertNotNull(patient.get(0).get("physicianManagingNpi"));
+        Assert.assertNotNull(patient.get(0).get("physicianFollowUpNpi"));
+        Assert.assertNotNull(patient.get(0).get("physicianPrimarySurgNpi"));
+        Assert.assertNotNull(patient.get(0).get("physicianManaging"));
+        Assert.assertNotNull(patient.get(0).get("physicianFollowUp"));
+        Assert.assertNotNull(patient.get(0).get("physicianPrimarySurg"));
+
     }
 
     /**
