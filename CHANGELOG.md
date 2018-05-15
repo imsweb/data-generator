@@ -1,14 +1,10 @@
 ## Synthetic data generator
 
-**Changes in version 1.6**
-
-- Updated Layout library from version 1.8 to version 1.10.
-- Updated Staging library from version 3.2to version 4.0.
-- Updated Algorithm library from version 1.12 to version 1.14.
-
 **Changes in version 1.5**
 
-- Updated Staging library from version 2.14 to version 3.2.
+- Updated Layout library from version 1.8 to version 1.10.
+- Updated Staging library from version 2.14 to version 4.0.
+- Updated Algorithm library from version 1.12 to version 1.14.
 
 **Changes in version 1.4**
 
