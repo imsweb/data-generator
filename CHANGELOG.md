@@ -1,6 +1,6 @@
 ## Synthetic data generator
 
-**Changes in version 1.5**
+**Changes in version 1.6**
 
 - Added support for NAACCR 18 format.
 - Removed vital status option from the standalone GUI.
