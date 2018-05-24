@@ -31,7 +31,7 @@ public class NaaccrDataGeneratorOptions {
     // minimum year of diagnosis (inclusive), max year - 10 if not provided
     protected Integer _minDxYear;
 
-    // the value to use for DEAD vital status (SEER uses 4 and COC uses 0); defaults to 4
+    // the value to use for DEAD vital status (SEER used to use 4 and COC 0, SEER now uses 0 as well as of NAACCR 18); defaults to 0
     protected String _vitalStatusDeadValue;
 
     // Registry ID (NAACCR Item #40)

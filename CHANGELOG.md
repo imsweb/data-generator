@@ -2,6 +2,12 @@
 
 **Changes in version 1.5**
 
+- Added support for NAACCR 18 format.
+- Removed vital status option from the standalone GUI.
+- Changed Vital Status rule to use 0 by default for vital status instead of 4.
+
+**Changes in version 1.5**
+
 - Updated Layout library from version 1.8 to version 1.10.
 - Updated Staging library from version 2.14 to version 4.0.
 - Updated Algorithm library from version 1.12 to version 1.14.

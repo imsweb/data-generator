@@ -7,8 +7,6 @@ import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
@@ -110,12 +108,7 @@ public class ProgressDialog extends JDialog {
         controlsPnl.setBorder(null);
         controlsPnl.setOpaque(false);
         _cancelBtn = new JButton("Cancel");
-        _cancelBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                performCancel();
-            }
-        });
+        _cancelBtn.addActionListener(e -> performCancel());
         controlsPnl.add(_cancelBtn);
         centerPnl.add(controlsPnl);
 

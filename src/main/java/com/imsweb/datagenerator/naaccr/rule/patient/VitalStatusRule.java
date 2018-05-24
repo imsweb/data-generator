@@ -24,7 +24,7 @@ public class VitalStatusRule extends NaaccrDataGeneratorRule {
         String value = DistributionUtils.getVitalStatus();
 
         // recode 4 into 0 if we have to
-        if ("4".equals(value) && options != null && options.getVitalStatusDeadValue() != null)
+        if ("0".equals(value) && options != null && options.getVitalStatusDeadValue() != null)
             value = options.getVitalStatusDeadValue();
 
         record.put("vitalStatus", value);

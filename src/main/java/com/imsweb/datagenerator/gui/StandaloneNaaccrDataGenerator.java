@@ -69,6 +69,8 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
     protected static final String _COMPRESSION_GZIP = "GZip";
 
     // possible values for the NAACCR formats
+    protected static final String _FORMAT_18_ABS = "NAACCR 18 Abstract (24,194 characters)";
+    protected static final String _FORMAT_18_INC = "NAACCR 18 Incidence (4,048 characters)";
     protected static final String _FORMAT_16_ABS = "NAACCR 16 Abstract (22,824 characters)";
     protected static final String _FORMAT_16_INC = "NAACCR 16 Incidence (3,339 characters)";
     protected static final String _FORMAT_15_ABS = "NAACCR 15 Abstract (22,824 characters)";
@@ -77,7 +79,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
     protected JFileChooser _fileChooser;
     protected JTextField _targetFld, _numRecFld, _dxYearFld, _registryIdFld;
     protected JRadioButton _numTumPerPatRandom, _numTumPerPatFixed;
-    protected JComboBox<String> _compressionBox, _formatBox, _numTumPerPatBox, _stateBox, _vsBox;
+    protected JComboBox<String> _compressionBox, _formatBox, _numTumPerPatBox, _stateBox;
     protected JButton _processBtn;
 
     public StandaloneNaaccrDataGenerator() {
@@ -204,7 +206,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         formatPnl.setBorder(null);
         formatPnl.add(new JLabel("Format:"));
         formatPnl.add(Box.createHorizontalStrut(5));
-        _formatBox = new JComboBox<>(new String[] {_FORMAT_16_ABS, _FORMAT_16_INC, _FORMAT_15_ABS, _FORMAT_15_INC});
+        _formatBox = new JComboBox<>(new String[] {_FORMAT_18_ABS, _FORMAT_18_INC, _FORMAT_16_ABS, _FORMAT_16_INC, _FORMAT_15_ABS, _FORMAT_15_INC});
         _formatBox.addActionListener(e -> {
             if (!_targetFld.getText().isEmpty())
                 _targetFld.setText(fixTargetFile());
@@ -325,18 +327,6 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         statePnl.add(Box.createHorizontalStrut(5));
         statePnl.add(new JLabel("- if not provided, no address information will be generated"));
         optionsPnl.add(statePnl);
-        optionsPnl.add(Box.createVerticalStrut(15));
-
-        // vital status
-        JPanel vsPnl = new JPanel();
-        vsPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
-        vsPnl.setBorder(null);
-        vsPnl.add(new JLabel("When creating a record with a Vital Status of \"dead\", use the following value:"));
-        vsPnl.add(Box.createHorizontalStrut(5));
-        _vsBox = new JComboBox<>(new String[] {"4 (SEER flavor)", "0 (CoC flavor)"});
-        vsPnl.add(_vsBox);
-        vsPnl.add(Box.createHorizontalStrut(10));
-        optionsPnl.add(vsPnl);
 
         pnl.add(optionsPnl);
 
@@ -407,8 +397,6 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
                 String state1 = (String)_stateBox.getSelectedItem();
                 if (state1.matches("[A-Z][A-Z]"))
                     options.setState(state1);
-                if (_vsBox.getSelectedItem().toString().toLowerCase().contains("coc"))
-                    options.setVitalStatusDeadValue("0");
             }
             catch (IllegalArgumentException exception) {
                 JOptionPane.showMessageDialog(StandaloneNaaccrDataGenerator.this, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -459,7 +447,11 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
     }
 
     private String getFormatIdFromLabel(String label) {
-        if (label.startsWith("NAACCR 16 Abstract"))
+        if (label.startsWith("NAACCR 18 Abstract"))
+            return LayoutFactory.LAYOUT_ID_NAACCR_18_ABSTRACT;
+        else if (label.startsWith("NAACCR 18 Incidence"))
+            return LayoutFactory.LAYOUT_ID_NAACCR_18_INCIDENCE;
+        else if (label.startsWith("NAACCR 16 Abstract"))
             return LayoutFactory.LAYOUT_ID_NAACCR_16_ABSTRACT;
         else if (label.startsWith("NAACCR 16 Incidence"))
             return LayoutFactory.LAYOUT_ID_NAACCR_16_INCIDENCE;
