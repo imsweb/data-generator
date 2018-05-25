@@ -4,8 +4,11 @@
 package com.imsweb.datagenerator.naaccr;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,43 +31,47 @@ public class NaaccrXmlDataGeneratorTest {
         // regular file, 1 tumor
         File file = TestingUtils.createFile("naaccr-data-generator-1-tumor.xml");
         generator.generateFile(file, 1, null);
-        List<Patient> patients = _LAYOUT.readAllPatients(file, "UTF-8", null);
-        Assert.assertEquals(1, patients.size());
+        List<Patient> patients = readXmlFile(file);
+        Assert.assertEquals(1, patients.stream().map(Patient::getTumors).map(List::size).mapToInt(Integer::intValue).sum());
         Assert.assertFalse(LayoutFactory.discoverFormat(file).isEmpty());
-/*
+
         // regular file, 10 records
-        file = TestingUtils.createFile("naaccr-data-generator-10-rec.txt");
+        file = TestingUtils.createFile("naaccr-data-generator-10-tumors.xml");
         generator.generateFile(file, 10, null);
-        lines = TestingUtils.readFile(file);
-        Assert.assertEquals(10, lines.size());
+        patients = readXmlFile(file);
+        Assert.assertEquals(10, patients.stream().map(Patient::getTumors).map(List::size).mapToInt(Integer::intValue).sum());
         Assert.assertFalse(LayoutFactory.discoverFormat(file).isEmpty());
 
         // compressed file, 1 record
-        file = TestingUtils.createFile("naaccr-data-generator-10-rec.txt.gz");
+        file = TestingUtils.createFile("naaccr-data-generator-1-tumor.xml.gz");
         generator.generateFile(file, 1, null);
-        lines = TestingUtils.readFile(file);
-        Assert.assertEquals(1, lines.size());
+        patients = readXmlFile(file);
+        Assert.assertEquals(1, patients.stream().map(Patient::getTumors).map(List::size).mapToInt(Integer::intValue).sum());
         Assert.assertFalse(LayoutFactory.discoverFormat(file).isEmpty());
 
         // compressed file, 10 records
-        file = TestingUtils.createFile("naaccr-data-generator-10-rec.txt.gz");
+        file = TestingUtils.createFile("naaccr-data-generator-10-tumors.xml.gz");
         generator.generateFile(file, 10, null);
-        lines = TestingUtils.readFile(file);
-        Assert.assertEquals(10, lines.size());
+        patients = readXmlFile(file);
+        Assert.assertEquals(10, patients.stream().map(Patient::getTumors).map(List::size).mapToInt(Integer::intValue).sum());
         Assert.assertFalse(LayoutFactory.discoverFormat(file).isEmpty());
 
         // use an option for the number of tumors per patient (3 per; 99 total, so there should be 33 patients)
         NaaccrDataGeneratorOptions options = new NaaccrDataGeneratorOptions();
         options.setNumTumorsPerPatient(3);
-        generator.generateFile(file, 99, options);
-        lines = TestingUtils.readFile(file);
-        Assert.assertEquals(99, lines.size());
-        FixedColumnsField patientIdNumberField = _LAYOUT.getFieldByName("patientIdNumber");
-        Assert.assertNotNull(patientIdNumberField);
-        Set<String> patientIdNumberValues = new HashSet<>();
-        for (String line : lines)
-            patientIdNumberValues.add(line.substring(patientIdNumberField.getStart() - 1, patientIdNumberField.getEnd()));
-        Assert.assertEquals(33, patientIdNumberValues.size());
-        */
+        generator.generateFile(file, 9, options);
+        patients = readXmlFile(file);
+        Assert.assertEquals(3, patients.size());
+        Assert.assertEquals(9, patients.stream().map(Patient::getTumors).map(List::size).mapToInt(Integer::intValue).sum());
+    }
+
+    private List<Patient> readXmlFile(File file) throws IOException {
+        if (file.getName().endsWith(".gz")) {
+            try (InputStream is = new GZIPInputStream(new FileInputStream(file))) {
+                return _LAYOUT.readAllPatients(is, "UTF-8", null);
+            }
+        }
+        else
+            return _LAYOUT.readAllPatients(file, "UTF-8", null);
     }
 }

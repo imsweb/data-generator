@@ -10,9 +10,11 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.zip.GZIPOutputStream;
 
 import com.imsweb.datagenerator.DataGenerator;
@@ -27,7 +29,7 @@ import com.imsweb.naaccrxml.PatientXmlWriter;
 import com.imsweb.naaccrxml.entity.Item;
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
-import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionaryItem;
+import com.imsweb.naaccrxml.entity.Tumor;
 
 /**
  * A NAACCR data generator can be used to create fake NAACCR data files.
@@ -176,19 +178,45 @@ public class NaaccrXmlDataGenerator implements DataGenerator {
 
         List<Map<String, String>> records = _generator.generatePatient(numTumors, options);
 
+        // deal with the three-part dates
+        for (Map<String, String> record : records) {
+            Set<String> toRemove = new HashSet<>();
+            Map<String, StringBuilder> toAdd = new HashMap<>();
+            for (Entry<String, String> entry : record.entrySet()) {
+                if (entry.getKey().endsWith("Year")) {
+                    toAdd.computeIfAbsent(entry.getKey().replace("Year", ""), k -> new StringBuilder("        ")).replace(0, 4, entry.getValue());
+                    toRemove.add(entry.getKey());
+                }
+                else if (entry.getKey().endsWith("Month")) {
+                    toAdd.computeIfAbsent(entry.getKey().replace("Month", ""), k -> new StringBuilder("        ")).replace(4, 6, entry.getValue());
+                    toRemove.add(entry.getKey());
+                }
+                else if (entry.getKey().endsWith("Day")) {
+                    toAdd.computeIfAbsent(entry.getKey().replace("Day", ""), k -> new StringBuilder("        ")).replace(6, 8, entry.getValue());
+                    toRemove.add(entry.getKey());
+                }
+            }
+            toRemove.forEach(record::remove);
+            toAdd.forEach((k, v) -> record.put(k, v.toString()));
+        }
+
         // populate patient items from the first record (shouldn't matter which one)
         for (Entry<String, String> entry : records.get(0).entrySet()) {
-            for (NaaccrDictionaryItem item : _xmlLayout.getBaseDictionary().getItems())
-                if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(item.getParentXmlElement()))
-                    patient.addItem(new Item(NaaccrLayout.getXmlIdFromLayoutName(entry.getKey()), entry.getValue()));
+            String naaccrId = NaaccrLayout.getXmlIdFromLayoutName(entry.getKey());
+            if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(_xmlLayout.getBaseDictionary().getItemByNaaccrId(naaccrId).getParentXmlElement()))
+                patient.addItem(new Item(naaccrId, entry.getValue()));
         }
 
         // populate tumors
-        for (Map<String, String> record : records)
-            for (Entry<String, String> entry : record.entrySet())
-                for (NaaccrDictionaryItem item : _xmlLayout.getBaseDictionary().getItems())
-                    if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(item.getParentXmlElement()))
-                        patient.addItem(new Item(NaaccrLayout.getXmlIdFromLayoutName(entry.getKey()), entry.getValue()));
+        for (Map<String, String> record : records) {
+            Tumor tumor = new Tumor();
+            for (Entry<String, String> entry : record.entrySet()) {
+                String naaccrId = NaaccrLayout.getXmlIdFromLayoutName(entry.getKey());
+                if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(_xmlLayout.getBaseDictionary().getItemByNaaccrId(naaccrId).getParentXmlElement()))
+                    tumor.addItem(new Item(NaaccrLayout.getXmlIdFromLayoutName(entry.getKey()), entry.getValue()));
+            }
+            patient.addTumor(tumor);
+        }
 
         return patient;
     }
@@ -238,9 +266,9 @@ public class NaaccrXmlDataGenerator implements DataGenerator {
         try (PatientXmlWriter writer = new PatientXmlWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), rootData)) {
             int numCreatedTumors = 0;
             while (numCreatedTumors < numTumors) {
-                int numTumorForThisPatient = numTumGen == null ? options.getNumTumorsPerPatient() : numTumGen.getValue();
-                _xmlLayout.writeNextPatient(writer, generatePatient(Math.min(numTumorForThisPatient, numTumors - numCreatedTumors), options));
-                numCreatedTumors++;
+                int numTumorForThisPatient = Math.min(numTumGen == null ? options.getNumTumorsPerPatient() : numTumGen.getValue(), numTumors - numCreatedTumors);
+                _xmlLayout.writeNextPatient(writer, generatePatient(numTumorForThisPatient, options));
+                numCreatedTumors += numTumorForThisPatient;
             }
         }
     }
