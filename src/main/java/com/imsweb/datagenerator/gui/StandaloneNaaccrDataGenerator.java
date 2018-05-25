@@ -27,6 +27,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,12 +71,28 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
     protected static final String _COMPRESSION_GZIP = "GZip";
 
     // possible values for the NAACCR formats
-    protected static final String _FORMAT_18_ABS = "NAACCR 18 Abstract (24,194 characters)";
-    protected static final String _FORMAT_18_INC = "NAACCR 18 Incidence (4,048 characters)";
-    protected static final String _FORMAT_16_ABS = "NAACCR 16 Abstract (22,824 characters)";
-    protected static final String _FORMAT_16_INC = "NAACCR 16 Incidence (3,339 characters)";
-    protected static final String _FORMAT_15_ABS = "NAACCR 15 Abstract (22,824 characters)";
-    protected static final String _FORMAT_15_INC = "NAACCR 15 Incidence (3,339 characters)";
+    protected static final String _FORMAT_18_ABS_FLAT = "NAACCR 18 Abstract (24,194 characters)";
+    protected static final String _FORMAT_18_INC_FLAT = "NAACCR 18 Incidence (4,048 characters)";
+    protected static final String _FORMAT_18_ABS_XML = "NAACCR XML 18 Abstract";
+    protected static final String _FORMAT_18_INC_XML = "NAACCR XML 18 Incidence";
+    protected static final String _FORMAT_16_ABS_FLAT = "NAACCR 16 Abstract (22,824 characters)";
+    protected static final String _FORMAT_16_INC_FLAT = "NAACCR 16 Incidence (3,339 characters)";
+    protected static final String _FORMAT_16_ABS_XML = "NAACCR XML 16 Abstract";
+    protected static final String _FORMAT_16_INC_XML = "NAACCR XML 16 Incidence";
+
+    // mappings between the labels and layouts
+    protected static final Map<String, String> _FORMATS = new LinkedHashMap<>();
+
+    static {
+        _FORMATS.put(_FORMAT_18_ABS_FLAT, LayoutFactory.LAYOUT_ID_NAACCR_18_ABSTRACT);
+        _FORMATS.put(_FORMAT_18_INC_FLAT, LayoutFactory.LAYOUT_ID_NAACCR_18_INCIDENCE);
+        _FORMATS.put(_FORMAT_18_ABS_XML, LayoutFactory.LAYOUT_ID_NAACCR_XML_18_ABSTRACT);
+        _FORMATS.put(_FORMAT_18_INC_XML, LayoutFactory.LAYOUT_ID_NAACCR_XML_18_INCIDENCE);
+        _FORMATS.put(_FORMAT_16_ABS_FLAT, LayoutFactory.LAYOUT_ID_NAACCR_16_ABSTRACT);
+        _FORMATS.put(_FORMAT_16_INC_FLAT, LayoutFactory.LAYOUT_ID_NAACCR_16_INCIDENCE);
+        _FORMATS.put(_FORMAT_16_ABS_XML, LayoutFactory.LAYOUT_ID_NAACCR_XML_16_ABSTRACT);
+        _FORMATS.put(_FORMAT_16_INC_XML, LayoutFactory.LAYOUT_ID_NAACCR_XML_16_INCIDENCE);
+    }
 
     protected JFileChooser _fileChooser;
     protected JTextField _targetFld, _numRecFld, _dxYearFld, _registryIdFld;
@@ -186,7 +204,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         pathPnl.add(new JLabel("Location: "));
         pathPnl.add(Box.createHorizontalStrut(5));
         _targetFld = new JTextField(60);
-        _targetFld.setText(new File(_fileChooser.getCurrentDirectory(), "synthetic-data_naaccr-16-abstract_1000-recs.txt").getPath());
+        _targetFld.setText(new File(_fileChooser.getCurrentDirectory(), "synthetic-data_naaccr-18-abstract_1000-records.txt").getPath());
         pathPnl.add(_targetFld);
         pathPnl.add(Box.createHorizontalStrut(10));
         JButton browseBtn = new JButton("Browse...");
@@ -206,7 +224,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         formatPnl.setBorder(null);
         formatPnl.add(new JLabel("Format:"));
         formatPnl.add(Box.createHorizontalStrut(5));
-        _formatBox = new JComboBox<>(new String[] {_FORMAT_18_ABS, _FORMAT_18_INC, _FORMAT_16_ABS, _FORMAT_16_INC, _FORMAT_15_ABS, _FORMAT_15_INC});
+        _formatBox = new JComboBox<>(_FORMATS.keySet().toArray(new String[0]));
         _formatBox.addActionListener(e -> {
             if (!_targetFld.getText().isEmpty())
                 _targetFld.setText(fixTargetFile());
@@ -230,7 +248,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         JPanel totalNumRecPnl = new JPanel();
         totalNumRecPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         totalNumRecPnl.setBorder(null);
-        totalNumRecPnl.add(new JLabel("Number of records:"));
+        totalNumRecPnl.add(new JLabel("Number of records/tumors:"));
         totalNumRecPnl.add(Box.createHorizontalStrut(5));
         _numRecFld = new JTextField(10);
         _numRecFld.setText("1000");
@@ -271,7 +289,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         JPanel numTumPerPat = new JPanel();
         numTumPerPat.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         numTumPerPat.setBorder(null);
-        numTumPerPat.add(new JLabel("Number of records per patient (records for the same patient will have the same Patient ID Number):"));
+        numTumPerPat.add(new JLabel("Number of tumors per patient:"));
         optionsPnl.add(numTumPerPat);
         optionsPnl.add(Box.createVerticalStrut(5));
 
@@ -279,7 +297,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         numTumPerPat1.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         numTumPerPat1.setBorder(null);
         numTumPerPat1.add(Box.createHorizontalStrut(35));
-        _numTumPerPatRandom = new JRadioButton("Use a randomized number of records per patient (mostly 1, a few with 2 or 3 tumors)");
+        _numTumPerPatRandom = new JRadioButton("Use a randomized number of tumors per patient (mostly 1, a few with 2 or 3 tumors)");
         numTumPerPat1.add(_numTumPerPatRandom);
         optionsPnl.add(numTumPerPat1);
 
@@ -287,7 +305,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         numTumPerPat2.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         numTumPerPat2.setBorder(null);
         numTumPerPat2.add(Box.createHorizontalStrut(35));
-        _numTumPerPatFixed = new JRadioButton("Use a fixed number of records per patient: ");
+        _numTumPerPatFixed = new JRadioButton("Use a fixed number of tumors per patient: ");
         numTumPerPat2.add(_numTumPerPatFixed);
         numTumPerPat2.add(Box.createHorizontalStrut(5));
         _numTumPerPatBox = new JComboBox<>(new String[] {" 1", " 2", " 3", " 4", " 5", " 6", " 7", " 8", " 9", "10"});
@@ -376,7 +394,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
 
             String registryIdRaw = _registryIdFld.getText();
             // if the user has entered 1 or more only whitespace characters, give an error
-            if(registryIdRaw.length() > 0 && "".equals(registryIdRaw.trim())) {
+            if (registryIdRaw.length() > 0 && "".equals(registryIdRaw.trim())) {
                 String message = "Registry ID cannot be whitespace. Leave this field empty to create data with no Registry ID.";
                 JOptionPane.showMessageDialog(StandaloneNaaccrDataGenerator.this, message, "Error", JOptionPane.ERROR_MESSAGE);
                 _registryIdFld.setText("");
@@ -384,7 +402,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
             }
 
             // get the layout ID
-            String layoutId = getFormatIdFromLabel((String)_formatBox.getSelectedItem());
+            String layoutId = _FORMATS.get(_formatBox.getSelectedItem());
 
             // create the options
             NaaccrDataGeneratorOptions options = new NaaccrDataGeneratorOptions();
@@ -423,7 +441,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         File file = new File(_targetFld.getText());
         String compression = (String)_compressionBox.getSelectedItem();
         String numRec = _numRecFld.getText();
-        String format = getFormatIdFromLabel((String)_formatBox.getSelectedItem());
+        String format = _FORMATS.get(_formatBox.getSelectedItem());
 
         String filename = file.getName();
         if (_COMPRESSION_GZIP.equals(compression)) {
@@ -435,32 +453,19 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
                 filename = filename.replace(".gz", "");
         }
 
-        Matcher matcher = Pattern.compile("_\\d+-recs").matcher(filename);
+        Matcher matcher = Pattern.compile("\\.(txt|xml)").matcher(filename);
         if (matcher.find())
-            filename = matcher.replaceFirst("_" + numRec + "-recs");
+            filename = matcher.replaceFirst(format.contains("xml") ? ".xml" : ".txt");
 
-        matcher = Pattern.compile("_naaccr-\\d+-(abstract|incidence)_").matcher(filename);
+        matcher = Pattern.compile("_\\d+-(records|tumors)").matcher(filename);
+        if (matcher.find())
+            filename = matcher.replaceFirst("_" + numRec + (format.contains("xml") ? "-tumors" : "-records"));
+
+        matcher = Pattern.compile("_naaccr(-xml)?-\\d+-(abstract|incidence)_").matcher(filename);
         if (matcher.find())
             filename = matcher.replaceFirst("_" + format + "_");
 
         return new File(file.getParentFile(), filename).getPath();
-    }
-
-    private String getFormatIdFromLabel(String label) {
-        if (label.startsWith("NAACCR 18 Abstract"))
-            return LayoutFactory.LAYOUT_ID_NAACCR_18_ABSTRACT;
-        else if (label.startsWith("NAACCR 18 Incidence"))
-            return LayoutFactory.LAYOUT_ID_NAACCR_18_INCIDENCE;
-        else if (label.startsWith("NAACCR 16 Abstract"))
-            return LayoutFactory.LAYOUT_ID_NAACCR_16_ABSTRACT;
-        else if (label.startsWith("NAACCR 16 Incidence"))
-            return LayoutFactory.LAYOUT_ID_NAACCR_16_INCIDENCE;
-        else if (label.startsWith("NAACCR 15 Abstract"))
-            return LayoutFactory.LAYOUT_ID_NAACCR_15_ABSTRACT;
-        else if (label.startsWith("NAACCR 15 Incidence"))
-            return LayoutFactory.LAYOUT_ID_NAACCR_15_INCIDENCE;
-        else
-            throw new RuntimeException("Unknown format label: " + label);
     }
 
     @Override

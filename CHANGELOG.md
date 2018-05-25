@@ -1,5 +1,11 @@
 ## Synthetic data generator
 
+**Changes in version 1.7**
+
+- Added options for generating NAACCR XML files in the standalone GUI.
+- Added new NAACCR XML generator.
+- Removed support for NAACCR 15 in the standalone GUI.
+
 **Changes in version 1.6**
 
 - Added support for NAACCR 18 format.

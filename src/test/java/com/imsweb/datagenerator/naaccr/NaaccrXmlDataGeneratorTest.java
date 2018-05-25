@@ -33,6 +33,8 @@ public class NaaccrXmlDataGeneratorTest {
         generator.generateFile(file, 1, null);
         List<Patient> patients = readXmlFile(file);
         Assert.assertEquals(1, patients.stream().map(Patient::getTumors).map(List::size).mapToInt(Integer::intValue).sum());
+        Assert.assertEquals(8, patients.get(0).getItemValue("dateOfBirth").length());
+        Assert.assertTrue(patients.get(0).getAllValidationErrors().isEmpty());
         Assert.assertFalse(LayoutFactory.discoverFormat(file).isEmpty());
 
         // regular file, 10 records

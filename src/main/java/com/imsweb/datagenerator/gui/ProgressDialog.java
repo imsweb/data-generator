@@ -20,7 +20,6 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 
 import javax.swing.Box;
@@ -37,28 +36,33 @@ import javax.swing.border.EmptyBorder;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGenerator;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
+import com.imsweb.datagenerator.naaccr.NaaccrXmlDataGenerator;
 import com.imsweb.datagenerator.utils.Distribution;
 import com.imsweb.layout.LayoutFactory;
+import com.imsweb.layout.naaccrxml.NaaccrXmlLayout;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
+import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
+import com.imsweb.naaccrxml.PatientXmlWriter;
+import com.imsweb.naaccrxml.entity.Item;
+import com.imsweb.naaccrxml.entity.NaaccrData;
 
 public class ProgressDialog extends JDialog {
 
     private File _file;
     private String _layoutId;
-    private int _numRecs;
+    private int _numTumors;
     private NaaccrDataGeneratorOptions _options;
 
     private JLabel _label;
     private JProgressBar _progressBar;
-    private JButton _cancelBtn;
 
     private ProgressDialogWorker _worker;
 
-    public ProgressDialog(Window owner, File file, int numRecs, String layoutId, NaaccrDataGeneratorOptions options) {
+    public ProgressDialog(Window owner, File file, int numTumors, String layoutId, NaaccrDataGeneratorOptions options) {
         super(owner);
 
         _file = file;
-        _numRecs = numRecs;
+        _numTumors = numTumors;
         _layoutId = layoutId;
         _options = options;
 
@@ -96,7 +100,7 @@ public class ProgressDialog extends JDialog {
         progressPnl.setLayout(new BorderLayout());
         progressPnl.setBorder(null);
         progressPnl.setOpaque(false);
-        _progressBar = new JProgressBar(0, numRecs);
+        _progressBar = new JProgressBar(0, _numTumors);
         _progressBar.setValue(0);
         _progressBar.setStringPainted(false);
         progressPnl.add(_progressBar, BorderLayout.CENTER);
@@ -107,9 +111,9 @@ public class ProgressDialog extends JDialog {
         controlsPnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
         controlsPnl.setBorder(null);
         controlsPnl.setOpaque(false);
-        _cancelBtn = new JButton("Cancel");
-        _cancelBtn.addActionListener(e -> performCancel());
-        controlsPnl.add(_cancelBtn);
+        JButton cancelBtn = new JButton("Cancel");
+        cancelBtn.addActionListener(e -> performCancel());
+        controlsPnl.add(cancelBtn);
         centerPnl.add(controlsPnl);
 
         _worker = new ProgressDialogWorker();
@@ -147,40 +151,73 @@ public class ProgressDialog extends JDialog {
         @Override
         protected Void doInBackground() {
             try {
-                // create the layout
-                _label.setText("Retrieving layout information...");
-                NaaccrLayout layout = (NaaccrLayout)LayoutFactory.getLayout(_layoutId);
-                if (_needsToStop)
-                    return null;
-
-                // instanciate the generator
-                _label.setText("Preparing rules...");
-                NaaccrDataGenerator generator = new NaaccrDataGenerator(layout);
-                if (_needsToStop)
-                    return null;
-
-                // create a random distribution for the number of tumors, if we have to
-                Distribution<Integer> numTumGen = _options.getNumTumorsPerPatient() == null ? generator.getNumTumorsPerPatientDistribution() : null;
 
                 // deal with compression
                 OutputStream os = new FileOutputStream(_file);
                 if (_file.getName().toLowerCase().endsWith(".gz"))
                     os = new GZIPOutputStream(os);
 
-                // and finally write the file!
-                _label.setText("Writing file...");
-                try (Writer writer = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8))) {
-                    int numCreatedTumors = 0;
-                    while (numCreatedTumors < _numRecs) {
-                        int numTumorForThisPatient = numTumGen == null ? _options.getNumTumorsPerPatient() : numTumGen.getValue();
-                        // never create more tumors than requested, so we use a min() call
-                        List<Map<String, String>> patient = generator.generatePatient(Math.min(numTumorForThisPatient, _numRecs - numCreatedTumors), _options);
-                        for (Map<String, String> tumor : patient)
-                            layout.writeRecord(writer, tumor);
-                        numCreatedTumors += patient.size();
-                        publish(patient.size());
-                        if (_needsToStop)
-                            break;
+                if (_layoutId.contains("xml")) {
+                    _label.setText("Retrieving layout information...");
+                    NaaccrXmlLayout layout = (NaaccrXmlLayout)LayoutFactory.getLayout(_layoutId);
+                    if (_needsToStop)
+                        return null;
+
+                    // instanciate the generator
+                    _label.setText("Preparing rules...");
+                    NaaccrXmlDataGenerator generator = new NaaccrXmlDataGenerator(layout);
+                    if (_needsToStop)
+                        return null;
+
+                    // create a random distribution for the number of tumors, if we have to
+                    Distribution<Integer> numTumGen = _options.getNumTumorsPerPatient() == null ? generator.getNumTumorsPerPatientDistribution() : null;
+
+                    // and finally write the file!
+                    _label.setText("Writing file...");
+                    NaaccrData rootData = new NaaccrData();
+                    rootData.setBaseDictionaryUri(NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(layout.getLayoutVersion()).getDictionaryUri());
+                    rootData.setRecordType(layout.getRecordType());
+                    if (_options.getRegistryId() != null)
+                        rootData.addItem(new Item("registryId", _options.getRegistryId()));
+
+                    try (PatientXmlWriter writer = new PatientXmlWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), rootData)) {
+                        int numCreatedTumors = 0;
+                        while (numCreatedTumors < _numTumors) {
+                            int numTumorForThisPatient = Math.min(numTumGen == null ? _options.getNumTumorsPerPatient() : numTumGen.getValue(), _numTumors - numCreatedTumors);
+                            layout.writeNextPatient(writer, generator.generatePatient(numTumorForThisPatient, _options));
+                            numCreatedTumors += numTumorForThisPatient;
+                            publish(numTumorForThisPatient);
+                        }
+                    }
+                }
+                else {
+                    // create the layout
+                    _label.setText("Retrieving layout information...");
+                    NaaccrLayout layout = (NaaccrLayout)LayoutFactory.getLayout(_layoutId);
+                    if (_needsToStop)
+                        return null;
+
+                    // instanciate the generator
+                    _label.setText("Preparing rules...");
+                    NaaccrDataGenerator generator = new NaaccrDataGenerator(layout);
+                    if (_needsToStop)
+                        return null;
+
+                    // create a random distribution for the number of tumors, if we have to
+                    Distribution<Integer> numTumGen = _options.getNumTumorsPerPatient() == null ? generator.getNumTumorsPerPatientDistribution() : null;
+
+                    // and finally write the file!
+                    _label.setText("Writing file...");
+                    try (Writer writer = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8))) {
+                        int numCreatedTumors = 0;
+                        while (numCreatedTumors < _numTumors) {
+                            int numTumorForThisPatient = Math.min(numTumGen == null ? _options.getNumTumorsPerPatient() : numTumGen.getValue(), _numTumors - numCreatedTumors);
+                            layout.writeRecords(writer, generator.generatePatient(numTumorForThisPatient, _options));
+                            numCreatedTumors += numTumorForThisPatient;
+                            publish(numTumorForThisPatient);
+                            if (_needsToStop)
+                                break;
+                        }
                     }
                 }
 
