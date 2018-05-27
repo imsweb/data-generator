@@ -4,6 +4,7 @@
 
 - Added options for generating NAACCR XML files in the standalone GUI.
 - Added new NAACCR XML generator.
+- Fixed formatting issue in Collaborative Stage rule.
 - Removed support for NAACCR 15 in the standalone GUI.
 
 **Changes in version 1.6**

@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
 import com.imsweb.datagenerator.utils.RandomUtils;
@@ -232,7 +234,6 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
      * @return random value
      */
     private String getRandomValueFromTable(String tableName, String key, Map<String, String> record, String schemaId) {
-        String value;
         StagingTable table = _staging.getTable(tableName);
 
         // get a random row from the table
@@ -244,12 +245,13 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
         StagingRange randomStringRange = stringRange.get(RandomUtils.nextInt(stringRange.size()));
 
         // if no range, return high value, otherwise pick a random value in range and return it
+        String value;
         if (randomStringRange.getHigh().equals(randomStringRange.getLow()))
             value = randomStringRange.getHigh();
         else {
             int high = Integer.parseInt(randomStringRange.getHigh());
             int low = Integer.parseInt(randomStringRange.getLow());
-            value = Integer.toString(RandomUtils.nextInt(high - low + 1) + low);
+            value = StringUtils.leftPad(Integer.toString(RandomUtils.nextInt(high - low + 1) + low), randomStringRange.getLow().length(), "0");
         }
 
         return value;

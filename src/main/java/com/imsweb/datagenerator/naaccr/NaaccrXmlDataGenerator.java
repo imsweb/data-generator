@@ -17,6 +17,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.zip.GZIPOutputStream;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.imsweb.datagenerator.DataGenerator;
 import com.imsweb.datagenerator.utils.Distribution;
 import com.imsweb.layout.Layout;
@@ -188,11 +190,11 @@ public class NaaccrXmlDataGenerator implements DataGenerator {
                     toRemove.add(entry.getKey());
                 }
                 else if (entry.getKey().endsWith("Month")) {
-                    toAdd.computeIfAbsent(entry.getKey().replace("Month", ""), k -> new StringBuilder("        ")).replace(4, 6, entry.getValue());
+                    toAdd.computeIfAbsent(entry.getKey().replace("Month", ""), k -> new StringBuilder("        ")).replace(4, 6, StringUtils.leftPad(entry.getValue(), 2, "0"));
                     toRemove.add(entry.getKey());
                 }
                 else if (entry.getKey().endsWith("Day")) {
-                    toAdd.computeIfAbsent(entry.getKey().replace("Day", ""), k -> new StringBuilder("        ")).replace(6, 8, entry.getValue());
+                    toAdd.computeIfAbsent(entry.getKey().replace("Day", ""), k -> new StringBuilder("        ")).replace(6, 8, StringUtils.leftPad(entry.getValue(), 2, "0"));
                     toRemove.add(entry.getKey());
                 }
             }
