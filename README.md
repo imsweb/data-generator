@@ -27,6 +27,8 @@ The following generators are provided with the library:
  - NaaccrDataGenerator can be used with NAACCR fixed-columns layouts.
  - NaaccrXmlDataGenerator can be used with NAACCR XML layouts.
  - NaaccrHl7DataGenerator can be used with NAACCR HL7 layouts.
+ - PhysicianDataGenerator can be used to generate physicians.
+ - FacilityDataGenerator can be used to generate facilities.
 
 ### NAACCR Fixed-columns Generator
 
@@ -127,6 +129,10 @@ generator.generateFile(targetFile, 10)
 
 The generator accepts an additional options object as an input to the generate methods, that object can be used to customize the
 random data generation of some of the fields.
+
+### Physician and Facility Data Generator
+
+Those generator don't require a layout; they can be used generate physicians and facilities. The data is created from publicly available NPI data files.
 
 ## Defining Variables
 
