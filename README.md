@@ -28,7 +28,7 @@ The following generators are provided with the library:
  - NaaccrXmlDataGenerator can be used with NAACCR XML layouts.
  - NaaccrHl7DataGenerator can be used with NAACCR HL7 layouts.
 
-###NAACCR Fixed-columns Generator
+### NAACCR Fixed-columns Generator
 
 The NAACCR generator current provides rules for the following fields:
  - Patient ID Number
@@ -83,7 +83,7 @@ generator.generateFile(targetFile, 500)
 The generator accepts an additional options object as an input to the generate methods, that object can be used to customize the
 random data generation of some of the fields.
 
-###NAACCR XML Generator
+### NAACCR XML Generator
 
 The NAACCR XML generator uses the same rules as the NAACCR fixed-columns generator.
 
@@ -102,7 +102,7 @@ generator.generateFile(targetFile, 500)
 The generator accepts an additional options object as an input to the generate methods, that object can be used to customize the
 random data generation of some of the fields.
 
-###NAACCR HL7 Generator
+### NAACCR HL7 Generator
 
 The NAACCR HL7 generator provides rules for the following segments:
  - Control Segment (MSH)
