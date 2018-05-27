@@ -22,24 +22,13 @@ There are two ways to use this library:
 1. Embed it into your own Java software and call one of the data generators.
 2. Download the executable JAR from the [release page](https://github.com/imsweb/data-generator/releases) and double click it to start the standalone GUI.
 
-There are currently three types of generator that are provided:
+The following generators are provided with the library:
  - RecordDataGenerator can bu used with generic fixed-columns layouts.
- - NaaccrDataGenerator can be used for NAACCR fixed-columns layouts.
- - NaaccrHl7DataGenerator can be used for NAACCR HL7 layouts.
+ - NaaccrDataGenerator can be used with NAACCR fixed-columns layouts.
+ - NaaccrXmlDataGenerator can be used with NAACCR XML layouts.
+ - NaaccrHl7DataGenerator can be used with NAACCR HL7 layouts.
 
-Here is an example using the NAACCR generator:
-```java
-// create the generator
-NaaccrDataGenerator generator = new NaaccrDataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_16_ABSTRACT);
-
-// generate a single patient with 2 tumors
-// tumors are represented by individual maps, patients are represented as list of maps
-List<Map<String, String>> patient = generator.generatePatient(2);
-
-// generate a file with 500 patients, each one will have between 1 and 3 tumors
-// with 1 being a much higher probability
-generator.generateFile(targetFile, 500)
-```
+###NAACCR Fixed-columns Generator
 
 The NAACCR generator current provides rules for the following fields:
  - Patient ID Number
@@ -79,6 +68,51 @@ The NAACCR generator current provides rules for the following fields:
  - NHIA
  - NAPIIA
 
+Here is an example using the NAACCR generator:
+```java
+// create the generator
+NaaccrDataGenerator generator = new NaaccrDataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_18_ABSTRACT);
+
+// generate a single patient with 2 tumors
+List<Map<String, String>> patient = generator.generatePatient(2);
+
+// generate a file with 500 tumors, each patient will have a random number of tumors (mostly 1)
+generator.generateFile(targetFile, 500)
+```
+
+The generator accepts an additional options object as an input to the generate methods, that object can be used to customize the
+random data generation of some of the fields.
+
+###NAACCR XML Generator
+
+The NAACCR XML generator uses the same rules as the NAACCR fixed-columns generator.
+
+Here is an example using the NAACCR XML generator:
+```java
+// create the generator
+NaaccrXmlDataGenerator generator = new NaaccrXmlDataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_XML_18_ABSTRACT);
+
+// generate a single patient with 2 tumors
+Patient patient = generator.generatePatient(2);
+
+// generate a file with 500 tumors, each patient will have a random number of tumors (mostly 1)
+generator.generateFile(targetFile, 500)
+```
+
+The generator accepts an additional options object as an input to the generate methods, that object can be used to customize the
+random data generation of some of the fields.
+
+###NAACCR HL7 Generator
+
+The NAACCR HL7 generator provides rules for the following segments:
+ - Control Segment (MSH)
+ - Patient Identifier Segment (PID)
+ - Next of Kin Segment (NK1)
+ - Patient Visit Segment (PV1)
+ - Common Order Segment (ORC)
+ - Observation Request Segment (OBR)
+ - Observation/Result Segment (OBX)
+
 Here is an example using the NAACCR HL7 generator:
 ```java
 // create the generator
@@ -91,16 +125,8 @@ Hl7Message message = generator.generateMessage();
 generator.generateFile(targetFile, 10)
 ```
 
-The current NAACCR HL7 generator provides rules for the following segments:
- - Control Segment (MSH)
- - Patient Identifier Segment (PID)
- - Next of Kin Segment (NK1)
- - Patient Visit Segment (PV1)
- - Common Order Segment (ORC)
- - Observation Request Segment (OBR)
- - Observation/Result Segment (OBX)
-
-Both NAACCR generators accept an additional options object as an input to the generate methods, that object can be used to customize the random data generation of some fields.
+The generator accepts an additional options object as an input to the generate methods, that object can be used to customize the
+random data generation of some of the fields.
 
 ## Defining Variables
 
