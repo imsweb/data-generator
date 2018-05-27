@@ -81,7 +81,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
     protected static final String _FORMAT_16_INC_XML = "NAACCR XML 16 Incidence";
 
     // mappings between the labels and layouts
-    protected static final Map<String, String> _FORMATS = new LinkedHashMap<>();
+    private static final Map<String, String> _FORMATS = new LinkedHashMap<>();
 
     static {
         _FORMATS.put(_FORMAT_18_ABS_FLAT, LayoutFactory.LAYOUT_ID_NAACCR_18_ABSTRACT);
