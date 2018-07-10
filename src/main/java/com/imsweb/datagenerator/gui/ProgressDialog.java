@@ -20,6 +20,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Objects;
 import java.util.zip.GZIPOutputStream;
 
 import javax.swing.Box;
@@ -247,7 +248,10 @@ public class ProgressDialog extends JDialog {
                 _worker = null;
                 setVisible(false);
                 ProgressDialog.this.dispose();
-                JOptionPane.showMessageDialog(getOwner(), "Unable to create file.\n\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                String message = Objects.toString(e.getMessage(), "No information available.");
+                if (!message.endsWith("."))
+                    message = message + ".";
+                JOptionPane.showMessageDialog(getOwner(), "Unable to create file.\n\n" + message, "Error", JOptionPane.ERROR_MESSAGE);
             }
             finally {
                 _worker = null;
