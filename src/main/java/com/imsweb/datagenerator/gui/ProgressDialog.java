@@ -44,6 +44,7 @@ import com.imsweb.datagenerator.utils.Distribution;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.naaccrxml.NaaccrXmlLayout;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
+import com.imsweb.naaccrxml.NaaccrOptions;
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 import com.imsweb.naaccrxml.PatientXmlWriter;
 import com.imsweb.naaccrxml.entity.Item;
@@ -184,7 +185,11 @@ public class ProgressDialog extends JDialog {
                     if (_options.getRegistryId() != null)
                         rootData.addItem(new Item("registryId", _options.getRegistryId()));
 
-                    try (PatientXmlWriter writer = new PatientXmlWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), rootData)) {
+                    // this will make sure we don't write items for the wrong record type (they will be ignored instead of throwing an exception)
+                    NaaccrOptions options = new NaaccrOptions();
+                    options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_IGNORE);
+
+                    try (PatientXmlWriter writer = new PatientXmlWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), rootData, options)) {
                         int numCreatedTumors = 0;
                         while (numCreatedTumors < _numTumors) {
                             int numTumorForThisPatient = Math.min(numTumGen == null ? _options.getNumTumorsPerPatient() : numTumGen.getValue(), _numTumors - numCreatedTumors);

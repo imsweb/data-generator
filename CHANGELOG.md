@@ -1,5 +1,11 @@
 ## Synthetic data generator
 
+**Changes in version 1.8**
+
+- Fixed an exception when generating NAACCR XML Incidence files.
+- Updated Staging client library from version 4.0 to version 4.1.
+- Updated Layout library from version 1.10 to version 1.11.
+
 **Changes in version 1.7**
 
 - Added options for generating NAACCR XML files in the standalone GUI.

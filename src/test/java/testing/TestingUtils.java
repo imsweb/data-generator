@@ -15,6 +15,10 @@ import java.util.zip.GZIPInputStream;
  */
 public final class TestingUtils {
 
+    public static String getWorkingDirectory() {
+        return System.getProperty("user.dir").replace(".idea\\modules", ""); // this will make it work in IntelliJ and outside of it...
+    }
+
     /**
      * Reads the content of the provided file.
      */
@@ -33,7 +37,6 @@ public final class TestingUtils {
             }
         }
 
-
         return lines;
     }
 
@@ -43,7 +46,7 @@ public final class TestingUtils {
     public static File createFile(String filename) throws IOException {
 
         // create the tmp folder
-        File tmpDir = new File(System.getProperty("user.dir") + "/build/test-tmp");
+        File tmpDir = new File(getWorkingDirectory() + "/build/test-tmp");
         if (!tmpDir.exists() && !tmpDir.mkdirs())
             throw new IOException("Unable to create tmp dir...");
 
