@@ -55,6 +55,7 @@ public class ProgressDialog extends JDialog {
     private File _file;
     private String _layoutId;
     private int _numTumors;
+    private boolean _addNaaccrNumbers;
     private NaaccrDataGeneratorOptions _options;
 
     private JLabel _label;
@@ -62,11 +63,12 @@ public class ProgressDialog extends JDialog {
 
     private ProgressDialogWorker _worker;
 
-    public ProgressDialog(Window owner, File file, int numTumors, String layoutId, NaaccrDataGeneratorOptions options) {
+    public ProgressDialog(Window owner, File file, int numTumors, boolean addNaaccrNumbers, String layoutId, NaaccrDataGeneratorOptions options) {
         super(owner);
 
         _file = file;
         _numTumors = numTumors;
+        _addNaaccrNumbers = addNaaccrNumbers;
         _layoutId = layoutId;
         _options = options;
 
@@ -188,6 +190,7 @@ public class ProgressDialog extends JDialog {
                     // this will make sure we don't write items for the wrong record type (they will be ignored instead of throwing an exception)
                     NaaccrOptions options = new NaaccrOptions();
                     options.setUnknownItemHandling(NaaccrOptions.ITEM_HANDLING_IGNORE);
+                    options.setWriteItemNumber(_addNaaccrNumbers);
 
                     try (PatientXmlWriter writer = new PatientXmlWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), rootData, options)) {
                         int numCreatedTumors = 0;

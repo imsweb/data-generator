@@ -36,6 +36,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -97,6 +98,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
     protected JFileChooser _fileChooser;
     protected JTextField _targetFld, _numRecFld, _dxYearFld, _registryIdFld;
     protected JRadioButton _numTumPerPatRandom, _numTumPerPatFixed;
+    protected JCheckBox _naaccrXmlNumBox;
     protected JComboBox<String> _compressionBox, _formatBox, _numTumPerPatBox, _stateBox;
     protected JButton _processBtn;
 
@@ -244,7 +246,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         filePnl.add(formatPnl);
         filePnl.add(Box.createVerticalStrut(15));
 
-        // total number of records
+        // total number of records, add XML numbers
         JPanel totalNumRecPnl = new JPanel();
         totalNumRecPnl.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
         totalNumRecPnl.setBorder(null);
@@ -260,6 +262,9 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
             }
         });
         totalNumRecPnl.add(_numRecFld);
+        totalNumRecPnl.add(Box.createHorizontalStrut(25));
+        _naaccrXmlNumBox = new JCheckBox("Add NAACCR Number attribute (XML only)");
+        totalNumRecPnl.add(_naaccrXmlNumBox);
         filePnl.add(totalNumRecPnl);
 
         pnl.add(Box.createVerticalStrut(15));
@@ -353,6 +358,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         return pnl;
     }
 
+    @SuppressWarnings({"ConstantConditions", "SuspiciousMethodCalls"})
     protected JPanel createControlsPanel() {
         JPanel pnl = new JPanel();
         pnl.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
@@ -376,6 +382,9 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
                 return;
             }
             int numRecords = Integer.parseInt(numRecsRaw);
+
+            // get add NAACCR Numbers
+            boolean addNaaccrNumbers = _naaccrXmlNumBox.isSelected();
 
             // get the DX year range
             String dxYearRaw = _dxYearFld.getText();
@@ -422,7 +431,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
             }
 
             // and finally, create and show a progress dialog
-            final ProgressDialog progressDlg = new ProgressDialog(StandaloneNaaccrDataGenerator.this, targetFile, numRecords, layoutId, options);
+            final ProgressDialog progressDlg = new ProgressDialog(StandaloneNaaccrDataGenerator.this, targetFile, numRecords, addNaaccrNumbers, layoutId, options);
             SwingUtilities.invokeLater(() -> {
                 // show the dialog in the center of the parent window
                 Component parent1 = StandaloneNaaccrDataGenerator.this;
@@ -437,6 +446,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
         return pnl;
     }
 
+    @SuppressWarnings("SuspiciousMethodCalls")
     private String fixTargetFile() {
         File file = new File(_targetFld.getText());
         String compression = (String)_compressionBox.getSelectedItem();
