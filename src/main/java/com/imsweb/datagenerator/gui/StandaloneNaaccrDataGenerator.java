@@ -58,6 +58,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.layout.LayoutFactory;
@@ -395,8 +396,8 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
             }
             int dxStart, dxEnd;
             if (dxYearRaw.contains("-")) {
-                dxStart = Integer.parseInt(dxYearRaw.split("-")[0]);
-                dxEnd = Integer.parseInt(dxYearRaw.split("-")[1]);
+                dxStart = Integer.parseInt(StringUtils.split(dxYearRaw, '-')[0]);
+                dxEnd = Integer.parseInt(StringUtils.split(dxYearRaw,'-')[1]);
             }
             else
                 dxStart = dxEnd = Integer.parseInt(dxYearRaw);
