@@ -111,11 +111,6 @@ modifyPom {
                 name 'Fabian Depry'
                 email 'depryf@imsweb.com'
             }
-            developer {
-                id 'nakamurae'
-                name 'Nakamur Eric'
-                email 'nakamurae@imsweb.com'
-            }
         }
     }
 }
