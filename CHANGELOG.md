@@ -1,5 +1,11 @@
 ## Synthetic data generator
 
+**Changes in version 1.9**
+
+- Added an option to the standalone GUI to generate NAACCR Number attribute for XML files.
+- Updated Layout library from version 1.11 to version 1.12.
+- Updated Algorithm library from version 1.14 to version 1.16.
+
 **Changes in version 1.8**
 
 - Fixed an exception when generating NAACCR XML Incidence files.

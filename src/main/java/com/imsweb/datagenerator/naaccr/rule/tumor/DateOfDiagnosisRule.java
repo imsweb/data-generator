@@ -61,6 +61,7 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
             maxDxDates.clear();
 
             int currentTumorIndex = (int)context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX);
+            @SuppressWarnings("unchecked")
             Map<Integer, Integer> ageGroupMap = (Map<Integer, Integer>)context.get(CONTEXT_FLAG_AGE_GROUP_MAP);
             minDxDates.add(birthDate.plusYears((ageGroupMap.get(currentTumorIndex) * 10)));
             maxDxDates.add(maxDate);

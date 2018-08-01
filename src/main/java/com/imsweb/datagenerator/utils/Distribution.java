@@ -85,7 +85,7 @@ public class Distribution<T> {
                         element.setFrequency(Double.parseDouble(values[0]));
                     }
                     else {
-                        Object obj = valueType.newInstance();
+                        Object obj = valueType.getDeclaredConstructor().newInstance();
                         for (Map.Entry<Integer, String> entry : columnsMapping.entrySet())
                             valueType.getMethod("set" + StringUtils.capitalize(entry.getValue()), String.class).invoke(obj, values[entry.getKey()]);
                         element.setValue((D)obj);

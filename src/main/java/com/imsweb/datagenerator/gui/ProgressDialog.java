@@ -35,8 +35,6 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 
-import org.apache.commons.io.IOUtils;
-
 import com.imsweb.datagenerator.naaccr.NaaccrDataGenerator;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrXmlDataGenerator;
@@ -156,13 +154,7 @@ public class ProgressDialog extends JDialog {
 
         @Override
         protected Void doInBackground() {
-            OutputStream os = null;
-            try {
-
-                // deal with compression
-                os = new FileOutputStream(_file);
-                if (_file.getName().toLowerCase().endsWith(".gz"))
-                    os = new GZIPOutputStream(os);
+            try (OutputStream os = _file.getName().toLowerCase().endsWith(".gz") ? new GZIPOutputStream(new FileOutputStream(_file)) : new FileOutputStream(_file)) {
 
                 if (_layoutId.contains("xml")) {
                     _label.setText("Retrieving layout information...");
@@ -265,7 +257,6 @@ public class ProgressDialog extends JDialog {
                 _worker = null;
                 setVisible(false);
                 ProgressDialog.this.dispose();
-                IOUtils.closeQuietly(os);
             }
 
             return null;

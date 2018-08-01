@@ -1,42 +1,48 @@
 import org.gradle.internal.jvm.Jvm
 
 plugins {
-    id 'java'
+    id 'java-library'
     id 'checkstyle'
-    id 'findbugs'
+    id 'net.ltgt.errorprone' version '0.0.16'
     id 'com.bmuschko.nexus' version '2.3.1'
     id 'io.codearte.nexus-staging' version '0.8.0'
-    id 'com.github.johnrengelman.shadow' version '1.2.3'
+    id 'com.github.johnrengelman.shadow' version '2.0.4'
 }
 
 group = 'com.imsweb'
 version = file('VERSION').text.trim()
 description = 'Cancer-related synthetic data generator.'
+sourceCompatibility = JavaVersion.VERSION_1_8
 
 println "Starting build using ${Jvm.current()}"
 
 repositories {
     mavenCentral()
-    maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots/'
-    }
 }
 
 dependencies {
-    compile 'com.imsweb:layout:1.11'
-    compile 'com.imsweb:algorithms:1.14'
-    compile 'com.imsweb:staging-client-java:4.1'
-    compile 'com.imsweb:staging-algorithm-cs:02.05.50'
-    compile 'commons-io:commons-io:2.5'
-    testCompile 'junit:junit:4.12'
+    api 'com.imsweb:layout:1.12'
+
+    implementation 'com.imsweb:algorithms:1.16'
+    implementation 'com.imsweb:staging-client-java:4.1'
+    implementation 'com.imsweb:staging-algorithm-cs:02.05.50'
+    implementation 'org.apache.commons:commons-lang3:3.7'
+
+    testImplementation 'junit:junit:4.12'
+
+    errorprone 'com.google.errorprone:error_prone_core:2.3.1'
 }
 
-// enforce UTF-8 for all compilation tasks
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+// enforce UTF-8, display the compilation warnings
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-Xlint:unchecked' << '-Xlint:deprecation'
+}
 
-// display the compilation warnings
-compileJava.options.compilerArgs << '-Xlint:unchecked' << '-Xlint:deprecation'
-compileTestJava.options.compilerArgs << '-Xlint:unchecked' << '-Xlint:deprecation'
+// the Javadoc was made way too strict in Java 8 and it's not worth the time fixing everything!
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
 
 // customize the manifest
 jar {
@@ -48,6 +54,7 @@ jar {
                 'Built-By': System.getProperty('user.name'),
                 'Built-Date': new Date(),
                 'Built-JDK': System.getProperty('java.version'),
+                'Automatic-Module-Name': 'com.imsweb.datagenerator',
                 'Main-Class': 'com.imsweb.datagenerator.gui.StandaloneNaaccrDataGenerator')
     }
     from ('VERSION') {
@@ -57,12 +64,6 @@ jar {
         rename 'LICENSE', 'DATA-GENERATOR-LICENSE'
     }
 }
-
-// this sucks, but they made the Javadoc way too stritct in Java 8 and it's not worth my time fixing it!
-tasks.withType(Javadoc) {
-    options.addStringOption('Xdoclint:none', '-quiet')
-}
-
 
 // we don't want these files in the "all" jar, it's confusing
 shadowJar {
@@ -80,13 +81,6 @@ shadowJar {
 checkstyle {
     ignoreFailures = true
     configFile = file('config/checkstyle/checkstyle.xml')
-}
-
-// findbugs plugin settings
-findbugs {
-    ignoreFailures = true
-    effort = 'max'
-    excludeFilter = file('config/findbugs/findbugs-exclude.xml')
 }
 
 // needed to deploy to Maven Central
@@ -128,11 +122,11 @@ modifyPom {
 
 // don't try to release a snapshot to a non-snapshot repository, that won't work anyway
 if (version.endsWith('-SNAPSHOT'))
-    closeRepository.enabled = false
+    gradle.startParameter.excludedTaskNames += 'closeAndReleaseRepository'
 
-// Gradle wrapper, this allows to build the project without having to install Gradle!
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.5'
+// Gradle wrapper, this allows to build the project without having to install Gradle...
+wrapper {
+    gradleVersion = '4.9'
 }
 
 

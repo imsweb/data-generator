@@ -27,6 +27,8 @@ public class SiteRule extends NaaccrDataGeneratorRule {
     public void execute(Map<String, String> tumor, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
 
         Integer currentTumorIndex = (Integer)context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX);
+
+        @SuppressWarnings("unchecked")
         Map<Integer, SiteFrequencyDto> siteFreqMap = (Map<Integer, SiteFrequencyDto>)context.get(CONTEXT_FLAG_SITE_FREQ_MAP);
         if (currentTumorIndex != null && siteFreqMap != null) {
             tumor.put("primarySite", siteFreqMap.get(currentTumorIndex).getSite());

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -354,7 +353,7 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
      * @return list of invalid values for the key
      */
     private List<String> getInvalidValues(String key, Map<String, String> record, String schemaId) {
-        List<String> invalidValues = new LinkedList<>();
+        List<String> invalidValues = new ArrayList<>();
 
         switch (key) {
             case "size":

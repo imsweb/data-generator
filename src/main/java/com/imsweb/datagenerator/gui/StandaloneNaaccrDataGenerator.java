@@ -397,7 +397,7 @@ public class StandaloneNaaccrDataGenerator extends JFrame implements ActionListe
             int dxStart, dxEnd;
             if (dxYearRaw.contains("-")) {
                 dxStart = Integer.parseInt(StringUtils.split(dxYearRaw, '-')[0]);
-                dxEnd = Integer.parseInt(StringUtils.split(dxYearRaw,'-')[1]);
+                dxEnd = Integer.parseInt(StringUtils.split(dxYearRaw, '-')[1]);
             }
             else
                 dxStart = dxEnd = Integer.parseInt(dxYearRaw);
