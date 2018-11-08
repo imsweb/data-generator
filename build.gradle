@@ -3,7 +3,7 @@ import org.gradle.internal.jvm.Jvm
 plugins {
     id 'java-library'
     id 'checkstyle'
-    id 'net.ltgt.errorprone' version '0.0.16'
+    id 'com.github.spotbugs' version '1.6.5'
     id 'com.bmuschko.nexus' version '2.3.1'
     id 'io.codearte.nexus-staging' version '0.8.0'
     id 'com.github.johnrengelman.shadow' version '2.0.4'
@@ -13,6 +13,7 @@ group = 'com.imsweb'
 version = file('VERSION').text.trim()
 description = 'Cancer-related synthetic data generator.'
 sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 println "Starting build using ${Jvm.current()}"
 
@@ -21,16 +22,14 @@ repositories {
 }
 
 dependencies {
-    api 'com.imsweb:layout:1.12'
+    api 'com.imsweb:layout:1.14'
 
-    implementation 'com.imsweb:algorithms:1.16'
+    implementation 'com.imsweb:algorithms:1.19'
     implementation 'com.imsweb:staging-client-java:4.1'
-    implementation 'com.imsweb:staging-algorithm-cs:02.05.50'
+    implementation 'com.imsweb:staging-algorithm-cs:02.05.50.1'
     implementation 'org.apache.commons:commons-lang3:3.7'
 
     testImplementation 'junit:junit:4.12'
-
-    errorprone 'com.google.errorprone:error_prone_core:2.3.1'
 }
 
 // enforce UTF-8, display the compilation warnings
@@ -83,6 +82,12 @@ checkstyle {
     configFile = file('config/checkstyle/checkstyle.xml')
 }
 
+// spotbugs plugin settings
+spotbugs {
+    ignoreFailures = true
+    excludeFilter = file('config/spotbugs/spotbugs-exclude.xml')
+}
+
 // needed to deploy to Maven Central
 modifyPom {
     project {
@@ -121,7 +126,7 @@ if (version.endsWith('-SNAPSHOT'))
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
-    gradleVersion = '4.9'
+    gradleVersion = '4.10.2'
 }
 
 

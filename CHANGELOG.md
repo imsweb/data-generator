@@ -2,6 +2,12 @@
 
 **Changes in version 1.9**
 
+- Updated Layout library from version 1.12 to version 1.14.
+- Updated Algorithm library from version 1.16 to version 1.19.
+- Updated CS library from version 02.05.50 to version 02.05.50.
+
+**Changes in version 1.9**
+
 - Added an option to the standalone GUI to generate NAACCR Number attribute for XML files.
 - Updated Layout library from version 1.11 to version 1.12.
 - Updated Algorithm library from version 1.14 to version 1.16.
