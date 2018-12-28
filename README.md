@@ -19,7 +19,7 @@ This library requires Java 8 or a more recent version.
 There are two ways to use this library:
 
 1. Embed it into your own Java software and call one of the data generators.
-2. Download the executable JAR from the [release page](https://github.com/imsweb/data-generator/releases) and double click it to start the standalone GUI.
+2. Download the executable JAR from the [release page](https://github.com/imsweb/data-generator/releases) and execute it using a local Java Runtime Environment. To start the application open a DOS prompt/terminal and type `java -jar lib\data-generator-x.x-all.jar` where x.x is the current version.
 
 The following generators are provided with the library:
  - RecordDataGenerator can bu used with generic fixed-columns layouts.
