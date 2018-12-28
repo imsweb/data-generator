@@ -26,6 +26,7 @@ dependencies {
     implementation 'com.imsweb:staging-client-java:4.1'
     implementation 'com.imsweb:staging-algorithm-cs:02.05.50.1'
     implementation 'org.apache.commons:commons-lang3:3.7'
+    implementation 'commons-io:commons-io:2.6'
 
     testImplementation 'junit:junit:4.12'
 }
