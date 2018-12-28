@@ -2,9 +2,9 @@
 
 **Changes in version 1.10 (unreleased)**
 
-- Updated Layout library from version 1.12 to version 1.14.
+- Updated Layout library from version 1.12 to version 1.15.
 - Updated Algorithm library from version 1.16 to version 1.19.
-- Updated CS library from version 02.05.50 to version 02.05.50.
+- Updated CS library from version 02.05.50 to version 02.05.50.1.
 
 **Changes in version 1.9**
 

@@ -1,5 +1,3 @@
-import org.gradle.internal.jvm.Jvm
-
 plugins {
     id 'java-library'
     id 'checkstyle'
@@ -15,14 +13,14 @@ description = 'Cancer-related synthetic data generator.'
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-println "Starting build using ${Jvm.current()}"
+println "Starting build using JDK ${Runtime.version().feature()}"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    api 'com.imsweb:layout:1.14'
+    api 'com.imsweb:layout:1.15'
 
     implementation 'com.imsweb:algorithms:1.19'
     implementation 'com.imsweb:staging-client-java:4.1'
@@ -79,13 +77,14 @@ shadowJar {
 // checkstyle plugin settings
 checkstyle {
     ignoreFailures = true
-    configFile = file('config/checkstyle/checkstyle.xml')
+    configFile = project(':').file('config/checkstyle/checkstyle.xml')
+    configProperties = ['suppressionFile': project(':').file('config/checkstyle/suppressions.xml')]
 }
 
 // spotbugs plugin settings
 spotbugs {
     ignoreFailures = true
-    excludeFilter = file('config/spotbugs/spotbugs-exclude.xml')
+    excludeFilter = project(':').file("config/spotbugs/spotbugs-exclude.xml")
 }
 
 // needed to deploy to Maven Central
@@ -126,7 +125,8 @@ if (version.endsWith('-SNAPSHOT'))
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
-    gradleVersion = '4.10.2'
+    gradleVersion = '5.0'
+    distributionType = Wrapper.DistributionType.ALL
 }
 
 
