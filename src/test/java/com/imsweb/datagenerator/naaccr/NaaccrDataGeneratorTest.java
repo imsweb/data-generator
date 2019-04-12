@@ -53,7 +53,7 @@ public class NaaccrDataGeneratorTest {
 
         // a layout is required
         try {
-            //noinspection ConstantConditions
+            //noinspection
             new NaaccrDataGenerator((Layout)null);
             Assert.fail();
         }
@@ -115,7 +115,6 @@ public class NaaccrDataGeneratorTest {
     }
 
     @Test
-    @SuppressWarnings("ConstantConditions")
     public void testGeneratePatient() throws IOException {
         NaaccrDataGenerator generator = new NaaccrDataGenerator(_LAYOUT.getLayoutId());
 
@@ -124,7 +123,7 @@ public class NaaccrDataGeneratorTest {
         Assert.assertEquals(1, patient.size());
         Assert.assertNotNull(patient.get(0).get("primarySite"));
         Assert.assertNull(patient.get(0).get("addressAtDxState"));
-        Assert.assertNull(_LAYOUT.validateLine(_LAYOUT.createLineFromRecord(patient.get(0)), 1));
+        Assert.assertNull(_LAYOUT.validateLine(_LAYOUT.createLineFromRecord(patient.get(0), null), 1));
 
         // null options, several tumors
         patient = generator.generatePatient(3, null);
@@ -167,6 +166,12 @@ public class NaaccrDataGeneratorTest {
 
         Assert.assertTrue("Diagnosis Date outside options Minimum and Maximum.", dateInRange1 || dateInRange2);
 
+        // another test with an incidence generator
+        generator = new NaaccrDataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_18_INCIDENCE);
+        patient = generator.generatePatient(1);
+        Assert.assertEquals(1, patient.size());
+        Assert.assertNotNull(patient.get(0).get("primarySite"));
+        Assert.assertNull(patient.get(0).get("nameLast"));
     }
 
     @Test
@@ -225,7 +230,6 @@ public class NaaccrDataGeneratorTest {
     }
 
     @Test
-    @SuppressWarnings("ConstantConditions")
     public void testGenerateWithProviders() {
         NaaccrDataGenerator generator = new NaaccrDataGenerator(_LAYOUT.getLayoutId());
         NaaccrDataGeneratorOptions genOptions = new NaaccrDataGeneratorOptions();

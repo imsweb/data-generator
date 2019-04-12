@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.zip.GZIPOutputStream;
 
 import com.imsweb.datagenerator.DataGenerator;
@@ -287,6 +289,10 @@ public class NaaccrDataGenerator implements DataGenerator {
             if (allPropertiesHaveValue(patient, rule.getRequiredProperties()))
                 rule.execute(patient, null, options, context);
 
+        // filter created keys to make sure they are in the layout
+        Set<String> invalidKeys = patient.keySet().stream().filter(s -> _layout.getFieldByName(s) == null).collect(Collectors.toSet());
+        invalidKeys.forEach(patient::remove);
+
         // create each tumor and add it to the return list
         for (int i = 0; i < numTumors; i++) {
             context.put(CONTEXT_FLAG_CURRENT_TUMOR_INDEX, i);
@@ -304,6 +310,10 @@ public class NaaccrDataGenerator implements DataGenerator {
             for (NaaccrDataGeneratorRule rule : _tumorRules)
                 if (allPropertiesHaveValue(tumor, rule.getRequiredProperties()))
                     rule.execute(tumor, tumors, options, context);
+
+            // filter created keys to make sure they are in the layout
+            invalidKeys = tumor.keySet().stream().filter(s -> _layout.getFieldByName(s) == null).collect(Collectors.toSet());
+            invalidKeys.forEach(tumor::remove);
 
             // if there is post-processing constant values, set them
             if (options.getConstantValuesPostProcessing() != null)
