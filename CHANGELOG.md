@@ -1,5 +1,9 @@
 ## Synthetic data generator
 
+**Changes in version 1.12 (not released yet)**
+
+- Removed GUI components (it was already not distributed anymore).
+
 **Changes in version 1.11**
 
 - Updated Layout library from version 1.18 to version 1.19.
