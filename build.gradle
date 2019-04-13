@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-    api 'com.imsweb:layout:1.18'
+    api 'com.imsweb:layout:1.19'
 
     implementation 'com.imsweb:algorithms:1.21'
     implementation 'com.imsweb:staging-client-java:4.1'

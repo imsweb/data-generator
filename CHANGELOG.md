@@ -1,5 +1,9 @@
 ## Synthetic data generator
 
+**Changes in version 1.11**
+
+- Updated Layout library from version 1.18 to version 1.19.
+
 **Changes in version 1.10**
 
 - Now removing invalid fields when creating NAACCR patients.
