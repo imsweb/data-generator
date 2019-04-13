@@ -16,12 +16,10 @@ This library requires Java 8 or a more recent version.
 
 ## Usage
 
-There are two ways to use this library:
+As of version 1.10, the GUI Standalone component of the library has been retired. The free [SEER Data Viewer](https://seer.cancer.gov/tools/dataviewer/) software
+can be used to generate synthetic data using a user-friendly interface.
 
-1. Embed it into your own Java software and call one of the data generators.
-2. Download the executable JAR from the [release page](https://github.com/imsweb/data-generator/releases) and execute it using a local Java Runtime Environment. To start the application open a DOS prompt/terminal and type `java -jar lib\data-generator-x.x-all.jar` where x.x is the current version.
-
-The following generators are provided with the library:
+When embedding the library in your project, the following generators are available:
  - RecordDataGenerator can bu used with generic fixed-columns layouts.
  - NaaccrDataGenerator can be used with NAACCR fixed-columns layouts.
  - NaaccrXmlDataGenerator can be used with NAACCR XML layouts.
