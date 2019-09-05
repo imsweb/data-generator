@@ -1,10 +1,9 @@
 plugins {
     id 'java-library'
     id 'checkstyle'
-    id 'com.github.spotbugs' version '1.6.5'
+    id 'com.github.spotbugs' version '2.0.0'
     id 'com.bmuschko.nexus' version '2.3.1'
     id 'io.codearte.nexus-staging' version '0.8.0'
-    id 'com.github.johnrengelman.shadow' version '2.0.4'
 }
 
 group = 'com.imsweb'
@@ -20,11 +19,11 @@ repositories {
 }
 
 dependencies {
-    api 'com.imsweb:layout:1.19'
+    api 'com.imsweb:layout:1.21'
 
-    implementation 'com.imsweb:algorithms:1.21'
-    implementation 'com.imsweb:staging-client-java:4.1'
-    implementation 'com.imsweb:staging-algorithm-cs:02.05.50.1'
+    implementation 'com.imsweb:algorithms:2.6'
+    implementation 'com.imsweb:staging-client-java:4.7'
+    implementation 'com.imsweb:staging-algorithm-cs:02.05.50.3'
     implementation 'org.apache.commons:commons-lang3:3.7'
     implementation 'commons-io:commons-io:2.6'
 
@@ -46,7 +45,7 @@ tasks.withType(Javadoc) {
 jar {
     manifest {
         attributes('Implementation-Title': project.name,
-                'Implementation-Version': version,
+                'Implementation-Version': project.version,
                 'Implementation-Vendor': 'Information Management Services Inc.',
                 'Created-By': System.properties['java.vm.version'] + ' (' + System.properties['java.vm.vendor'] + ')',
                 'Built-By': System.getProperty('user.name'),
@@ -59,18 +58,6 @@ jar {
         rename 'VERSION', 'DATA-GENERATOR-VERSION'
     }
     from ('LICENSE') {
-        rename 'LICENSE', 'DATA-GENERATOR-LICENSE'
-    }
-}
-
-// we don't want these files in the "all" jar, it's confusing
-shadowJar {
-    exclude('XMLPULL_1_1_3_1_VERSION')
-    exclude('XPP3_1.1.4c_MIN_VERSION')
-    from('VERSION') {
-        rename 'VERSION', 'DATA-GENERATOR-VERSION'
-    }
-    from('LICENSE') {
         rename 'LICENSE', 'DATA-GENERATOR-LICENSE'
     }
 }
@@ -126,7 +113,7 @@ if (version.endsWith('-SNAPSHOT'))
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
-    gradleVersion = '5.3.1'
+    gradleVersion = '5.5.1'
     distributionType = Wrapper.DistributionType.ALL
 }
 

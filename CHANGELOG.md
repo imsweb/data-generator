@@ -2,6 +2,10 @@
 
 **Changes in version 1.12 (not released yet)**
 
+- Updated Algorithms library from version 1.21 to version 2.6.
+- Updated Layout library from version 1.19 to version 1.21.
+- Updated Staging client library from version 4.1 to version 4.7.
+- Updated CS library from version 02.05.50.1 to version 02.05.50.3.
 - Removed GUI components (it was already not distributed anymore).
 
 **Changes in version 1.11**

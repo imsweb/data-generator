@@ -31,7 +31,7 @@ public class NhiaRule extends NaaccrDataGeneratorRule {
         input.setIhs(record.get("ihs"));
         input.setNameLast(record.get("nameLast"));
         input.setNameMaiden(record.get("nameMaiden"));
-        input.setCountyAtDx(record.get("addressAtDxCounty"));
+        input.setCountyAtDxAnalysis(record.get("countyAtDxAnalysis"));
         input.setStateAtDx(record.get("addressAtDxState"));
         // this is using the algorithms library to compute the result...
         NhiaResultsDto results = NhiaUtils.computeNhia(input, NhiaUtils.NHIA_OPTION_ALL_CASES);
