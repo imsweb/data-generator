@@ -1,6 +1,6 @@
 ## Synthetic data generator
 
-**Changes in version 1.12 (not released yet)**
+**Changes in version 1.12**
 
 - Updated Algorithms library from version 1.21 to version 2.6.
 - Updated Layout library from version 1.19 to version 1.21.
