@@ -1,9 +1,9 @@
 plugins {
     id 'java-library'
     id 'checkstyle'
-    id 'com.github.spotbugs' version '2.0.0'
+    id 'com.github.spotbugs' version '3.0.0'
     id 'com.bmuschko.nexus' version '2.3.1'
-    id 'io.codearte.nexus-staging' version '0.8.0'
+    id 'io.codearte.nexus-staging' version '0.21.2'
 }
 
 group = 'com.imsweb'
@@ -19,15 +19,15 @@ repositories {
 }
 
 dependencies {
-    api 'com.imsweb:layout:1.21'
+    api 'com.imsweb:layout:1.24'
 
-    implementation 'com.imsweb:algorithms:2.6'
+    implementation 'com.imsweb:algorithms:2.11'
     implementation 'com.imsweb:staging-client-java:4.7'
     implementation 'com.imsweb:staging-algorithm-cs:02.05.50.3'
-    implementation 'org.apache.commons:commons-lang3:3.7'
+    implementation 'org.apache.commons:commons-lang3:3.9'
     implementation 'commons-io:commons-io:2.6'
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
 }
 
 // enforce UTF-8, display the compilation warnings
@@ -113,7 +113,7 @@ if (version.endsWith('-SNAPSHOT'))
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
-    gradleVersion = '5.5.1'
+    gradleVersion = '6.0.1'
     distributionType = Wrapper.DistributionType.ALL
 }
 
