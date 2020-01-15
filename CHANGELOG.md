@@ -2,8 +2,8 @@
 
 **Changes in version 1.13**
 
-- Updated Algorithms library from version 2.6 to version 2.11.
-- Updated Layout library from version 1.21 to version 1.24.
+- Updated Algorithms library from version 2.6 to version 2.12.
+- Updated Layout library from version 1.21 to version 1.25.
 - Updated Commons Lang library from version 3.7 to version 3.9.
 
 **Changes in version 1.12**

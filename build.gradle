@@ -19,9 +19,9 @@ repositories {
 }
 
 dependencies {
-    api 'com.imsweb:layout:1.24'
+    api 'com.imsweb:layout:1.25'
 
-    implementation 'com.imsweb:algorithms:2.11'
+    implementation 'com.imsweb:algorithms:2.12'
     implementation 'com.imsweb:staging-client-java:4.7'
     implementation 'com.imsweb:staging-algorithm-cs:02.05.50.3'
     implementation 'org.apache.commons:commons-lang3:3.9'
