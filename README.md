@@ -16,7 +16,7 @@ This library requires Java 8 or a more recent version.
 
 ## Usage
 
-As of version 1.10, the GUI Standalone component of the library has been retired. The free [SEER Data Viewer](https://seer.cancer.gov/tools/dataviewer/) software
+As of version 1.10, the GUI Standalone component of the library has been retired. The free [File*Pro](https://seer.cancer.gov/tools/filepro/) software
 can be used to generate synthetic data using a user-friendly interface.
 
 When embedding the library in your project, the following generators are available:
