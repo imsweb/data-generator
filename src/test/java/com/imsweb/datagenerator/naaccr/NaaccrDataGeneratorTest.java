@@ -137,7 +137,7 @@ public class NaaccrDataGeneratorTest {
         // test state option
         options.setState("HI");
         patient = generator.generatePatient(1, options);
-        Assert.assertEquals("HI", patient.get(0).get("addressAtDxState"));
+        Assert.assertEquals("HI", patient.get(0).get("addrAtDxState"));
 
         // test pre-processing constant value (since we are using a field that has a rule, it should be overridden)
         options.setConstantValuesPreProcessing(Collections.singletonMap("nameLast", "TEST"));
@@ -156,10 +156,10 @@ public class NaaccrDataGeneratorTest {
         options.setMaxDxYear(2005);
         patient = generator.generatePatient(numTumors, options);
 
-        LocalDate dateOfDx1 = LocalDate.of(Integer.valueOf(patient.get(0).get("dateOfDiagnosisYear")), Integer.valueOf(patient.get(0).get("dateOfDiagnosisMonth")),
-                Integer.valueOf(patient.get(0).get("dateOfDiagnosisDay")));
-        LocalDate dateOfDx2 = LocalDate.of(Integer.valueOf(patient.get(1).get("dateOfDiagnosisYear")), Integer.valueOf(patient.get(1).get("dateOfDiagnosisMonth")),
-                Integer.valueOf(patient.get(1).get("dateOfDiagnosisDay")));
+        LocalDate dateOfDx1 = LocalDate.of(Integer.parseInt(patient.get(0).get("dateOfDiagnosisYear")), Integer.parseInt(patient.get(0).get("dateOfDiagnosisMonth")),
+                Integer.parseInt(patient.get(0).get("dateOfDiagnosisDay")));
+        LocalDate dateOfDx2 = LocalDate.of(Integer.parseInt(patient.get(1).get("dateOfDiagnosisYear")), Integer.parseInt(patient.get(1).get("dateOfDiagnosisMonth")),
+                Integer.parseInt(patient.get(1).get("dateOfDiagnosisDay")));
 
         boolean dateInRange1 = dateOfDx1.isAfter(options.getMinDxDate().minusDays(1)) && dateOfDx1.isBefore(options.getMaxDxDate().plusDays(1));
         boolean dateInRange2 = dateOfDx2.isAfter(options.getMinDxDate().minusDays(1)) && dateOfDx2.isBefore(options.getMaxDxDate().plusDays(1));
@@ -268,9 +268,9 @@ public class NaaccrDataGeneratorTest {
         Assert.assertEquals(1, patient.size());
         Assert.assertNotNull(patient.get(0).get("primarySite"));
         Assert.assertNotNull(patient.get(0).get("npiReportingFacility"));
-        Assert.assertNotNull(patient.get(0).get("physicianManagingNpi"));
-        Assert.assertNotNull(patient.get(0).get("physicianFollowUpNpi"));
-        Assert.assertNotNull(patient.get(0).get("physicianPrimarySurgNpi"));
+        Assert.assertNotNull(patient.get(0).get("npiPhysicianManaging"));
+        Assert.assertNotNull(patient.get(0).get("npiPhysicianFollowUp"));
+        Assert.assertNotNull(patient.get(0).get("npiPhysicianPrimarySurg"));
         Assert.assertNotNull(patient.get(0).get("physicianManaging"));
         Assert.assertNotNull(patient.get(0).get("physicianFollowUp"));
         Assert.assertNotNull(patient.get(0).get("physicianPrimarySurg"));
@@ -280,7 +280,7 @@ public class NaaccrDataGeneratorTest {
     /**
      * Testing patient rule. only assigns a single value to the nameLast field in the output file.
      */
-    private class TestPatientRule extends NaaccrDataGeneratorRule {
+    private static class TestPatientRule extends NaaccrDataGeneratorRule {
 
         private String _value;
 
@@ -298,7 +298,7 @@ public class NaaccrDataGeneratorTest {
     /**
      * Testing tumor rule. only assigns a single value to the primarySite field in the output file.
      */
-    private class TestTumorRule extends NaaccrDataGeneratorRule {
+    private static class TestTumorRule extends NaaccrDataGeneratorRule {
 
         private String _value;
 

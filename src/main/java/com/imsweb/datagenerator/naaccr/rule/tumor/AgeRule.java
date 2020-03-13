@@ -38,6 +38,6 @@ public class AgeRule extends NaaccrDataGeneratorRule {
         int dxDay = Integer.parseInt(record.get("dateOfDiagnosisDay"));
         LocalDate dxDate = LocalDate.of(dxYear, dxMonth, dxDay);
 
-        record.put("\tageAtDiagnosis", String.format("%03d", ChronoUnit.YEARS.between(dateOfBirth, dxDate)));
+        record.put("ageAtDiagnosis", String.format("%03d", ChronoUnit.YEARS.between(dateOfBirth, dxDate)));
     }
 }

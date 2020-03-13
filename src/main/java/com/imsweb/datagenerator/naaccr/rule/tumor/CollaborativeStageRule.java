@@ -87,7 +87,7 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
 
     @Override
     public List<String> getRequiredProperties() {
-        return Arrays.asList("primarySite", "histologicTypeIcdO3", "behaviorCodeIcdO3", "grade", "dateOfDiagnosisYear", "\tageAtDiagnosis", "vitalStatus", "typeOfReportingSource");
+        return Arrays.asList("primarySite", "histologicTypeIcdO3", "behaviorCodeIcdO3", "grade", "dateOfDiagnosisYear", "ageAtDiagnosis", "vitalStatus", "typeOfReportingSource");
     }
 
     @Override
@@ -151,7 +151,7 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
         data.setInput(CsInput.METS_AT_DX, record.get("csMetsAtDx"));
         data.setInput(CsInput.METS_EVAL, record.get("csMetsEval"));
         data.setInput(CsInput.LVI, record.get("lymphVascularInvasion"));
-        data.setInput(CsInput.AGE_AT_DX, record.get("\tageAtDiagnosis"));
+        data.setInput(CsInput.AGE_AT_DX, record.get("ageAtDiagnosis"));
 
         data.setSsf(1, record.get("csSiteSpecificFactor1"));
         data.setSsf(2, record.get("csSiteSpecificFactor2"));
