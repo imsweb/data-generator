@@ -27,8 +27,8 @@ public class DateOfInitialRxRule extends NaaccrDataGeneratorRule {
     @Override
     public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         // for now this is set to the DX date...
-        record.put("dateOfInitialRxYear", record.get("dateOfDiagnosisYear"));
-        record.put("dateOfInitialRxMonth", record.get("dateOfDiagnosisMonth"));
-        record.put("dateOfInitialRxDay", record.get("dateOfDiagnosisDay"));
+        record.put("dateInitialRxSeerYear", record.get("dateOfDiagnosisYear"));
+        record.put("dateInitialRxSeerMonth", record.get("dateOfDiagnosisMonth"));
+        record.put("dateInitialRxSeerDay", record.get("dateOfDiagnosisDay"));
     }
 }

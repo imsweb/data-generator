@@ -24,10 +24,10 @@ public class CensusRule extends NaaccrDataGeneratorRule {
         record.put("censusTract2000", "999999");
         record.put("censusTract2010", "999999");
 
-        record.put("censusCertainty708090", "");
-        record.put("censusCertainty2000", "9");
-        record.put("censusCertainty2010", "9");
+        record.put("censusTrCert19708090", "");
+        record.put("censusTrCertainty2000", "9");
+        record.put("censusTrCertainty2010", "9");
 
-        record.put("censusPovertyIndictr", "9");
+        record.put("censusTrPovertyIndictr", "9");
     }
 }

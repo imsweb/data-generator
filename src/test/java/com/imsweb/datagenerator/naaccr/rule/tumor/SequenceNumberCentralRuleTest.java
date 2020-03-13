@@ -21,7 +21,7 @@ public class SequenceNumberCentralRuleTest {
         // create a single tumor for the patient and verify sequence number is 00
         Map<String, String> rec = new HashMap<>();
         _rule.execute(rec, otherRecords, null, context);
-        Assert.assertTrue(rec.get("sequenceNumberCentral").equals("00"));
+        Assert.assertEquals("00", rec.get("sequenceNumberCentral"));
         otherRecords.add(rec);
 
         // add a second tumor to the same patient
@@ -29,18 +29,18 @@ public class SequenceNumberCentralRuleTest {
         _rule.execute(rec, otherRecords, null, context);
         otherRecords.add(rec);
         // verify the previous tumor seq. no. changed from 00 to 01
-        Assert.assertTrue(otherRecords.get(0).get("sequenceNumberCentral").equals("01"));
+        Assert.assertEquals("01", otherRecords.get(0).get("sequenceNumberCentral"));
         // verify this new tumor's seq. no. is 02
-        Assert.assertTrue(rec.get("sequenceNumberCentral").equals("02"));
+        Assert.assertEquals("02", rec.get("sequenceNumberCentral"));
 
         // add a third tumor to the same patient
         rec = new HashMap<>();
         _rule.execute(rec, otherRecords, null, context);
         otherRecords.add(rec);
         // verify sequence numbers of previous two tumors
-        Assert.assertTrue(otherRecords.get(0).get("sequenceNumberCentral").equals("01"));
-        Assert.assertTrue(otherRecords.get(1).get("sequenceNumberCentral").equals("02"));
+        Assert.assertEquals("01", otherRecords.get(0).get("sequenceNumberCentral"));
+        Assert.assertEquals("02", otherRecords.get(1).get("sequenceNumberCentral"));
         // verify this new tumor's seq. no. is 03
-        Assert.assertTrue(rec.get("sequenceNumberCentral").equals("03"));
+        Assert.assertEquals("03", rec.get("sequenceNumberCentral"));
     }
 }

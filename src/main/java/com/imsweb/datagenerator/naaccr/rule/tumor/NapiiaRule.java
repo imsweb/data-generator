@@ -43,6 +43,6 @@ public class NapiiaRule extends NaaccrDataGeneratorRule {
         input.setNameFirst(record.get("nameFirst"));
         // this is using the algorithms library to compute the value...
         NapiiaResultsDto results = NapiiaUtils.computeNapiia(input);
-        record.put("napiia", results.getNapiiaValue());
+        record.put("raceNapiia", results.getNapiiaValue());
     }
 }

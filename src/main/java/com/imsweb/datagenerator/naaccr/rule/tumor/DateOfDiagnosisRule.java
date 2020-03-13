@@ -37,8 +37,8 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
         // never go before min date defined in options, or current date minus ten years if options not defined
         minDxDates.add(options == null ? LocalDate.now().minusYears(10) : options.getMinDxDate());
         // never go before the year of birth
-        if (propertyHasValue(record, "birthDateYear"))
-            minDxDates.add(LocalDate.of(Integer.parseInt(record.get("birthDateYear")) + 1, 1, 1));
+        if (propertyHasValue(record, "dateOfBirthYear"))
+            minDxDates.add(LocalDate.of(Integer.parseInt(record.get("dateOfBirthYear")) + 1, 1, 1));
         // never go before dx date of patient's most recent tumor (if this isn't the first one)
         if (otherRecords != null && !otherRecords.isEmpty()) {
             Map<String, String> lastTumor = otherRecords.get(otherRecords.size() - 1);
@@ -47,10 +47,10 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
         }
 
         if (context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX) != null) {
-            Integer birthYear = Integer.parseInt(record.get("birthDateYear"));
-            Integer birthMonth = Integer.parseInt(record.get("birthDateMonth"));
-            Integer birthDay = Integer.parseInt(record.get("birthDateDay"));
-            LocalDate birthDate = LocalDate.of(birthYear, birthMonth, birthDay);
+            int birthYear = Integer.parseInt(record.get("dateOfBirthYear"));
+            int birthMonth = Integer.parseInt(record.get("dateOfBirthMonth"));
+            int birthDay = Integer.parseInt(record.get("dateOfBirthDay"));
+            LocalDate dateOfBirth = LocalDate.of(birthYear, birthMonth, birthDay);
 
             // PROBLEM: This brakes 3 previous rules:
             // 1. Minimum date must be within 10 years of today.
@@ -63,7 +63,7 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
             int currentTumorIndex = (int)context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX);
             @SuppressWarnings("unchecked")
             Map<Integer, Integer> ageGroupMap = (Map<Integer, Integer>)context.get(CONTEXT_FLAG_AGE_GROUP_MAP);
-            minDxDates.add(birthDate.plusYears((ageGroupMap.get(currentTumorIndex) * 10)));
+            minDxDates.add(dateOfBirth.plusYears((ageGroupMap.get(currentTumorIndex) * 10)));
             maxDxDates.add(maxDate);
         }
 

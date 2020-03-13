@@ -1,11 +1,10 @@
 package com.imsweb.datagenerator.naaccr.rule.tumor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import java.time.LocalDate;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -82,9 +81,9 @@ public class DateOfDiagnosisRuleTest {
 
 
         Map<String, String> rec = new HashMap<>();
-        rec.put("birthDateYear", "1940");
-        rec.put("birthDateMonth", "7");
-        rec.put("birthDateDay", "1");
+        rec.put("dateOfBirthYear", "1940");
+        rec.put("dateOfBirthMonth", "7");
+        rec.put("dateOfBirthDay", "1");
 
         NaaccrDataGeneratorOptions options = new NaaccrDataGeneratorOptions();
         options.setMaxDxYear(2005);
@@ -92,9 +91,9 @@ public class DateOfDiagnosisRuleTest {
         _rule.execute(rec, null, options, context);
 
         LocalDate dateOfDx = LocalDate.of(Integer.valueOf(rec.get("dateOfDiagnosisYear")), Integer.valueOf(rec.get("dateOfDiagnosisMonth")), Integer.valueOf(rec.get("dateOfDiagnosisDay")));
-        LocalDate birthDate = LocalDate.of(1940, 7, 1);
+        LocalDate dateOfBirth = LocalDate.of(1940, 7, 1);
 
-        LocalDate startDate = birthDate.plusYears(5 * 10);
+        LocalDate startDate = dateOfBirth.plusYears(5 * 10);
         LocalDate endDate = options.getMaxDxDate();
         Assert.assertTrue(dateOfDx.toString(), dateOfDx.isAfter(startDate) && dateOfDx.isBefore(endDate));
 

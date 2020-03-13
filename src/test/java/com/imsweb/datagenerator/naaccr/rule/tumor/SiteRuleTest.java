@@ -30,8 +30,8 @@ public class SiteRuleTest {
                 _rule.execute(rec, null, null, context);
                 // primary site must be 'C' followed by three digits; histology must be four digits, and behavior one digit
                 Assert.assertTrue("Primary site value pattern match", rec.get("primarySite").matches("C\\d{3}"));
-                Assert.assertTrue("Histology value pattern match", rec.get("histologyIcdO3").matches("\\d{4}"));
-                Assert.assertTrue("Behavior value pattern match", rec.get("behaviorIcdO3").matches("\\d"));
+                Assert.assertTrue("Histology value pattern match", rec.get("histologicTypeIcdO3").matches("\\d{4}"));
+                Assert.assertTrue("Behavior value pattern match", rec.get("behaviorCodeIcdO3").matches("\\d"));
             }
         }
 
@@ -57,11 +57,11 @@ public class SiteRuleTest {
         rec.put("sex", "1");
         _rule.execute(rec, null, null, context);
 
-        Assert.assertTrue(rec.get("primarySite").equals("C000"));
-        Assert.assertTrue(rec.get("histologyIcdO3").equals("8070"));
-        Assert.assertTrue(rec.get("behaviorIcdO3").equals("3"));
-        Assert.assertTrue(rec.get("grade").equals("9"));
-        Assert.assertTrue(rec.get("laterality").equals("9"));
+        Assert.assertEquals("C000", rec.get("primarySite"));
+        Assert.assertEquals("8070", rec.get("histologicTypeIcdO3"));
+        Assert.assertEquals("3", rec.get("behaviorCodeIcdO3"));
+        Assert.assertEquals("9", rec.get("grade"));
+        Assert.assertEquals("9", rec.get("laterality"));
 
         context = new HashMap<>();
         context.put(CONTEXT_FLAG_SEX, "1");
@@ -85,10 +85,10 @@ public class SiteRuleTest {
         rec.put("sex", "1");
         _rule.execute(rec, null, null, context);
 
-        Assert.assertTrue(rec.get("primarySite").equals("C809"));
-        Assert.assertTrue(rec.get("histologyIcdO3").equals("8111"));
-        Assert.assertTrue(rec.get("behaviorIcdO3").equals("9"));
-        Assert.assertTrue(rec.get("grade").equals("9"));
-        Assert.assertTrue(rec.get("laterality").equals("0"));
+        Assert.assertEquals("C809", rec.get("primarySite"));
+        Assert.assertEquals("8111", rec.get("histologicTypeIcdO3"));
+        Assert.assertEquals("9", rec.get("behaviorCodeIcdO3"));
+        Assert.assertEquals("9", rec.get("grade"));
+        Assert.assertEquals("0", rec.get("laterality"));
     }
 }

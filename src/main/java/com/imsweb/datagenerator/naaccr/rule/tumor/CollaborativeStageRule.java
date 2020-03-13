@@ -87,7 +87,7 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
 
     @Override
     public List<String> getRequiredProperties() {
-        return Arrays.asList("primarySite", "histologyIcdO3", "behaviorIcdO3", "grade", "dateOfDiagnosisYear", "ageAtDx", "vitalStatus", "typeOfReportingSource");
+        return Arrays.asList("primarySite", "histologicTypeIcdO3", "behaviorCodeIcdO3", "grade", "dateOfDiagnosisYear", "\tageAtDiagnosis", "vitalStatus", "typeOfReportingSource");
     }
 
     @Override
@@ -97,7 +97,7 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
         if (!inDxYearRange(record, 2004, 2015))
             return;
 
-        List<StagingSchema> lookup = _staging.lookupSchema(new CsSchemaLookup(record.get("primarySite"), record.get("histologyIcdO3")));
+        List<StagingSchema> lookup = _staging.lookupSchema(new CsSchemaLookup(record.get("primarySite"), record.get("histologicTypeIcdO3")));
 
         // get first schema - if multiple schemas returned, this will only be used to get a discriminator, and lookup will be repeated
         StagingSchema schema = _staging.getSchema(lookup.get(0).getId());
@@ -112,7 +112,7 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
 
         // if multiple schemas were returned, use discriminator to make another lookup
         if (lookup.size() > 1) {
-            lookup = _staging.lookupSchema(new CsSchemaLookup(record.get("primarySite"), record.get("histologyIcdO3"), record.get("csSiteSpecificFactor25")));
+            lookup = _staging.lookupSchema(new CsSchemaLookup(record.get("primarySite"), record.get("histologicTypeIcdO3"), record.get("csSiteSpecificFactor25")));
             if (lookup.size() == 0)
                 return;
             schema = _staging.getSchema(lookup.get(0).getId());
@@ -136,8 +136,8 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
 
         CsStagingData data = new CsStagingData();
         data.setInput(CsInput.PRIMARY_SITE, record.get("primarySite"));
-        data.setInput(CsInput.HISTOLOGY, record.get("histologyIcdO3"));
-        data.setInput(CsInput.BEHAVIOR, record.get("behaviorIcdO3"));
+        data.setInput(CsInput.HISTOLOGY, record.get("histologicTypeIcdO3"));
+        data.setInput(CsInput.BEHAVIOR, record.get("behaviorCodeIcdO3"));
         data.setInput(CsInput.GRADE, record.get("grade"));
         data.setInput(CsInput.DX_YEAR, record.get("dateOfDiagnosisYear"));
         data.setInput(CsInput.CS_VERSION_ORIGINAL, record.get("csVersionOriginal"));
@@ -151,7 +151,7 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
         data.setInput(CsInput.METS_AT_DX, record.get("csMetsAtDx"));
         data.setInput(CsInput.METS_EVAL, record.get("csMetsEval"));
         data.setInput(CsInput.LVI, record.get("lymphVascularInvasion"));
-        data.setInput(CsInput.AGE_AT_DX, record.get("ageAtDx"));
+        data.setInput(CsInput.AGE_AT_DX, record.get("\tageAtDiagnosis"));
 
         data.setSsf(1, record.get("csSiteSpecificFactor1"));
         data.setSsf(2, record.get("csSiteSpecificFactor2"));

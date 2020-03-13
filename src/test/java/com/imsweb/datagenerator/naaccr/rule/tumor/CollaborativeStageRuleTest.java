@@ -27,11 +27,11 @@ public class CollaborativeStageRuleTest {
 
         Map<String, String> rec = new HashMap<>();
         rec.put("primarySite", "C680");
-        rec.put("histologyIcdO3", "8000");
-        rec.put("behaviorIcdO3", "3");
+        rec.put("histologicTypeIcdO3", "8000");
+        rec.put("behaviorCodeIcdO3", "3");
         rec.put("grade", "9");
         rec.put("dateOfDiagnosisYear", "2013");
-        rec.put("ageAtDx", "060");
+        rec.put("ageAtDiagnosis", "060");
         rec.put("vitalStatus", "1");
         rec.put("typeOfReportingSource", "1");
         _rule.execute(rec, null, null, context);

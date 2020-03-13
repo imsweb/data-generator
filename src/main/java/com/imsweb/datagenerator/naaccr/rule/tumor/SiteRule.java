@@ -32,15 +32,15 @@ public class SiteRule extends NaaccrDataGeneratorRule {
         Map<Integer, SiteFrequencyDto> siteFreqMap = (Map<Integer, SiteFrequencyDto>)context.get(CONTEXT_FLAG_SITE_FREQ_MAP);
         if (currentTumorIndex != null && siteFreqMap != null) {
             tumor.put("primarySite", siteFreqMap.get(currentTumorIndex).getSite());
-            tumor.put("histologyIcdO3", siteFreqMap.get(currentTumorIndex).getHistology());
-            tumor.put("behaviorIcdO3", siteFreqMap.get(currentTumorIndex).getBehavior());
+            tumor.put("histologicTypeIcdO3", siteFreqMap.get(currentTumorIndex).getHistology());
+            tumor.put("behaviorCodeIcdO3", siteFreqMap.get(currentTumorIndex).getBehavior());
         }
 
         if (!propertyHasValue(tumor, "primarySite")) {
             SiteFrequencyDto dto = DistributionUtils.getSite(tumor.get("sex"));
             tumor.put("primarySite", dto.getSite());
-            tumor.put("histologyIcdO3", dto.getHistology());
-            tumor.put("behaviorIcdO3", dto.getBehavior());
+            tumor.put("histologicTypeIcdO3", dto.getHistology());
+            tumor.put("behaviorCodeIcdO3", dto.getBehavior());
         }
 
         // set grade and laterality to 9, unknown

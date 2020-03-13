@@ -54,7 +54,7 @@ public class RxSummaryRule extends NaaccrDataGeneratorRule {
 
         // If year of DX < 2006, RX Summ--Systemic Sur Seq must be blank
         if (inDxYearRange(record, 2006, null))
-            record.put("rxSummSystemicSurgSeq", "9");
+            record.put("rxSummSystemicSurSeq", "9");
 
         // If Year of DX < 1998 or > 2002, RX summ--surg site 98-02, RX summ--scope reg 98-02, and RX summ--surg oth 98-02 must be blank.
         if (inDxYearRange(record, 1998, 2002)) {

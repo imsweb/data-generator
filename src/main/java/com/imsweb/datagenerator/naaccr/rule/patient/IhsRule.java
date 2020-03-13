@@ -20,6 +20,6 @@ public class IhsRule extends NaaccrDataGeneratorRule {
 
     @Override
     public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
-        record.put("ihs", "");
+        record.put("ihsLink", "");
     }
 }

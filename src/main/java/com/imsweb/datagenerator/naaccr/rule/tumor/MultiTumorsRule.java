@@ -32,9 +32,9 @@ public class MultiTumorsRule extends NaaccrDataGeneratorRule {
             return;
 
         // for now this is set to the DX date...
-        record.put("dateOfMultipleTumorsYear", record.get("dateOfDiagnosisYear"));
-        record.put("dateOfMultipleTumorsMonth", record.get("dateOfDiagnosisMonth"));
-        record.put("dateOfMultipleTumorsDay", record.get("dateOfDiagnosisDay"));
+        record.put("dateOfMultTumorsYear", record.get("dateOfDiagnosisYear"));
+        record.put("dateOfMultTumorsMonth", record.get("dateOfDiagnosisMonth"));
+        record.put("dateOfMultTumorsDay", record.get("dateOfDiagnosisDay"));
 
         record.put("multiTumorRptAsOnePrim", "99");
         record.put("multiplicityCounter", "99");

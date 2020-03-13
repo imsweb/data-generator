@@ -28,13 +28,13 @@ public class NhiaRule extends NaaccrDataGeneratorRule {
         input.setBirthplaceCountry(record.get("birthplaceCountry"));
         input.setSex(record.get("sex"));
         input.setRace1(record.get("race1"));
-        input.setIhs(record.get("ihs"));
+        input.setIhs(record.get("ihsLink"));
         input.setNameLast(record.get("nameLast"));
         input.setNameMaiden(record.get("nameMaiden"));
         input.setCountyAtDxAnalysis(record.get("countyAtDxAnalysis"));
-        input.setStateAtDx(record.get("addressAtDxState"));
+        input.setStateAtDx(record.get("addrAtDxState"));
         // this is using the algorithms library to compute the result...
         NhiaResultsDto results = NhiaUtils.computeNhia(input, NhiaUtils.NHIA_OPTION_ALL_CASES);
-        record.put("nhia", results.getNhia());
+        record.put("nhiaDerivedHispOrigin", results.getNhia());
     }
 }

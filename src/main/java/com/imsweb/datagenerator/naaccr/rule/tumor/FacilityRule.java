@@ -28,7 +28,7 @@ public class FacilityRule extends NaaccrDataGeneratorRule {
         if (options != null && options.getFacilities() != null && !options.getFacilities().isEmpty()) {
             // Pick a random facility and add it to the record.
             FacilityDto facility = options.getFacilities().get(RandomUtils.nextInt(options.getFacilities().size()));
-            record.put("reportingFacilityNpi", facility.getNpi());
+            record.put("npiReportingFacility", facility.getNpi());
         }
     }
 }

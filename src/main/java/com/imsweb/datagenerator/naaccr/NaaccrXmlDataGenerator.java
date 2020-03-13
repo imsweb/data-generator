@@ -24,7 +24,6 @@ import com.imsweb.datagenerator.utils.Distribution;
 import com.imsweb.layout.Layout;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.naaccrxml.NaaccrXmlLayout;
-import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 import com.imsweb.naaccrxml.NaaccrXmlUtils;
 import com.imsweb.naaccrxml.PatientXmlWriter;
@@ -204,7 +203,7 @@ public class NaaccrXmlDataGenerator implements DataGenerator {
 
         // populate patient items from the first record (shouldn't matter which one)
         for (Entry<String, String> entry : records.get(0).entrySet()) {
-            String naaccrId = NaaccrLayout.getXmlIdFromLayoutName(entry.getKey());
+            String naaccrId = entry.getKey();
             if (NaaccrXmlUtils.NAACCR_XML_TAG_PATIENT.equals(_xmlLayout.getBaseDictionary().getItemByNaaccrId(naaccrId).getParentXmlElement()))
                 patient.addItem(new Item(naaccrId, entry.getValue()));
         }
@@ -213,9 +212,9 @@ public class NaaccrXmlDataGenerator implements DataGenerator {
         for (Map<String, String> record : records) {
             Tumor tumor = new Tumor();
             for (Entry<String, String> entry : record.entrySet()) {
-                String naaccrId = NaaccrLayout.getXmlIdFromLayoutName(entry.getKey());
+                String naaccrId = entry.getKey();
                 if (NaaccrXmlUtils.NAACCR_XML_TAG_TUMOR.equals(_xmlLayout.getBaseDictionary().getItemByNaaccrId(naaccrId).getParentXmlElement()))
-                    tumor.addItem(new Item(NaaccrLayout.getXmlIdFromLayoutName(entry.getKey()), entry.getValue()));
+                    tumor.addItem(new Item(naaccrId, entry.getValue()));
             }
             patient.addTumor(tumor);
         }

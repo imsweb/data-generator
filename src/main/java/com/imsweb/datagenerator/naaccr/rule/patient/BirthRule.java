@@ -53,9 +53,9 @@ public class BirthRule extends NaaccrDataGeneratorRule {
 
         LocalDate randomDate = RandomUtils.getRandomDateBetween(minBirthDate, maxBirthDate);
 
-        record.put("birthDateYear", Integer.toString(randomDate.getYear()));
-        record.put("birthDateMonth", Integer.toString(randomDate.getMonthValue()));
-        record.put("birthDateDay", Integer.toString(randomDate.getDayOfMonth()));
+        record.put("dateOfBirthYear", Integer.toString(randomDate.getYear()));
+        record.put("dateOfBirthMonth", Integer.toString(randomDate.getMonthValue()));
+        record.put("dateOfBirthDay", Integer.toString(randomDate.getDayOfMonth()));
         record.put("birthplaceState", DistributionUtils.getState());
         record.put("birthplaceCountry", "USA");
     }

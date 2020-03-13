@@ -19,11 +19,11 @@ public class AddressCurrentRuleTest {
         Map<String, String> rec = new HashMap<>();
         Map<String, Object> context = new HashMap<>();
         _rule.execute(rec, null, null, context);
-        Assert.assertNull(rec.get("addressCurrentCity"));
-        Assert.assertNull(rec.get("addressCurrentState"));
-        Assert.assertNull(rec.get("addressCurrentPostalCode"));
-        Assert.assertNull(rec.get("addressCurrentStreetName"));
-        Assert.assertNull(rec.get("addressCurrentCounty"));
+        Assert.assertNull(rec.get("addrCurrentCity"));
+        Assert.assertNull(rec.get("addrCurrentState"));
+        Assert.assertNull(rec.get("addrCurrentPostalCode"));
+        Assert.assertNull(rec.get("addrCurrentNoStreet"));
+        Assert.assertNull(rec.get("countyCurrent"));
 
         // generate 10 random addresses and verify pattern for each
         NaaccrDataGeneratorOptions options = new NaaccrDataGeneratorOptions();
@@ -33,16 +33,16 @@ public class AddressCurrentRuleTest {
             _rule.execute(rec, null, options, context);
 
             // verify city name pattern
-            Assert.assertTrue(rec.get("addressCurrentCity").matches("^[\\w \\.]+$"));
+            Assert.assertTrue(rec.get("addrCurrentCity").matches("^[\\w .]+$"));
             // verify 2 letter state
-            Assert.assertTrue(rec.get("addressCurrentState").matches("^[A-Z]{2}$"));
+            Assert.assertTrue(rec.get("addrCurrentState").matches("^[A-Z]{2}$"));
             // verify 5 or 9 digit zip code
-            Assert.assertTrue(rec.get("addressCurrentPostalCode").matches("^\\d{5}$") || rec.get("addressCurrentPostalCode").matches("^\\d{9}$"));
+            Assert.assertTrue(rec.get("addrCurrentPostalCode").matches("^\\d{5}$") || rec.get("addressCurrentPostalCode").matches("^\\d{9}$"));
             // verify length and pattern of street name
-            Assert.assertTrue(rec.get("addressCurrentStreetName").length() <= 60);
-            Assert.assertTrue(rec.get("addressCurrentStreetName").matches("^\\d+ [\\w \\.]+ \\w+\\.?$"));
+            Assert.assertTrue(rec.get("addrCurrentNoStreet").length() <= 60);
+            Assert.assertTrue(rec.get("addrCurrentNoStreet").matches("^\\d+ [\\w .]+ \\w+\\.?$"));
             // verify 3 digit county code
-            Assert.assertTrue(rec.get("addressCurrentCounty").matches("^\\d{3}$"));
+            Assert.assertTrue(rec.get("countyCurrent").matches("^\\d{3}$"));
         }
     }
 }

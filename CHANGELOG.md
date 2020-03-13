@@ -1,5 +1,11 @@
 ## Synthetic data generator
 
+**Changes in version 1.14**
+
+- Aligned NAACCR fixed-column layout field names on NAACCR XML IDs.
+- Updated Algorithms library from version 2.12 to version 2.13.
+- Updated Layout library from version 1.25 to version 2.0.
+
 **Changes in version 1.13**
 
 - Updated Algorithms library from version 2.6 to version 2.12.

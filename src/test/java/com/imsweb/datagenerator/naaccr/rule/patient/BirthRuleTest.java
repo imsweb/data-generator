@@ -1,9 +1,8 @@
 package com.imsweb.datagenerator.naaccr.rule.patient;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-
-import java.time.LocalDate;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,12 +28,12 @@ public class BirthRuleTest {
         _rule.execute(rec, null, options, context);
 
         // the birth date should have been assigned
-        Assert.assertTrue(rec.get("birthDateYear").matches("\\d{4}"));
-        Assert.assertTrue(rec.get("birthDateMonth").matches("\\d{1,2}"));
-        Assert.assertTrue(rec.get("birthDateDay").matches("\\d{1,2}"));
+        Assert.assertTrue(rec.get("dateOfBirthYear").matches("\\d{4}"));
+        Assert.assertTrue(rec.get("dateOfBirthMonth").matches("\\d{1,2}"));
+        Assert.assertTrue(rec.get("dateOfBirthDay").matches("\\d{1,2}"));
 
         // it should be in a specific range
-        LocalDate assignedDate = LocalDate.of(Integer.parseInt(rec.get("birthDateYear")), Integer.parseInt(rec.get("birthDateMonth")), Integer.parseInt(rec.get("birthDateDay")));
+        LocalDate assignedDate = LocalDate.of(Integer.parseInt(rec.get("dateOfBirthYear")), Integer.parseInt(rec.get("dateOfBirthMonth")), Integer.parseInt(rec.get("dateOfBirthDay")));
         Assert.assertTrue(assignedDate.toString(), assignedDate.isBefore(options.getMinDxDate().minusYears(5).plusDays(1)) &&
                 assignedDate.isAfter(options.getMinDxDate().minusYears(105).minusDays(1)));
 
@@ -78,7 +77,7 @@ public class BirthRuleTest {
 
         _rule.execute(rec, null, options, context);
 
-        assignedDate = LocalDate.of(Integer.parseInt(rec.get("birthDateYear")), Integer.parseInt(rec.get("birthDateMonth")), Integer.parseInt(rec.get("birthDateDay")));
+        assignedDate = LocalDate.of(Integer.parseInt(rec.get("dateOfBirthYear")), Integer.parseInt(rec.get("dateOfBirthMonth")), Integer.parseInt(rec.get("dateOfBirthDay")));
         LocalDate startDate = options.getMinDxDate().minusYears(80).minusDays(1);
         LocalDate endDate = options.getMaxDxDate().minusYears(80).plusDays(1);
         String assertMsg = assignedDate.toString() + ": Not between " + startDate.toString() + " and " + endDate.toString();
@@ -90,7 +89,7 @@ public class BirthRuleTest {
 
         _rule.execute(rec, null, options, context);
 
-        assignedDate = LocalDate.of(Integer.parseInt(rec.get("birthDateYear")), Integer.parseInt(rec.get("birthDateMonth")), Integer.parseInt(rec.get("birthDateDay")));
+        assignedDate = LocalDate.of(Integer.parseInt(rec.get("dateOfBirthYear")), Integer.parseInt(rec.get("dateOfBirthMonth")), Integer.parseInt(rec.get("dateOfBirthDay")));
         startDate = options.getMinDxDate().minusYears(80).minusDays(1);
         endDate = options.getMaxDxDate().minusYears(80).plusDays(1);
         assertMsg = assignedDate.toString() + ": Not between " + startDate.toString() + " and " + endDate.toString();

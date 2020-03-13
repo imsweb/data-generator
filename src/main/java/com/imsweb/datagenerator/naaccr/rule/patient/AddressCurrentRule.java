@@ -13,12 +13,12 @@ public class AddressCurrentRule extends AddressRule {
     public AddressCurrentRule() {
         super(ID,
                 "Current address",
-                "addressCurrentState",
-                "addressCurrentCity",
-                "addressCurrentPostalCode",
-                "addressCurrentCountry",
-                "addressCurrentStreetName",
-                "addressCurrentSupplementl",
-                "addressCurrentCounty");
+                "addrCurrentState",
+                "addrCurrentCity",
+                "addrCurrentPostalCode",
+                "addrCurrentCountry",
+                "addrCurrentNoStreet",
+                "addrCurrentSupplementl",
+                "countyCurrent");
     }
 }

@@ -18,29 +18,29 @@ public class AgeRuleTest {
 
         // set birthday to 7/5/1980 and DX date to 11/5/2015 (when patient is 35 years old)
         Map<String, String> rec = new HashMap<>();
-        rec.put("birthDateYear", "1980");
-        rec.put("birthDateMonth", "07");
-        rec.put("birthDateDay", "05");
-        rec.put("birthDateFlag", "");
+        rec.put("dateOfBirthYear", "1980");
+        rec.put("dateOfBirthMonth", "07");
+        rec.put("dateOfBirthDay", "05");
+        rec.put("dateOfBirthFlag", "");
         rec.put("dateOfDiagnosisYear", "2015");
         rec.put("dateOfDiagnosisMonth", "11");
         rec.put("dateOfDiagnosisDay", "05");
         rec.put("dateOfDiagnosisFlag", "");
         Map<String, Object> context = new HashMap<>();
         _rule.execute(rec, otherRecords, null, context);
-        Assert.assertEquals("035", rec.get("ageAtDx"));
+        Assert.assertEquals("035", rec.get("ageAtDiagnosis"));
 
         // set DX day/month to birthday in 2015 and verify still 35
-        rec.remove("ageAtDx");
+        rec.remove("ageAtDiagnosis");
         rec.put("dateOfDiagnosisMonth", "07");
         rec.put("dateOfDiagnosisDay", "05");
         _rule.execute(rec, otherRecords, null, context);
-        Assert.assertEquals("035", rec.get("ageAtDx"));
+        Assert.assertEquals("035", rec.get("ageAtDiagnosis"));
 
         // set DX day/month to day before birthday in 2015 and verify age is now 34
-        rec.remove("ageAtDx");
+        rec.remove("ageAtDiagnosis");
         rec.put("dateOfDiagnosisDay", "04");
         _rule.execute(rec, otherRecords, null, context);
-        Assert.assertEquals("034", rec.get("ageAtDx"));
+        Assert.assertEquals("034", rec.get("ageAtDiagnosis"));
     }
 }

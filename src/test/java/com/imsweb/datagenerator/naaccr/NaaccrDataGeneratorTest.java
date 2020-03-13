@@ -240,10 +240,10 @@ public class NaaccrDataGeneratorTest {
 
         Assert.assertEquals(1, patient.size());
         Assert.assertNotNull(patient.get(0).get("primarySite"));
-        Assert.assertNull(patient.get(0).get("reportingFacilityNpi"));
-        Assert.assertNull(patient.get(0).get("physicianManagingNpi"));
-        Assert.assertNull(patient.get(0).get("physicianFollowUpNpi"));
-        Assert.assertNull(patient.get(0).get("physicianPrimarySurgNpi"));
+        Assert.assertNull(patient.get(0).get("npiReportingFacility"));
+        Assert.assertNull(patient.get(0).get("npiPhysicianManaging"));
+        Assert.assertNull(patient.get(0).get("npiPhysicianFollowUp"));
+        Assert.assertNull(patient.get(0).get("npiPhysicianPrimarySurg"));
         Assert.assertNull(patient.get(0).get("physicianManaging"));
         Assert.assertNull(patient.get(0).get("physicianFollowUp"));
         Assert.assertNull(patient.get(0).get("physicianPrimarySurg"));
@@ -267,7 +267,7 @@ public class NaaccrDataGeneratorTest {
         patient = generator.generatePatient(1, genOptions);
         Assert.assertEquals(1, patient.size());
         Assert.assertNotNull(patient.get(0).get("primarySite"));
-        Assert.assertNotNull(patient.get(0).get("reportingFacilityNpi"));
+        Assert.assertNotNull(patient.get(0).get("npiReportingFacility"));
         Assert.assertNotNull(patient.get(0).get("physicianManagingNpi"));
         Assert.assertNotNull(patient.get(0).get("physicianFollowUpNpi"));
         Assert.assertNotNull(patient.get(0).get("physicianPrimarySurgNpi"));
@@ -329,8 +329,8 @@ public class NaaccrDataGeneratorTest {
 
         final int NUM_PATIENTS = 1000;
 
-        String header = "Patient Num \tpatientIdNumber \tnameFirst \tnameLast \tsex \tbirthDateYear \tbirthDateMonth \tbirthDateDay \t";
-        header += "Tumor Num \tseerRecordNumber \ttumorRecordNumber \tprimarySite \thistologyIcdO3 \tbehaviorIcdO3 \tageAtDx \tdateOfDiagnosisYear \tdateOfDiagnosisMonth \tdateOfDiagnosisDay";
+        String header = "Patient Num \tpatientIdNumber \tnameFirst \tnameLast \tsex \tdateOfBirthYear \tdateOfBirthMonth \tdateOfBirthDay \t";
+        header += "Tumor Num \tseerRecordNumber \ttumorRecordNumber \tprimarySite \thistologicTypeIcdO3 \tbehaviorCodeIcdO3 \tageAtDiagnosis \tdateOfDiagnosisYear \tdateOfDiagnosisMonth \tdateOfDiagnosisDay";
 
         System.out.println(header);
         String line;
@@ -349,17 +349,17 @@ public class NaaccrDataGeneratorTest {
                 line += m.get("nameFirst") + "\t";
                 line += m.get("nameLast") + "\t";
                 line += m.get("sex") + "\t";
-                line += m.get("birthDateYear") + "\t";
-                line += m.get("birthDateMonth") + "\t";
-                line += m.get("birthDateDay") + "\t";
+                line += m.get("dateOfBirthYear") + "\t";
+                line += m.get("dateOfBirthMonth") + "\t";
+                line += m.get("dateOfBirthDay") + "\t";
 
                 line += tumorCount + "\t";
                 line += m.get("seerRecordNumber") + "\t";
                 line += m.get("tumorRecordNumber") + "\t";
                 line += m.get("primarySite") + "\t";
-                line += m.get("histologyIcdO3") + "\t";
-                line += m.get("behaviorIcdO3") + "\t";
-                line += m.get("ageAtDx") + "\t";
+                line += m.get("histologicTypeIcdO3") + "\t";
+                line += m.get("behaviorCodeIcdO3") + "\t";
+                line += m.get("ageAtDiagnosis") + "\t";
                 line += m.get("dateOfDiagnosisYear") + "\t";
                 line += m.get("dateOfDiagnosisMonth") + "\t";
                 line += m.get("dateOfDiagnosisDay") + "\t";

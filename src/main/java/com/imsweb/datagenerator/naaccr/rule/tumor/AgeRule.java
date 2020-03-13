@@ -23,21 +23,21 @@ public class AgeRule extends NaaccrDataGeneratorRule {
 
     @Override
     public List<String> getRequiredProperties() {
-        return Arrays.asList("birthDateYear", "birthDateMonth", "birthDateDay", "dateOfDiagnosisYear", "dateOfDiagnosisMonth", "dateOfDiagnosisDay");
+        return Arrays.asList("dateOfBirthYear", "dateOfBirthMonth", "dateOfBirthDay", "dateOfDiagnosisYear", "dateOfDiagnosisMonth", "dateOfDiagnosisDay");
     }
 
     @Override
     public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
-        Integer birthYear = Integer.valueOf(record.get("birthDateYear"));
-        Integer birthMonth = Integer.valueOf(record.get("birthDateMonth"));
-        Integer birthDay = Integer.valueOf(record.get("birthDateDay"));
-        LocalDate birthDate = LocalDate.of(birthYear, birthMonth, birthDay);
+        int birthYear = Integer.parseInt(record.get("dateOfBirthYear"));
+        int birthMonth = Integer.parseInt(record.get("dateOfBirthMonth"));
+        int birthDay = Integer.parseInt(record.get("dateOfBirthDay"));
+        LocalDate dateOfBirth = LocalDate.of(birthYear, birthMonth, birthDay);
 
-        Integer dxYear = Integer.valueOf(record.get("dateOfDiagnosisYear"));
-        Integer dxMonth = Integer.valueOf(record.get("dateOfDiagnosisMonth"));
-        Integer dxDay = Integer.valueOf(record.get("dateOfDiagnosisDay"));
+        int dxYear = Integer.parseInt(record.get("dateOfDiagnosisYear"));
+        int dxMonth = Integer.parseInt(record.get("dateOfDiagnosisMonth"));
+        int dxDay = Integer.parseInt(record.get("dateOfDiagnosisDay"));
         LocalDate dxDate = LocalDate.of(dxYear, dxMonth, dxDay);
 
-        record.put("ageAtDx", String.format("%03d", ChronoUnit.YEARS.between(birthDate, dxDate)));
+        record.put("\tageAtDiagnosis", String.format("%03d", ChronoUnit.YEARS.between(dateOfBirth, dxDate)));
     }
 }

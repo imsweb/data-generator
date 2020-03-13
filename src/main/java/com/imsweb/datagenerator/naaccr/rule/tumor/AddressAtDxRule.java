@@ -19,13 +19,13 @@ public class AddressAtDxRule extends AddressRule {
     public AddressAtDxRule() {
         super(ID,
                 "Address at DX",
-                "addressAtDxState",
-                "addressAtDxCity",
-                "addressAtDxPostalCode",
-                "addressAtDxCountry",
-                "addressAtDxStreetName",
-                "addressAtDxSupplementl",
-                "addressAtDxCounty");
+                "addrAtDxState",
+                "addrAtDxCity",
+                "addrAtDxPostalCode",
+                "addrAtDxCountry",
+                "addrAtDxNoStreet",
+                "addrAtDxSupplementl",
+                "countyAtDx");
     }
 
     @Override

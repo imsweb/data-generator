@@ -28,15 +28,15 @@ public class PhysicianRule extends NaaccrDataGeneratorRule {
         if (options != null && options.getPhysicians() != null && !options.getPhysicians().isEmpty()) {
             // Pick a random physician for each visit.
             PhysicianDto physicianManaging = options.getPhysicians().get(RandomUtils.nextInt(options.getPhysicians().size()));
-            record.put("physicianManagingNpi", physicianManaging.getNpi());
+            record.put("npiPhysicianManaging", physicianManaging.getNpi());
             record.put("physicianManaging", physicianManaging.getLastName() + ", " + physicianManaging.getFirstName());
 
             PhysicianDto physicianFollowup = options.getPhysicians().get(RandomUtils.nextInt(options.getPhysicians().size()));
-            record.put("physicianFollowUpNpi", physicianFollowup.getNpi());
+            record.put("npiPhysicianFollowUp", physicianFollowup.getNpi());
             record.put("physicianFollowUp", physicianFollowup.getLastName() + ", " + physicianFollowup.getFirstName());
 
             PhysicianDto physicianPrimary = options.getPhysicians().get(RandomUtils.nextInt(options.getPhysicians().size()));
-            record.put("physicianPrimarySurgNpi", physicianPrimary.getNpi());
+            record.put("npiPhysicianPrimarySurg", physicianPrimary.getNpi());
             record.put("physicianPrimarySurg", physicianPrimary.getLastName() + ", " + physicianPrimary.getFirstName());
         }
 
