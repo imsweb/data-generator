@@ -19,13 +19,13 @@ repositories {
 }
 
 dependencies {
-    api 'com.imsweb:layout:2.0'
+    api 'com.imsweb:layout:3.0'
 
     implementation 'com.imsweb:algorithms:2.13'
-    implementation 'com.imsweb:staging-client-java:4.7'
-    implementation 'com.imsweb:staging-algorithm-cs:02.05.50.3'
-    implementation 'org.apache.commons:commons-lang3:3.9'
-    implementation 'commons-io:commons-io:2.6'
+    implementation 'com.imsweb:staging-client-java:4.8'
+    implementation 'com.imsweb:staging-algorithm-cs:02.05.50.4'
+    implementation 'org.apache.commons:commons-lang3:3.10'
+    implementation 'commons-io:commons-io:2.7'
 
     testImplementation 'junit:junit:4.13'
 }

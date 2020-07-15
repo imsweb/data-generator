@@ -22,7 +22,7 @@ public class NaaccrHl7DataGeneratorTest {
     public void testGenerator() throws IOException {
 
         // get the HL7 layout
-        NaaccrHl7Layout layout = (NaaccrHl7Layout)LayoutFactory.getLayout(LayoutFactory.LAYOUT_ID_NAACCR_HL7_2_5_1);
+        NaaccrHl7Layout layout = (NaaccrHl7Layout)LayoutFactory.getLayout(LayoutFactory.LAYOUT_ID_NAACCR_HL7_V4);
 
         // create generator
         NaaccrHl7DataGenerator generator = new NaaccrHl7DataGenerator(layout);
@@ -59,7 +59,7 @@ public class NaaccrHl7DataGeneratorTest {
 
     @Test
     public void testGeneratorExtension() {
-        NaaccrHl7DataGenerator generator = new MyHl7DataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_HL7_2_5_1);
+        NaaccrHl7DataGenerator generator = new MyHl7DataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_HL7_V4);
         Assert.assertEquals("Test", generator.generateMessage().getSegment("PID").getField(5).getComponent(1).getValue());
         Assert.assertEquals("Test", generator.generateMessage().getSegment("PID").getField(5).getComponent(1).getValue());
         Assert.assertEquals("Test", generator.generateMessage().getSegment("PID").getField(5).getComponent(1).getValue());

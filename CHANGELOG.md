@@ -2,6 +2,15 @@
 
 **Changes in version 1.14**
 
+- Updated Layout library from version 2.0 to version 3.0.
+- Updated Algorithms library from version 2.13 to version 2.14.
+- Updated Staging client library from version 4.7 to version 4.8.
+- Updated CS library from version 02.05.50.3 to version 02.05.50.4.
+- Updated Commons Lang library from version 3.9 to version 3.10.
+- Updated Commons IO library from version 2.6 to version 2.7.
+
+**Changes in version 1.14**
+
 - Aligned NAACCR fixed-column layout field names on NAACCR XML IDs.
 - Updated Algorithms library from version 2.12 to version 2.13.
 - Updated Layout library from version 1.25 to version 2.0.
