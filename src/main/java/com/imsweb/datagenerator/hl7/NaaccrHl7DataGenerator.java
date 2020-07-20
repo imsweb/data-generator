@@ -21,7 +21,6 @@ import com.imsweb.datagenerator.hl7.rule.ObservationRequestSegmentRule;
 import com.imsweb.datagenerator.hl7.rule.ObservationSegmentRule;
 import com.imsweb.datagenerator.hl7.rule.PatientIdentifierSegmentRule;
 import com.imsweb.datagenerator.hl7.rule.PatientVisitSegmentRule;
-import com.imsweb.layout.Layout;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.hl7.NaaccrHl7Layout;
 import com.imsweb.layout.hl7.entity.Hl7Message;
@@ -42,21 +41,19 @@ public class NaaccrHl7DataGenerator implements DataGenerator {
      * @param layoutId NAACCR HL7 layout ID to use
      */
     public NaaccrHl7DataGenerator(String layoutId) {
-        this(LayoutFactory.getLayout(layoutId));
+        this(LayoutFactory.getNaaccrHl7Layout(layoutId));
     }
 
     /**
      * Constructor
      * @param layout Naaccr HL7 layout to use
      */
-    public NaaccrHl7DataGenerator(Layout layout) {
+    public NaaccrHl7DataGenerator(NaaccrHl7Layout layout) {
         if (layout == null)
             throw new RuntimeException("A layout is required for creating a NAACCR HL7 data generator!");
-        if (!(layout instanceof NaaccrHl7Layout))
-            throw new RuntimeException("A NAACCR HL7 layout is required for creating a NAACCR HL7 data generator!");
-        _layout = (NaaccrHl7Layout)layout;
-        _rules = new ArrayList<>();
+        _layout = layout;
 
+        _rules = new ArrayList<>();
         _rules.add(new ControlSegmentRule());
         _rules.add(new PatientIdentifierSegmentRule());
         _rules.add(new NextOfKinSegmentRule());

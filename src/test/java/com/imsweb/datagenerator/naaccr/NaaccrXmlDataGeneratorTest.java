@@ -22,7 +22,7 @@ import com.imsweb.naaccrxml.entity.Patient;
 public class NaaccrXmlDataGeneratorTest {
 
     // we are going to use this layout
-    private static final NaaccrXmlLayout _LAYOUT = (NaaccrXmlLayout)LayoutFactory.getLayout(LayoutFactory.LAYOUT_ID_NAACCR_XML_18_ABSTRACT);
+    private static final NaaccrXmlLayout _LAYOUT = LayoutFactory.getNaaccrXmlLayout(LayoutFactory.LAYOUT_ID_NAACCR_XML_21_ABSTRACT);
 
     @Test
     public void testGenerate() throws IOException {

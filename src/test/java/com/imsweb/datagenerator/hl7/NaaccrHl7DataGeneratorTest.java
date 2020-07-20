@@ -22,7 +22,7 @@ public class NaaccrHl7DataGeneratorTest {
     public void testGenerator() throws IOException {
 
         // get the HL7 layout
-        NaaccrHl7Layout layout = (NaaccrHl7Layout)LayoutFactory.getLayout(LayoutFactory.LAYOUT_ID_NAACCR_HL7_V4);
+        NaaccrHl7Layout layout = LayoutFactory.getNaaccrHl7Layout(LayoutFactory.LAYOUT_ID_NAACCR_HL7_V4);
 
         // create generator
         NaaccrHl7DataGenerator generator = new NaaccrHl7DataGenerator(layout);

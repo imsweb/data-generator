@@ -1,5 +1,9 @@
 ## Synthetic data generator
 
+**Changes in version 1.16**
+
+- Added support for creating NAACCR 21 XML data.
+
 **Changes in version 1.15**
 
 - Updated Layout library from version 2.0 to version 3.0.

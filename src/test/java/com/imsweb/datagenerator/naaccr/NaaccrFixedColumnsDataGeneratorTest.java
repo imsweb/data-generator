@@ -19,19 +19,18 @@ import com.imsweb.datagenerator.provider.facility.FacilityDataGenerator;
 import com.imsweb.datagenerator.provider.facility.FacilityDto;
 import com.imsweb.datagenerator.provider.physician.PhysicianDataGenerator;
 import com.imsweb.datagenerator.provider.physician.PhysicianDto;
-import com.imsweb.layout.Layout;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.FixedColumnsField;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
 
-public class NaaccrDataGeneratorTest {
+public class NaaccrFixedColumnsDataGeneratorTest {
 
     // we are going to use this layout
-    private static final NaaccrLayout _LAYOUT = (NaaccrLayout)LayoutFactory.getLayout(LayoutFactory.LAYOUT_ID_NAACCR_16_ABSTRACT);
+    private static final NaaccrLayout _LAYOUT = LayoutFactory.getNaaccrFixedColumnsLayout(LayoutFactory.LAYOUT_ID_NAACCR_18_ABSTRACT);
 
     @Test
     public void testGenerator() {
-        NaaccrDataGenerator generator = new NaaccrDataGenerator(_LAYOUT);
+        NaaccrFixedColumnsDataGenerator generator = new NaaccrFixedColumnsDataGenerator(_LAYOUT);
 
         // default generator comes with some patient and tumor rules
         Assert.assertFalse(generator.getPatientRules().isEmpty());
@@ -45,6 +44,8 @@ public class NaaccrDataGeneratorTest {
             Assert.assertNotNull(rule.getName());
         }
 
+        Assert.assertNotNull(generator.getNumTumorsPerPatientDistribution());
+
         // test no rules
         generator.getPatientRules().clear();
         Assert.assertTrue(generator.getPatientRules().isEmpty());
@@ -54,7 +55,7 @@ public class NaaccrDataGeneratorTest {
         // a layout is required
         try {
             //noinspection
-            new NaaccrDataGenerator((Layout)null);
+            new NaaccrFixedColumnsDataGenerator((NaaccrLayout)null);
             Assert.fail();
         }
         catch (RuntimeException e) {
@@ -116,7 +117,7 @@ public class NaaccrDataGeneratorTest {
 
     @Test
     public void testGeneratePatient() throws IOException {
-        NaaccrDataGenerator generator = new NaaccrDataGenerator(_LAYOUT.getLayoutId());
+        NaaccrFixedColumnsDataGenerator generator = new NaaccrFixedColumnsDataGenerator(_LAYOUT.getLayoutId());
 
         // null options, 1 tumor
         List<Map<String, String>> patient = generator.generatePatient(1, null);
@@ -167,7 +168,7 @@ public class NaaccrDataGeneratorTest {
         Assert.assertTrue("Diagnosis Date outside options Minimum and Maximum.", dateInRange1 || dateInRange2);
 
         // another test with an incidence generator
-        generator = new NaaccrDataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_18_INCIDENCE);
+        generator = new NaaccrFixedColumnsDataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_18_INCIDENCE);
         patient = generator.generatePatient(1);
         Assert.assertEquals(1, patient.size());
         Assert.assertNotNull(patient.get(0).get("primarySite"));
@@ -176,7 +177,7 @@ public class NaaccrDataGeneratorTest {
 
     @Test
     public void testGenerateFile() throws IOException {
-        NaaccrDataGenerator generator = new NaaccrDataGenerator(_LAYOUT);
+        NaaccrFixedColumnsDataGenerator generator = new NaaccrFixedColumnsDataGenerator(_LAYOUT);
 
         // regular file, 1 record
         File file = TestingUtils.createFile("naaccr-data-generator-1-rec.txt");
@@ -231,7 +232,7 @@ public class NaaccrDataGeneratorTest {
 
     @Test
     public void testGenerateWithProviders() {
-        NaaccrDataGenerator generator = new NaaccrDataGenerator(_LAYOUT.getLayoutId());
+        NaaccrFixedColumnsDataGenerator generator = new NaaccrFixedColumnsDataGenerator(_LAYOUT.getLayoutId());
         NaaccrDataGeneratorOptions genOptions = new NaaccrDataGeneratorOptions();
         genOptions.setState("CA");
 
@@ -282,7 +283,7 @@ public class NaaccrDataGeneratorTest {
      */
     private static class TestPatientRule extends NaaccrDataGeneratorRule {
 
-        private String _value;
+        private final String _value;
 
         public TestPatientRule(String value) {
             super("test-patient", "Testing patient rule");
@@ -300,7 +301,7 @@ public class NaaccrDataGeneratorTest {
      */
     private static class TestTumorRule extends NaaccrDataGeneratorRule {
 
-        private String _value;
+        private final String _value;
 
         public TestTumorRule(String value) {
             super("test-tumor", "Testing tumor rule");

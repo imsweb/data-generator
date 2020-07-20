@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.imsweb.datagenerator.naaccr.NaaccrDataGenerator;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
+import com.imsweb.datagenerator.naaccr.NaaccrFixedColumnsDataGenerator;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
 
@@ -62,7 +62,7 @@ public class SeerBatchGenerator {
     private static final int _NUM_FILES_PER_REG = 1;
     private static final boolean _ZIP_FILE = true;
     private static final boolean _APPEND_SIZE = true;
-    private static final NaaccrLayout _LAYOUT = (NaaccrLayout)LayoutFactory.getLayout(LayoutFactory.LAYOUT_ID_NAACCR_15_ABSTRACT);
+    private static final NaaccrLayout _LAYOUT = LayoutFactory.getNaaccrFixedColumnsLayout(LayoutFactory.LAYOUT_ID_NAACCR_15_ABSTRACT);
     private static final String _FILE_DESTINATION = "./build/";
     private static final String _FILE_NAME_TEMPLATE = "_generated_data";
     private static final String _FILE_NAME_EXTENSION = _ZIP_FILE ? ".txt.gz" : ".txt";
@@ -96,7 +96,7 @@ public class SeerBatchGenerator {
         options.setConstantValuesPostProcessing(constantValues);
 
         // create the generator and generate the file
-        NaaccrDataGenerator generator = new NaaccrDataGenerator(_LAYOUT);
+        NaaccrFixedColumnsDataGenerator generator = new NaaccrFixedColumnsDataGenerator(_LAYOUT);
         generator.generateFile(file, _NUM_RECORDS, options);
         System.out.println("Generated " + _NUM_RECORDS + " " + _LAYOUT.getLayoutName() + " records for registry " + registry + " in " + (System.currentTimeMillis() - t) / 1000.0 + " seconds.");
     }
