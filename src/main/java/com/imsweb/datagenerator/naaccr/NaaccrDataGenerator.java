@@ -222,26 +222,8 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
         return _tumorRules;
     }
 
-    /**
-     * Generates a single patient with a requested number of tumors.
-     * <br/><br/>
-     * Every patient field will have the same value on every generated tumor.
-     * @param numTumors number of tumors to generate
-     * @return generated patient as a list of tumor maps, never null
-     */
-    public List<Map<String, String>> generatePatient(int numTumors) {
-        return generatePatient(numTumors, null);
-    }
-
-    /**
-     * Generates a single patient with a requested number of tumors.
-     * <br/><br/>
-     * Every patient field will have the same value on every generated tumor.
-     * @param numTumors number of tumors to generate
-     * @param options options
-     * @return generated patient as a list of tumor maps, never null
-     */
-    public List<Map<String, String>> generatePatient(int numTumors, NaaccrDataGeneratorOptions options) {
+    // helper, creates a single patient as a list of maps
+    protected List<Map<String, String>> generatePatientAsListOfMaps(int numTumors, NaaccrDataGeneratorOptions options) {
         // make sure number of tumors is valid
         if (numTumors < 1)
             throw new IllegalArgumentException("Number of tumors must be greater than 0");

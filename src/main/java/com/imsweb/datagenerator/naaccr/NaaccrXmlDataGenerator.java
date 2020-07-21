@@ -71,6 +71,29 @@ public class NaaccrXmlDataGenerator extends NaaccrDataGenerator {
     }
 
     /**
+     * Generates a single patient with a requested number of tumors.
+     * <br/><br/>
+     * Every patient field will have the same value on every generated tumor.
+     * @param numTumors number of tumors to generate
+     * @return generated patient as a list of tumor maps, never null
+     */
+    public Patient generatePatient(int numTumors) {
+        return generatePatient(numTumors, null);
+    }
+
+    /**
+     * Generates a single patient with a requested number of tumors.
+     * <br/><br/>
+     * Every patient field will have the same value on every generated tumor.
+     * @param numTumors number of tumors to generate
+     * @param options options
+     * @return generated patient as a list of tumor maps, never null
+     */
+    public Patient generatePatient(int numTumors, NaaccrDataGeneratorOptions options) {
+        return createPatient(generatePatientAsListOfMaps(numTumors, options));
+    }
+
+    /**
      * Generates a requested number of tumors and saves them in the specified file.
      * <br/><br/>
      * Every patient field will have the same value on every generated tumor.
@@ -116,7 +139,7 @@ public class NaaccrXmlDataGenerator extends NaaccrDataGenerator {
             int numCreatedTumors = 0;
             while (numCreatedTumors < numTumors) {
                 int numTumorForThisPatient = Math.min(numTumGen == null ? options.getNumTumorsPerPatient() : numTumGen.getValue(), numTumors - numCreatedTumors);
-                _xmlLayout.writeNextPatient(writer, createPatient(generatePatient(numTumorForThisPatient, options)));
+                _xmlLayout.writeNextPatient(writer, generatePatient(numTumorForThisPatient, options));
                 numCreatedTumors += numTumorForThisPatient;
             }
         }

@@ -1,5 +1,9 @@
 ## Synthetic data generator
 
+**Changes in version 1.17**
+
+- Fixed NAACCR XML generator so it returns Patient objects and not list of records.
+
 **Changes in version 1.16**
 
 - Added support for creating NAACCR 21 XML data.

@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 
@@ -55,6 +56,29 @@ public class NaaccrFixedColumnsDataGenerator extends NaaccrDataGenerator {
     @Override
     protected boolean isInvalidValidField(String name) {
         return _layout.getFieldByName(name) == null;
+    }
+
+    /**
+     * Generates a single patient with a requested number of tumors.
+     * <br/><br/>
+     * Every patient field will have the same value on every generated tumor.
+     * @param numTumors number of tumors to generate
+     * @return generated patient as a list of tumor maps, never null
+     */
+    public List<Map<String, String>> generatePatient(int numTumors) {
+        return generatePatient(numTumors, null);
+    }
+
+    /**
+     * Generates a single patient with a requested number of tumors.
+     * <br/><br/>
+     * Every patient field will have the same value on every generated tumor.
+     * @param numTumors number of tumors to generate
+     * @param options options
+     * @return generated patient as a list of tumor maps, never null
+     */
+    public List<Map<String, String>> generatePatient(int numTumors, NaaccrDataGeneratorOptions options) {
+        return generatePatientAsListOfMaps(numTumors, options);
     }
 
     /**
