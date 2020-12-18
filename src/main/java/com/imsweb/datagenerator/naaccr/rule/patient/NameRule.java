@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
 import com.imsweb.datagenerator.utils.DistributionUtils;
@@ -20,11 +22,15 @@ public class NameRule extends NaaccrDataGeneratorRule {
     private static final String[] _VALUES_SUFFIXES = {"CPA", "LLD", "MD", "PhD", "Ret", "RN"};
     private static final String[] _VALUES_SUFFIXES_MALE = {"Jr.", "Sr.", "III", "IV"};
 
+    private final boolean _useMaidenNameField;
+
     /**
      * Constructor.
      */
-    public NameRule() {
+    public NameRule(boolean useMaidenNameField) {
         super(ID, "Name (Last, First, Middle, Prefix, Suffix and Maiden if needed)");
+
+        _useMaidenNameField = useMaidenNameField;
     }
 
     @Override
@@ -39,9 +45,11 @@ public class NameRule extends NaaccrDataGeneratorRule {
         record.put("nameFirst", getFirstName(record));
         record.put("namePrefix", getPrefix(record));
         record.put("nameSuffix", getSuffix(record));
-        record.put("nameMaiden", getMaidenName(record));
-        // if a maiden name was created and returned, generate a new last name
-        if (!record.get("nameMaiden").isEmpty())
+
+        String surnameKey = _useMaidenNameField ? "nameMaiden" : "nameBirthSurname";
+        record.put(surnameKey, getBirthSurnameName(record));
+        // if a birth surname was created and returned, generate a new last name
+        if (!StringUtils.isBlank(record.get(surnameKey)))
             record.put("nameLast", getSpouseLastName(record));
     }
 
@@ -113,22 +121,22 @@ public class NameRule extends NaaccrDataGeneratorRule {
     }
 
     /**
-     * If patient is female, this method will return a maiden name 60% of the time. It will return a blank string otherwise. The maiden name is
-     * assigned by simply reassigning the already generated last name to the maiden name, since it already accounts for the patient's race.
+     * If patient is female, this method will return a birth surname name 60% of the time. It will return a blank string otherwise. The surname is
+     * assigned by simply reassigning the already generated last name to the surname name, since it already accounts for the patient's race.
      * @param record patient record map
-     * @return patient's maiden name (same as current last name) or blank if no maiden name
+     * @return patient's birth surname (same as current last name) or blank if no surname name
      */
-    protected String getMaidenName(Map<String, String> record) {
-        String maidenName = "";
+    protected String getBirthSurnameName(Map<String, String> record) {
+        String birthSurname = "";
         if ("2".equals(record.get("sex")))
             if (RandomUtils.nextInt(100) < 60)
-                // patient is female and will have a maiden name - use the already generated last name
-                maidenName = record.get("nameLast");
-        return maidenName;
+                // patient is female and will have a birth surname - use the already generated last name
+                birthSurname = record.get("nameLast");
+        return birthSurname;
     }
 
     /**
-     * Produces a new last name independent of current patient. This is used as the new surname when a maiden name is present
+     * Produces a new last name independent of current patient. This is used as the new surname when a birth surname is present
      * @return random last name
      */
     protected String getSpouseLastName(Map<String, String> record) {

@@ -1,18 +1,17 @@
 package com.imsweb.datagenerator.naaccr;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import java.time.LocalDate;
-
 public abstract class NaaccrDataGeneratorRule {
 
     // the unique ID of this rule
-    private String _id;
+    private final String _id;
 
     // the name of this rule
-    private String _name;
+    private final String _name;
 
     /**
      * Constructor.

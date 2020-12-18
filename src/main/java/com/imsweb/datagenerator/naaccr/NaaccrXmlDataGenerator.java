@@ -22,6 +22,8 @@ import org.apache.commons.lang3.StringUtils;
 import com.imsweb.datagenerator.utils.Distribution;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.naaccrxml.NaaccrXmlLayout;
+import com.imsweb.naaccrxml.NaaccrFormat;
+import com.imsweb.naaccrxml.NaaccrOptions;
 import com.imsweb.naaccrxml.NaaccrXmlDictionaryUtils;
 import com.imsweb.naaccrxml.NaaccrXmlUtils;
 import com.imsweb.naaccrxml.PatientXmlWriter;
@@ -53,7 +55,7 @@ public class NaaccrXmlDataGenerator extends NaaccrDataGenerator {
      * @param layout NAACCR layout to use for this generator
      */
     public NaaccrXmlDataGenerator(NaaccrXmlLayout layout) {
-        super();
+        super(layout == null || NaaccrFormat.NAACCR_VERSION_180.compareTo(layout.getNaaccrVersion()) <= 0);
 
         if (layout == null)
             throw new RuntimeException("A layout is required for creating a NAACCR XML data generator!");
@@ -104,6 +106,7 @@ public class NaaccrXmlDataGenerator extends NaaccrDataGenerator {
         generateFile(file, numTumors, null);
     }
 
+
     /**
      * Generates a requested number of tumors and saves them in the specified file.
      * <br/><br/>
@@ -113,6 +116,18 @@ public class NaaccrXmlDataGenerator extends NaaccrDataGenerator {
      * @param options options that will be provided to every rules.
      */
     public void generateFile(File file, int numTumors, NaaccrDataGeneratorOptions options) throws IOException {
+        generateFile(file, numTumors, options, null);
+    }
+
+    /**
+     * Generates a requested number of tumors and saves them in the specified file.
+     * <br/><br/>
+     * Every patient field will have the same value on every generated tumor.
+     * @param file file to create; if the name ends with ".gz", it will be compressed
+     * @param numTumors number of tumors to generate, must be greater than 0
+     * @param options options that will be provided to every rules.
+     */
+    public void generateFile(File file, int numTumors, NaaccrDataGeneratorOptions options, NaaccrOptions writerOptions) throws IOException {
         // make sure number of tumors is valid
         if (numTumors < 1)
             throw new IllegalArgumentException("Number of tumors must be greater than 0");
@@ -135,7 +150,7 @@ public class NaaccrXmlDataGenerator extends NaaccrDataGenerator {
         if (options.getRegistryId() != null)
             rootData.addItem(new Item("registryId", options.getRegistryId()));
 
-        try (PatientXmlWriter writer = new PatientXmlWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), rootData)) {
+        try (PatientXmlWriter writer = new PatientXmlWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), rootData, writerOptions, _xmlLayout.getUserDictionaries())) {
             int numCreatedTumors = 0;
             while (numCreatedTumors < numTumors) {
                 int numTumorForThisPatient = Math.min(numTumGen == null ? options.getNumTumorsPerPatient() : numTumGen.getValue(), numTumors - numCreatedTumors);

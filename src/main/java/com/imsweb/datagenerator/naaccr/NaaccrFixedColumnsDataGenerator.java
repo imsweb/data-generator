@@ -41,7 +41,7 @@ public class NaaccrFixedColumnsDataGenerator extends NaaccrDataGenerator {
      * @param layout NAACCR layout to use for this generator
      */
     public NaaccrFixedColumnsDataGenerator(NaaccrLayout layout) {
-        super();
+        super(true);
 
         if (layout == null)
             throw new RuntimeException("A layout is required for creating a NAACCR data generator!");

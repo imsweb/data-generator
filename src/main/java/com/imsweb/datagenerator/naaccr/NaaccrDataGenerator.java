@@ -78,8 +78,9 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
 
     /**
      * Constructor
+     * @param useMaidenNameField if true, the name rule will use the 'nameMaiden' field, otherwise it will use the 'nameBirthSurname' field
      */
-    public NaaccrDataGenerator() {
+    public NaaccrDataGenerator(boolean useMaidenNameField) {
 
         // default patient rules
         _patientRules = new ArrayList<>();
@@ -88,7 +89,7 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
         _patientRules.add(new RaceRule());
         _patientRules.add(new HispanicOriginRule());
         _patientRules.add(new SsnRule());
-        _patientRules.add(new NameRule());
+        _patientRules.add(new NameRule(useMaidenNameField));
         _patientRules.add(new VitalStatusRule());
         _patientRules.add(new DeathRule());
         _patientRules.add(new BirthRule());
