@@ -11,9 +11,11 @@ import java.util.Map.Entry;
 import org.apache.commons.lang3.StringUtils;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
-import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
+import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
 import com.imsweb.datagenerator.utils.RandomUtils;
 import com.imsweb.decisionengine.Endpoint.EndpointType;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
 import com.imsweb.staging.Staging;
 import com.imsweb.staging.cs.CsDataProvider;
 import com.imsweb.staging.cs.CsDataProvider.CsVersion;
@@ -29,7 +31,7 @@ import com.imsweb.staging.entities.StagingSchemaInput;
 import com.imsweb.staging.entities.StagingTable;
 import com.imsweb.staging.entities.StagingTableRow;
 
-public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
+public class CollaborativeStageRule extends NaaccrDataGeneratorTumorRule {
 
     // unique identifier for this rule
     public static final String ID = "collaborative-stage";
@@ -91,13 +93,13 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
+    public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
 
         // Collaborative Stage was used only in 2004-2015
-        if (!inDxYearRange(record, 2004, 2015))
+        if (!inDxYearRange(tumor, 2004, 2015))
             return;
 
-        List<StagingSchema> lookup = _staging.lookupSchema(new CsSchemaLookup(record.get("primarySite"), record.get("histologicTypeIcdO3")));
+        List<StagingSchema> lookup = _staging.lookupSchema(new CsSchemaLookup(tumor.getItemValue("primarySite"), tumor.getItemValue("histologicTypeIcdO3")));
 
         // get first schema - if multiple schemas returned, this will only be used to get a discriminator, and lookup will be repeated
         StagingSchema schema = _staging.getSchema(lookup.get(0).getId());
@@ -105,14 +107,14 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
         String schemaId = schema.getId();
 
         // assign discriminator to ssf25
-        record.put("csSiteSpecificFactor25", getRandomValueFromTable(inputMap.get("ssf25").getTable(), "ssf25", record, schemaId));
+        setValue(tumor, "csSiteSpecificFactor25", getRandomValueFromTable(inputMap.get("ssf25").getTable(), "ssf25", tumor, patient, schemaId));
 
         if (lookup.size() == 0)
             return;
 
         // if multiple schemas were returned, use discriminator to make another lookup
         if (lookup.size() > 1) {
-            lookup = _staging.lookupSchema(new CsSchemaLookup(record.get("primarySite"), record.get("histologicTypeIcdO3"), record.get("csSiteSpecificFactor25")));
+            lookup = _staging.lookupSchema(new CsSchemaLookup(tumor.getItemValue("primarySite"), tumor.getItemValue("histologicTypeIcdO3"), tumor.getItemValue("csSiteSpecificFactor25")));
             if (lookup.size() == 0)
                 return;
             schema = _staging.getSchema(lookup.get(0).getId());
@@ -122,107 +124,107 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
 
         // loop over input fields, putting values into the record
         for (Entry<String, String> entry : _CS_FIELDS.entrySet()) {
-            List<String> validValues = getAllValidValues(entry.getValue(), record, schemaId);
+            List<String> validValues = getAllValidValues(entry.getValue(), tumor, schemaId);
             if (validValues == null)
                 // there are no restrictions on the valid values for this key - look up random value from tables
-                record.put(entry.getKey(), getRandomValueFromTable(inputMap.get(entry.getValue()).getTable(), entry.getValue(), record, schemaId));
+                setValue(tumor, entry.getKey(), getRandomValueFromTable(inputMap.get(entry.getValue()).getTable(), entry.getValue(), tumor, patient, schemaId));
             else
                 // there are restrictions on this key; select a random value from the valid values list
-                record.put(entry.getKey(), validValues.get(RandomUtils.nextInt(validValues.size())));
+                setValue(tumor, entry.getKey(), validValues.get(RandomUtils.nextInt(validValues.size())));
         }
 
-        record.put("csVersionInputCurrent", "020550");
-        record.put("csVersionOriginal", "020550");
+        setValue(tumor, "csVersionInputCurrent", "020550");
+        setValue(tumor, "csVersionOriginal", "020550");
 
         CsStagingData data = new CsStagingData();
-        data.setInput(CsInput.PRIMARY_SITE, record.get("primarySite"));
-        data.setInput(CsInput.HISTOLOGY, record.get("histologicTypeIcdO3"));
-        data.setInput(CsInput.BEHAVIOR, record.get("behaviorCodeIcdO3"));
-        data.setInput(CsInput.GRADE, record.get("grade"));
-        data.setInput(CsInput.DX_YEAR, record.get("dateOfDiagnosisYear"));
-        data.setInput(CsInput.CS_VERSION_ORIGINAL, record.get("csVersionOriginal"));
-        data.setInput(CsInput.TUMOR_SIZE, record.get("csTumorSize"));
-        data.setInput(CsInput.EXTENSION, record.get("csExtension"));
-        data.setInput(CsInput.EXTENSION_EVAL, record.get("csTumorSizeExtEval"));
-        data.setInput(CsInput.LYMPH_NODES, record.get("csLymphNodes"));
-        data.setInput(CsInput.LYMPH_NODES_EVAL, record.get("csLymphNodesEval"));
-        data.setInput(CsInput.REGIONAL_NODES_POSITIVE, record.get("regionalNodesPositive"));
-        data.setInput(CsInput.REGIONAL_NODES_EXAMINED, record.get("regionalNodesExamined"));
-        data.setInput(CsInput.METS_AT_DX, record.get("csMetsAtDx"));
-        data.setInput(CsInput.METS_EVAL, record.get("csMetsEval"));
-        data.setInput(CsInput.LVI, record.get("lymphVascularInvasion"));
-        data.setInput(CsInput.AGE_AT_DX, record.get("ageAtDiagnosis"));
+        data.setInput(CsInput.PRIMARY_SITE, tumor.getItemValue("primarySite"));
+        data.setInput(CsInput.HISTOLOGY, tumor.getItemValue("histologicTypeIcdO3"));
+        data.setInput(CsInput.BEHAVIOR, tumor.getItemValue("behaviorCodeIcdO3"));
+        data.setInput(CsInput.GRADE, tumor.getItemValue("grade"));
+        data.setInput(CsInput.DX_YEAR, tumor.getItemValue("dateOfDiagnosisYear"));
+        data.setInput(CsInput.CS_VERSION_ORIGINAL, tumor.getItemValue("csVersionOriginal"));
+        data.setInput(CsInput.TUMOR_SIZE, tumor.getItemValue("csTumorSize"));
+        data.setInput(CsInput.EXTENSION, tumor.getItemValue("csExtension"));
+        data.setInput(CsInput.EXTENSION_EVAL, tumor.getItemValue("csTumorSizeExtEval"));
+        data.setInput(CsInput.LYMPH_NODES, tumor.getItemValue("csLymphNodes"));
+        data.setInput(CsInput.LYMPH_NODES_EVAL, tumor.getItemValue("csLymphNodesEval"));
+        data.setInput(CsInput.REGIONAL_NODES_POSITIVE, tumor.getItemValue("regionalNodesPositive"));
+        data.setInput(CsInput.REGIONAL_NODES_EXAMINED, tumor.getItemValue("regionalNodesExamined"));
+        data.setInput(CsInput.METS_AT_DX, tumor.getItemValue("csMetsAtDx"));
+        data.setInput(CsInput.METS_EVAL, tumor.getItemValue("csMetsEval"));
+        data.setInput(CsInput.LVI, tumor.getItemValue("lymphVascularInvasion"));
+        data.setInput(CsInput.AGE_AT_DX, tumor.getItemValue("ageAtDiagnosis"));
 
-        data.setSsf(1, record.get("csSiteSpecificFactor1"));
-        data.setSsf(2, record.get("csSiteSpecificFactor2"));
-        data.setSsf(3, record.get("csSiteSpecificFactor3"));
-        data.setSsf(4, record.get("csSiteSpecificFactor4"));
-        data.setSsf(5, record.get("csSiteSpecificFactor5"));
-        data.setSsf(6, record.get("csSiteSpecificFactor6"));
-        data.setSsf(7, record.get("csSiteSpecificFactor7"));
-        data.setSsf(8, record.get("csSiteSpecificFactor8"));
-        data.setSsf(9, record.get("csSiteSpecificFactor9"));
-        data.setSsf(10, record.get("csSiteSpecificFactor10"));
-        data.setSsf(11, record.get("csSiteSpecificFactor11"));
-        data.setSsf(12, record.get("csSiteSpecificFactor12"));
-        data.setSsf(13, record.get("csSiteSpecificFactor13"));
-        data.setSsf(14, record.get("csSiteSpecificFactor14"));
-        data.setSsf(15, record.get("csSiteSpecificFactor15"));
-        data.setSsf(16, record.get("csSiteSpecificFactor16"));
-        data.setSsf(17, record.get("csSiteSpecificFactor17"));
-        data.setSsf(18, record.get("csSiteSpecificFactor18"));
-        data.setSsf(19, record.get("csSiteSpecificFactor19"));
-        data.setSsf(20, record.get("csSiteSpecificFactor20"));
-        data.setSsf(21, record.get("csSiteSpecificFactor21"));
-        data.setSsf(22, record.get("csSiteSpecificFactor22"));
-        data.setSsf(23, record.get("csSiteSpecificFactor23"));
-        data.setSsf(24, record.get("csSiteSpecificFactor24"));
-        data.setSsf(25, record.get("csSiteSpecificFactor25"));
+        data.setSsf(1, tumor.getItemValue("csSiteSpecificFactor1"));
+        data.setSsf(2, tumor.getItemValue("csSiteSpecificFactor2"));
+        data.setSsf(3, tumor.getItemValue("csSiteSpecificFactor3"));
+        data.setSsf(4, tumor.getItemValue("csSiteSpecificFactor4"));
+        data.setSsf(5, tumor.getItemValue("csSiteSpecificFactor5"));
+        data.setSsf(6, tumor.getItemValue("csSiteSpecificFactor6"));
+        data.setSsf(7, tumor.getItemValue("csSiteSpecificFactor7"));
+        data.setSsf(8, tumor.getItemValue("csSiteSpecificFactor8"));
+        data.setSsf(9, tumor.getItemValue("csSiteSpecificFactor9"));
+        data.setSsf(10, tumor.getItemValue("csSiteSpecificFactor10"));
+        data.setSsf(11, tumor.getItemValue("csSiteSpecificFactor11"));
+        data.setSsf(12, tumor.getItemValue("csSiteSpecificFactor12"));
+        data.setSsf(13, tumor.getItemValue("csSiteSpecificFactor13"));
+        data.setSsf(14, tumor.getItemValue("csSiteSpecificFactor14"));
+        data.setSsf(15, tumor.getItemValue("csSiteSpecificFactor15"));
+        data.setSsf(16, tumor.getItemValue("csSiteSpecificFactor16"));
+        data.setSsf(17, tumor.getItemValue("csSiteSpecificFactor17"));
+        data.setSsf(18, tumor.getItemValue("csSiteSpecificFactor18"));
+        data.setSsf(19, tumor.getItemValue("csSiteSpecificFactor19"));
+        data.setSsf(20, tumor.getItemValue("csSiteSpecificFactor20"));
+        data.setSsf(21, tumor.getItemValue("csSiteSpecificFactor21"));
+        data.setSsf(22, tumor.getItemValue("csSiteSpecificFactor22"));
+        data.setSsf(23, tumor.getItemValue("csSiteSpecificFactor23"));
+        data.setSsf(24, tumor.getItemValue("csSiteSpecificFactor24"));
+        data.setSsf(25, tumor.getItemValue("csSiteSpecificFactor25"));
 
         _staging.stage(data);
 
         // set flag to 1 (AJCC fields derived from CS) or blank if not derived (before 2004)
-        record.put("derivedAjccFlag", "1");
-        record.put("derivedSs1977Flag", "1");
-        record.put("derivedSs2000Flag", "1");
+        setValue(tumor, "derivedAjccFlag", "1");
+        setValue(tumor, "derivedSs1977Flag", "1");
+        setValue(tumor, "derivedSs2000Flag", "1");
 
         // If Year of DX > 2003, the following CS Data Items cannot be blank
-        record.put("csVersionDerived", data.getOutput(CsOutput.CSVER_DERIVED));
-        record.put("derivedAjcc6T", data.getOutput(CsOutput.STOR_AJCC6_T));
-        record.put("derivedAjcc6N", data.getOutput(CsOutput.STOR_AJCC6_N));
-        record.put("derivedAjcc6M", data.getOutput(CsOutput.STOR_AJCC6_M));
-        record.put("derivedAjcc6TDescriptor", data.getOutput(CsOutput.STOR_AJCC6_TDESCRIPTOR));
-        record.put("derivedAjcc6NDescriptor", data.getOutput(CsOutput.STOR_AJCC6_NDESCRIPTOR));
-        record.put("derivedAjcc6MDescriptor", data.getOutput(CsOutput.STOR_AJCC6_MDESCRIPTOR));
-        record.put("derivedAjcc6StageGroup", data.getOutput(CsOutput.STOR_AJCC6_STAGE));
-        record.put("derivedAjcc7T", data.getOutput(CsOutput.STOR_AJCC7_T));
-        record.put("derivedAjcc7N", data.getOutput(CsOutput.STOR_AJCC7_N));
-        record.put("derivedAjcc7M", data.getOutput(CsOutput.STOR_AJCC7_M));
-        record.put("derivedAjcc7TDescriptor", data.getOutput(CsOutput.STOR_AJCC7_TDESCRIPTOR));
-        record.put("derivedAjcc7NDescriptor", data.getOutput(CsOutput.STOR_AJCC7_NDESCRIPTOR));
-        record.put("derivedAjcc7MDescriptor", data.getOutput(CsOutput.STOR_AJCC7_MDESCRIPTOR));
-        record.put("derivedAjcc7StageGroup", data.getOutput(CsOutput.STOR_AJCC7_STAGE));
-        record.put("derivedSs1977", data.getOutput(CsOutput.STOR_SS1977_STAGE));
-        record.put("derivedSs2000", data.getOutput(CsOutput.STOR_SS2000_STAGE));
+        setValue(tumor, "csVersionDerived", data.getOutput(CsOutput.CSVER_DERIVED));
+        setValue(tumor, "derivedAjcc6T", data.getOutput(CsOutput.STOR_AJCC6_T));
+        setValue(tumor, "derivedAjcc6N", data.getOutput(CsOutput.STOR_AJCC6_N));
+        setValue(tumor, "derivedAjcc6M", data.getOutput(CsOutput.STOR_AJCC6_M));
+        setValue(tumor, "derivedAjcc6TDescriptor", data.getOutput(CsOutput.STOR_AJCC6_TDESCRIPTOR));
+        setValue(tumor, "derivedAjcc6NDescriptor", data.getOutput(CsOutput.STOR_AJCC6_NDESCRIPTOR));
+        setValue(tumor, "derivedAjcc6MDescriptor", data.getOutput(CsOutput.STOR_AJCC6_MDESCRIPTOR));
+        setValue(tumor, "derivedAjcc6StageGroup", data.getOutput(CsOutput.STOR_AJCC6_STAGE));
+        setValue(tumor, "derivedAjcc7T", data.getOutput(CsOutput.STOR_AJCC7_T));
+        setValue(tumor, "derivedAjcc7N", data.getOutput(CsOutput.STOR_AJCC7_N));
+        setValue(tumor, "derivedAjcc7M", data.getOutput(CsOutput.STOR_AJCC7_M));
+        setValue(tumor, "derivedAjcc7TDescriptor", data.getOutput(CsOutput.STOR_AJCC7_TDESCRIPTOR));
+        setValue(tumor, "derivedAjcc7NDescriptor", data.getOutput(CsOutput.STOR_AJCC7_NDESCRIPTOR));
+        setValue(tumor, "derivedAjcc7MDescriptor", data.getOutput(CsOutput.STOR_AJCC7_MDESCRIPTOR));
+        setValue(tumor, "derivedAjcc7StageGroup", data.getOutput(CsOutput.STOR_AJCC7_STAGE));
+        setValue(tumor, "derivedSs1977", data.getOutput(CsOutput.STOR_SS1977_STAGE));
+        setValue(tumor, "derivedSs2000", data.getOutput(CsOutput.STOR_SS2000_STAGE));
 
-        if (record.get("csMetsAtDx").equals("00")) {
-            record.put("csMetsAtDxBone", "0");
-            record.put("csMetsAtDxBrain", "0");
-            record.put("csMetsAtDxLung", "0");
-            record.put("csMetsAtDxLiver", "0");
+        if (tumor.getItemValue("csMetsAtDx").equals("00")) {
+            setValue(tumor, "csMetsAtDxBone", "0");
+            setValue(tumor, "csMetsAtDxBrain", "0");
+            setValue(tumor, "csMetsAtDxLung", "0");
+            setValue(tumor, "csMetsAtDxLiver", "0");
         }
-        else if (record.get("csMetsAtDx").equals("98") && !schemaId.equals("ill_defined_other")) {
-            record.put("csMetsAtDxBone", "8");
-            record.put("csMetsAtDxBrain", "8");
-            record.put("csMetsAtDxLung", "8");
-            record.put("csMetsAtDxLiver", "8");
+        else if (tumor.getItemValue("csMetsAtDx").equals("98") && !schemaId.equals("ill_defined_other")) {
+            setValue(tumor, "csMetsAtDxBone", "8");
+            setValue(tumor, "csMetsAtDxBrain", "8");
+            setValue(tumor, "csMetsAtDxLung", "8");
+            setValue(tumor, "csMetsAtDxLiver", "8");
         }
         else {
             // if any of these are 1, csMetsAtDx must not be 00 or 99
-            record.put("csMetsAtDxBone", "9");
-            record.put("csMetsAtDxBrain", "9");
-            record.put("csMetsAtDxLung", "9");
-            record.put("csMetsAtDxLiver", "9");
+            setValue(tumor, "csMetsAtDxBone", "9");
+            setValue(tumor, "csMetsAtDxBrain", "9");
+            setValue(tumor, "csMetsAtDxLung", "9");
+            setValue(tumor, "csMetsAtDxLiver", "9");
         }
     }
 
@@ -230,13 +232,15 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
      * Takes a table name and key and returns a random value for the given key
      * @param tableName CS Table name
      * @param key table key name
+     * @param tumor tumor
+     * schemaId the schema ID
      * @return random value
      */
-    private String getRandomValueFromTable(String tableName, String key, Map<String, String> record, String schemaId) {
+    private String getRandomValueFromTable(String tableName, String key, Tumor tumor, Patient patient, String schemaId) {
         StagingTable table = _staging.getTable(tableName);
 
         // get a random row from the table
-        List<StagingTableRow> tableRows = getValidTableRows(table, key, record, schemaId);
+        List<StagingTableRow> tableRows = getValidTableRows(table, key, tumor, patient, schemaId);
         StagingTableRow randomRow = tableRows.get(RandomUtils.nextInt(tableRows.size()));
 
         // get a random value or value range from the row using key
@@ -261,11 +265,11 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
      * of all valid rows. If there are no invalid codes in the table, the results of this method will be the same as table.getTableRows() in StagingTable.
      * @param table table containing rows for filtering
      * @param key table key being looked up
-     * @param record tumor record
+     * @param tumor tumor
      * @param schemaId schema for this tumor
      * @return list of rows containing valid key values
      */
-    private List<StagingTableRow> getValidTableRows(StagingTable table, String key, Map<String, String> record, String schemaId) {
+    private List<StagingTableRow> getValidTableRows(StagingTable table, String key, Tumor tumor, Patient patient, String schemaId) {
         List<StagingTableRow> validRows = new ArrayList<>();
 
         // get the index number of the description column
@@ -287,7 +291,7 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
 
             // check invalid values list - omit any input values that are marked invalid
             List<StagingRange> inputs = row.getColumnInput(key);
-            boolean isInvalidValue = !inputs.isEmpty() && getInvalidValues(key, record, schemaId).contains(inputs.get(0).getHigh());
+            boolean isInvalidValue = !inputs.isEmpty() && getInvalidValues(key, tumor, patient, schemaId).contains(inputs.get(0).getHigh());
 
             // check for error in endpoints - omit these from table
             List<StagingEndpoint> endpoints = row.getEndpoints();
@@ -318,25 +322,25 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
      * Returns a list of all valid values for a specific key or null if it cannot define all the valid values. If a list is returned, only values in the list
      * may be used when randomly selecting. If null is returned, it can be assumed all possible values are valid unless later identified as invalid.
      * @param key table key being looked up
-     * @param record tumor record
+     * @param tumor tumor
      * @param schemaId schema for this tumor
      * @return list of all acceptable values for the key, or null if all acceptable values cannot be defined.
      */
-    private List<String> getAllValidValues(String key, Map<String, String> record, String schemaId) {
+    private List<String> getAllValidValues(String key, Tumor tumor, String schemaId) {
         List<String> validValues = null;
         switch (key) {
             case "ssf4":
             case "ssf5":
-                if (schemaId.equals("breast") && !record.get("csLymphNodes").equals("000"))
+                if (schemaId.equals("breast") && !tumor.getItemValue("csLymphNodes").equals("000"))
                     validValues = new ArrayList<>(Collections.singletonList("987"));
                 break;
             case "ssf13":
-                if (schemaId.equals("breast") && record.get("csSiteSpecificFactor7").equals("998"))
+                if (schemaId.equals("breast") && tumor.getItemValue("csSiteSpecificFactor7").equals("998"))
                     validValues = Collections.singletonList("988");
                 break;
             case "nodes_pos":
             case "nodes_exam":
-                if (record.get("typeOfReportingSource").equals("7") || schemaId.equals("heme_retic") || schemaId.equals("lymphoma") || schemaId.equals("brain") || schemaId.equals("cns_other")
+                if (tumor.getItemValue("typeOfReportingSource").equals("7") || schemaId.equals("heme_retic") || schemaId.equals("lymphoma") || schemaId.equals("brain") || schemaId.equals("cns_other")
                         || schemaId.equals("ill_defined_other") || schemaId.equals("placenta") || schemaId.equals("intracranial_gland") || schemaId.equals("myeloma_plasma_cell_disorder"))
                     validValues = Collections.singletonList("99");
                 break;
@@ -348,11 +352,11 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
     /**
      * Returns a list of all invalid values for the specific key. When scanning the key's table, these are omitting from random selection
      * @param key table key being looked up
-     * @param record tumor record
+     * @param tumor tumor
      * @param schemaId schema for this tumor
      * @return list of invalid values for the key
      */
-    private List<String> getInvalidValues(String key, Map<String, String> record, String schemaId) {
+    private List<String> getInvalidValues(String key, Tumor tumor, Patient patient, String schemaId) {
         List<String> invalidValues = new ArrayList<>();
 
         switch (key) {
@@ -360,12 +364,12 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
             case "nodes_eval":
             case "mets_eval":
                 // for living patients (VS=1), remove eval values specifying evidence from autopsy
-                if (record.get("vitalStatus").equals("1"))
+                if (patient.getItemValue("vitalStatus").equals("1"))
                     invalidValues.add("8");
                 break;
             case "extension_eval":
                 // for living patients (VS=1), remove eval values specifying evidence from autopsy
-                if (record.get("vitalStatus").equals("1"))
+                if (patient.getItemValue("vitalStatus").equals("1"))
                     if (schemaId.equals("prostate"))
                         invalidValues.addAll(Arrays.asList("3", "8"));
                     else
@@ -373,11 +377,11 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorRule {
                 break;
             case "ssf4":
             case "ssf5":
-                if (schemaId.equals("breast") && record.get("csLymphNodes").equals("000"))
+                if (schemaId.equals("breast") && tumor.getItemValue("csLymphNodes").equals("000"))
                     invalidValues.add("987");
                 break;
             case "ssf13":
-                if (schemaId.equals("breast") && !record.get("csSiteSpecificFactor12").equals("998"))
+                if (schemaId.equals("breast") && !tumor.getItemValue("csSiteSpecificFactor12").equals("998"))
                     invalidValues.add("998");
                 break;
             default:

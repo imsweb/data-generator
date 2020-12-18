@@ -1,18 +1,18 @@
 package com.imsweb.datagenerator.naaccr.rule.patient;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
-import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
+import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorPatientRule;
 import com.imsweb.datagenerator.utils.DistributionUtils;
 import com.imsweb.datagenerator.utils.RandomUtils;
+import com.imsweb.naaccrxml.entity.Patient;
 
 import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_MAX_AGE_GROUP;
 import static java.time.temporal.ChronoUnit.DAYS;
 
-public class BirthRule extends NaaccrDataGeneratorRule {
+public class BirthRule extends NaaccrDataGeneratorPatientRule {
 
     // unique identifier for this rule
     public static final String ID = "birth";
@@ -25,7 +25,7 @@ public class BirthRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
+    public void execute(Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
 
         // birth date should be no later than five years prior to min dx date (or current date if min dx date not defined)
         //LocalDate maxBirthDate = options == null ? LocalDate.now().minusYears(15) : options.getMinDxDate().minusYears(5);
@@ -53,10 +53,10 @@ public class BirthRule extends NaaccrDataGeneratorRule {
 
         LocalDate randomDate = RandomUtils.getRandomDateBetween(minBirthDate, maxBirthDate);
 
-        record.put("dateOfBirthYear", Integer.toString(randomDate.getYear()));
-        record.put("dateOfBirthMonth", Integer.toString(randomDate.getMonthValue()));
-        record.put("dateOfBirthDay", Integer.toString(randomDate.getDayOfMonth()));
-        record.put("birthplaceState", DistributionUtils.getState());
-        record.put("birthplaceCountry", "USA");
+        setValue(patient, "dateOfBirthYear", Integer.toString(randomDate.getYear()));
+        setValue(patient, "dateOfBirthMonth", Integer.toString(randomDate.getMonthValue()));
+        setValue(patient, "dateOfBirthDay", Integer.toString(randomDate.getDayOfMonth()));
+        setValue(patient, "birthplaceState", DistributionUtils.getState());
+        setValue(patient, "birthplaceCountry", "USA");
     }
 }

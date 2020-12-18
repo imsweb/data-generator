@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.imsweb.datagenerator.DataGenerator;
 import com.imsweb.datagenerator.naaccr.rule.patient.AddressCurrentRule;
@@ -16,8 +18,9 @@ import com.imsweb.datagenerator.naaccr.rule.patient.BirthRule;
 import com.imsweb.datagenerator.naaccr.rule.patient.ComputedEthnicityRule;
 import com.imsweb.datagenerator.naaccr.rule.patient.DeathRule;
 import com.imsweb.datagenerator.naaccr.rule.patient.HispanicOriginRule;
-import com.imsweb.datagenerator.naaccr.rule.patient.IhsRule;
 import com.imsweb.datagenerator.naaccr.rule.patient.NameRule;
+import com.imsweb.datagenerator.naaccr.rule.patient.NapiiaRule;
+import com.imsweb.datagenerator.naaccr.rule.patient.NhiaRule;
 import com.imsweb.datagenerator.naaccr.rule.patient.PatientIdRule;
 import com.imsweb.datagenerator.naaccr.rule.patient.RaceRule;
 import com.imsweb.datagenerator.naaccr.rule.patient.SexRule;
@@ -35,11 +38,8 @@ import com.imsweb.datagenerator.naaccr.rule.tumor.DxConfirmationRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.FacilityRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.MaritalStatusRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.MultiTumorsRule;
-import com.imsweb.datagenerator.naaccr.rule.tumor.NapiiaRule;
-import com.imsweb.datagenerator.naaccr.rule.tumor.NhiaRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.PhysicianRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.PrimaryPayerRule;
-import com.imsweb.datagenerator.naaccr.rule.tumor.RegistryIdRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.ReportingSourceRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.RxSummaryRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.SeerCodingSystemRule;
@@ -52,6 +52,10 @@ import com.imsweb.datagenerator.naaccr.rule.tumor.TumorRecordNumberRule;
 import com.imsweb.datagenerator.utils.Distribution;
 import com.imsweb.datagenerator.utils.DistributionUtils;
 import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
+import com.imsweb.naaccrxml.entity.AbstractEntity;
+import com.imsweb.naaccrxml.entity.Item;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
 
 /**
  * A NAACCR data generator can be used to create fake NAACCR data files.
@@ -70,11 +74,9 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
     public static final String CONTEXT_FLAG_AGE_GROUP_MAP = "ageGroupMap";
     public static final String CONTEXT_FLAG_MAX_AGE_GROUP = "maxAgeGroup";
 
-    // list of patient specific rules to be executed in order
-    private final List<NaaccrDataGeneratorRule> _patientRules;
-
-    // list of tumor specific rules to be executed in order
-    private final List<NaaccrDataGeneratorRule> _tumorRules;
+    // list of rules (order matters)
+    private final List<NaaccrDataGeneratorPatientRule> _patientRules;
+    private final List<NaaccrDataGeneratorTumorRule> _tumorRules;
 
     /**
      * Constructor
@@ -95,11 +97,11 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
         _patientRules.add(new BirthRule());
         _patientRules.add(new AddressCurrentRule());
         _patientRules.add(new ComputedEthnicityRule());
-        _patientRules.add(new IhsRule());
+        _patientRules.add(new NhiaRule());
+        _patientRules.add(new NapiiaRule());
 
         // default tumor rules
         _tumorRules = new ArrayList<>();
-        _tumorRules.add(new RegistryIdRule());
         _tumorRules.add(new TumorRecordNumberRule());
         _tumorRules.add(new SeerRecordNumberRule());
         _tumorRules.add(new SequenceNumberCentralRule());
@@ -121,8 +123,6 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
         _tumorRules.add(new MultiTumorsRule());
         _tumorRules.add(new DateOfConclusiveDxRule());
         _tumorRules.add(new CollaborativeStageRule());
-        _tumorRules.add(new NhiaRule());
-        _tumorRules.add(new NapiiaRule());
         _tumorRules.add(new FacilityRule());
         _tumorRules.add(new PhysicianRule());
     }
@@ -131,7 +131,7 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
      * Adds a new patient rule
      * @param rule rule to be added
      */
-    public void addPatientRule(NaaccrDataGeneratorRule rule) {
+    public void addPatientRule(NaaccrDataGeneratorPatientRule rule) {
         _patientRules.add(rule);
     }
 
@@ -149,7 +149,7 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
      * @param newRule new rule to replace with
      * @return true if the rule was actually replaced
      */
-    public boolean replacePatientRule(NaaccrDataGeneratorRule newRule) {
+    public boolean replacePatientRule(NaaccrDataGeneratorPatientRule newRule) {
         int idx = _patientRules.indexOf(newRule);
         if (idx != -1) {
             _patientRules.set(idx, newRule);
@@ -161,8 +161,8 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
     /**
      * Returns the requested patient rule from this generator.
      */
-    public NaaccrDataGeneratorRule getPatientRule(String ruleId) {
-        for (NaaccrDataGeneratorRule rule : _patientRules)
+    public NaaccrDataGeneratorPatientRule getPatientRule(String ruleId) {
+        for (NaaccrDataGeneratorPatientRule rule : _patientRules)
             if (ruleId.equals(rule.getId()))
                 return rule;
         return null;
@@ -171,7 +171,7 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
     /**
      * Returns all the patient rules from this generator.
      */
-    public List<NaaccrDataGeneratorRule> getPatientRules() {
+    public List<NaaccrDataGeneratorPatientRule> getPatientRules() {
         return _patientRules;
     }
 
@@ -179,7 +179,7 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
      * Adds a new patient rule
      * @param rule rule to be added
      */
-    public void addTumorRule(NaaccrDataGeneratorRule rule) {
+    public void addTumorRule(NaaccrDataGeneratorTumorRule rule) {
         _tumorRules.add(rule);
     }
 
@@ -197,7 +197,7 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
      * @param newRule new rule to replace with
      * @return true if the rule was actually replaced
      */
-    public boolean replaceTumorRule(NaaccrDataGeneratorRule newRule) {
+    public boolean replaceTumorRule(NaaccrDataGeneratorTumorRule newRule) {
         int idx = _tumorRules.indexOf(newRule);
         if (idx != -1) {
             _tumorRules.set(idx, newRule);
@@ -209,8 +209,8 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
     /**
      * Returns the requested patient rule from this generator.
      */
-    public NaaccrDataGeneratorRule getTumorRule(String ruleId) {
-        for (NaaccrDataGeneratorRule rule : _tumorRules)
+    public NaaccrDataGeneratorTumorRule getTumorRule(String ruleId) {
+        for (NaaccrDataGeneratorTumorRule rule : _tumorRules)
             if (ruleId.equals(rule.getId()))
                 return rule;
         return null;
@@ -219,12 +219,12 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
     /**
      * Returns all the tumor rules from this generator.
      */
-    public List<NaaccrDataGeneratorRule> getTumorRules() {
+    public List<NaaccrDataGeneratorTumorRule> getTumorRules() {
         return _tumorRules;
     }
 
-    // helper, creates a single patient as a list of maps
-    protected List<Map<String, String>> generatePatientAsListOfMaps(int numTumors, NaaccrDataGeneratorOptions options) {
+    // helper, creates a single patient
+    protected Patient internalGeneratePatient(int numTumors, NaaccrDataGeneratorOptions options) {
         // make sure number of tumors is valid
         if (numTumors < 1)
             throw new IllegalArgumentException("Number of tumors must be greater than 0");
@@ -236,49 +236,56 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
         // Context contains information that is shared amongst the rules. Contains values we want to use for this patient.
         Map<String, Object> context = generateInitialPatientContext(numTumors);
 
-        List<Map<String, String>> tumors = new ArrayList<>();
-
         // execute the patient rules once; we will copy the resulting values in each tumor
-        Map<String, String> patient = new HashMap<>();
-        for (NaaccrDataGeneratorRule rule : _patientRules)
-            if (allPropertiesHaveValue(patient, rule.getRequiredProperties()))
-                rule.execute(patient, null, options, context);
+        Patient patient = new Patient();
+        for (NaaccrDataGeneratorPatientRule rule : _patientRules)
+            if (allPropertiesHaveValue(patient, null, rule.getRequiredProperties()))
+                rule.execute(patient, options, context);
+        addFullDates(patient);
 
         // filter created keys to make sure they are in the layout
-        Set<String> invalidKeys = patient.keySet().stream().filter(this::isInvalidValidField).collect(Collectors.toSet());
-        invalidKeys.forEach(patient::remove);
+        for (Item item : patient.getItems().stream().filter(item -> isInvalidValidField(item.getNaaccrId())).collect(Collectors.toList()))
+            patient.removeItem(item);
 
         // create each tumor and add it to the return list
         for (int i = 0; i < numTumors; i++) {
             context.put(CONTEXT_FLAG_CURRENT_TUMOR_INDEX, i);
 
-            Map<String, String> tumor = new HashMap<>();
+            Tumor tumor = new Tumor();
 
             // if there is pre-processing constant values, set them
             if (options.getConstantValuesPreProcessing() != null)
-                tumor.putAll(options.getConstantValuesPreProcessing());
-
-            // copy the patient values
-            tumor.putAll(patient);
+                for (Entry<String, String> entry : options.getConstantValuesPreProcessing().entrySet())
+                    setValue(tumor, entry.getKey(), entry.getValue());
 
             // execute the tumor rules
-            for (NaaccrDataGeneratorRule rule : _tumorRules)
-                if (allPropertiesHaveValue(tumor, rule.getRequiredProperties()))
-                    rule.execute(tumor, tumors, options, context);
+            for (NaaccrDataGeneratorTumorRule rule : _tumorRules)
+                if (allPropertiesHaveValue(patient, tumor, rule.getRequiredProperties()))
+                    rule.execute(tumor, patient, options, context);
+            addFullDates(tumor);
 
             // filter created keys to make sure they are in the layout
-            invalidKeys = tumor.keySet().stream().filter(this::isInvalidValidField).collect(Collectors.toSet());
-            invalidKeys.forEach(tumor::remove);
+            for (Item item : tumor.getItems().stream().filter(item -> isInvalidValidField(item.getNaaccrId())).collect(Collectors.toList()))
+                tumor.removeItem(item);
 
             // if there is post-processing constant values, set them
             if (options.getConstantValuesPostProcessing() != null)
-                tumor.putAll(options.getConstantValuesPostProcessing());
+                for (Entry<String, String> entry : options.getConstantValuesPostProcessing().entrySet())
+                    setValue(tumor, entry.getKey(), entry.getValue());
 
             // we are done with this tumor, add it to the result
-            tumors.add(tumor);
+            patient.addTumor(tumor);
         }
 
-        return tumors;
+        return patient;
+    }
+
+    protected void setValue(AbstractEntity entity, String property, String value) {
+        Item item = entity.getItem(property);
+        if (item != null)
+            item.setValue(value);
+        else
+            entity.addItem(new Item(property, value));
     }
 
     protected abstract boolean isInvalidValidField(String name);
@@ -331,12 +338,33 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
     /**
      * Returns true if all the requested properties have a non-blank value on the provided record.
      */
-    protected boolean allPropertiesHaveValue(Map<String, String> record, List<String> properties) {
+    protected boolean allPropertiesHaveValue(Patient patient, Tumor tumor, List<String> properties) {
         for (String property : properties) {
-            String val = record.get(property);
-            if (val == null || val.trim().isEmpty())
+            String val = patient.getItemValue(property);
+            if (StringUtils.isBlank(val) && tumor != null)
+                val = tumor.getItemValue(property);
+            if (StringUtils.isBlank(val))
                 return false;
         }
         return true;
+    }
+
+    protected void addFullDates(AbstractEntity entity) {
+        for (String yearProp : entity.getItems().stream().map(Item::getNaaccrId).filter(i -> i.endsWith("Year")).collect(Collectors.toList())) {
+            String prop = yearProp.replace("Year", "");
+
+            String yearVal = entity.getItemValue(prop + "Year");
+            String monthVal = entity.getItemValue(prop + "Month");
+            String dayVal = entity.getItemValue(prop + "Day");
+
+            StringBuilder val = new StringBuilder(yearVal);
+            if (!StringUtils.isBlank(monthVal))
+                val.append(monthVal);
+            if (!StringUtils.isBlank(dayVal))
+                val.append(dayVal);
+
+            setValue(entity, prop, val.toString());
+        }
+
     }
 }

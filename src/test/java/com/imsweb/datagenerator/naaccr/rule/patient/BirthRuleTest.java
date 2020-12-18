@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
+import com.imsweb.naaccrxml.entity.Patient;
 
 import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_AGE_GROUP_MAP;
 import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_MAX_AGE_GROUP;
@@ -17,31 +18,32 @@ import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_S
 
 public class BirthRuleTest {
 
-    private BirthRule _rule = new BirthRule();
+    private final BirthRule _rule = new BirthRule();
 
     @Test
     public void testExecute() {
-        Map<String, String> rec = new HashMap<>();
+        Patient patient = new Patient();
+
         Map<String, Object> context = new HashMap<>();
         NaaccrDataGeneratorOptions options = new NaaccrDataGeneratorOptions();
         options.setMinDxYear(2000);
-        _rule.execute(rec, null, options, context);
+        _rule.execute(patient, options, context);
 
         // the birth date should have been assigned
-        Assert.assertTrue(rec.get("dateOfBirthYear").matches("\\d{4}"));
-        Assert.assertTrue(rec.get("dateOfBirthMonth").matches("\\d{1,2}"));
-        Assert.assertTrue(rec.get("dateOfBirthDay").matches("\\d{1,2}"));
+        Assert.assertTrue(patient.getItemValue("dateOfBirthYear").matches("\\d{4}"));
+        Assert.assertTrue(patient.getItemValue("dateOfBirthMonth").matches("\\d{1,2}"));
+        Assert.assertTrue(patient.getItemValue("dateOfBirthDay").matches("\\d{1,2}"));
 
         // it should be in a specific range
-        LocalDate assignedDate = LocalDate.of(Integer.parseInt(rec.get("dateOfBirthYear")), Integer.parseInt(rec.get("dateOfBirthMonth")), Integer.parseInt(rec.get("dateOfBirthDay")));
+        LocalDate assignedDate = LocalDate.of(Integer.parseInt(patient.getItemValue("dateOfBirthYear")), Integer.parseInt(patient.getItemValue("dateOfBirthMonth")),
+                Integer.parseInt(patient.getItemValue("dateOfBirthDay")));
         Assert.assertTrue(assignedDate.toString(), assignedDate.isBefore(options.getMinDxDate().minusYears(5).plusDays(1)) &&
                 assignedDate.isAfter(options.getMinDxDate().minusYears(105).minusDays(1)));
 
         // the country should have been assigned
-        Assert.assertEquals("USA", rec.get("birthplaceCountry"));
+        Assert.assertEquals("USA", patient.getItemValue("birthplaceCountry"));
         // state is random but should always be assigned
-        Assert.assertTrue(rec.get("birthplaceState").matches("[A-Z]{2}"));
-
+        Assert.assertTrue(patient.getItemValue("birthplaceState").matches("[A-Z]{2}"));
 
         // Use of a context
         context.put(CONTEXT_FLAG_SEX, "1");
@@ -67,17 +69,17 @@ public class BirthRuleTest {
         context.put(CONTEXT_FLAG_AGE_GROUP_MAP, ageGroupMap);
         context.put(CONTEXT_FLAG_MAX_AGE_GROUP, 8);
 
-
-        rec = new HashMap<>();
+        patient = new Patient();
         options = new NaaccrDataGeneratorOptions();
 
         // 5 year range maximum 1920 - 1925.
         options.setMinDxYear(2000);
         options.setMaxDxYear(2005);
 
-        _rule.execute(rec, null, options, context);
+        _rule.execute(patient, options, context);
 
-        assignedDate = LocalDate.of(Integer.parseInt(rec.get("dateOfBirthYear")), Integer.parseInt(rec.get("dateOfBirthMonth")), Integer.parseInt(rec.get("dateOfBirthDay")));
+        assignedDate = LocalDate.of(Integer.parseInt(patient.getItemValue("dateOfBirthYear")), Integer.parseInt(patient.getItemValue("dateOfBirthMonth")),
+                Integer.parseInt(patient.getItemValue("dateOfBirthDay")));
         LocalDate startDate = options.getMinDxDate().minusYears(80).minusDays(1);
         LocalDate endDate = options.getMaxDxDate().minusYears(80).plusDays(1);
         String assertMsg = assignedDate.toString() + ": Not between " + startDate.toString() + " and " + endDate.toString();
@@ -87,9 +89,10 @@ public class BirthRuleTest {
         options.setMinDxYear(2000);
         options.setMaxDxYear(2015);
 
-        _rule.execute(rec, null, options, context);
+        _rule.execute(patient, options, context);
 
-        assignedDate = LocalDate.of(Integer.parseInt(rec.get("dateOfBirthYear")), Integer.parseInt(rec.get("dateOfBirthMonth")), Integer.parseInt(rec.get("dateOfBirthDay")));
+        assignedDate = LocalDate.of(Integer.parseInt(patient.getItemValue("dateOfBirthYear")), Integer.parseInt(patient.getItemValue("dateOfBirthMonth")),
+                Integer.parseInt(patient.getItemValue("dateOfBirthDay")));
         startDate = options.getMinDxDate().minusYears(80).minusDays(1);
         endDate = options.getMaxDxDate().minusYears(80).plusDays(1);
         assertMsg = assignedDate.toString() + ": Not between " + startDate.toString() + " and " + endDate.toString();

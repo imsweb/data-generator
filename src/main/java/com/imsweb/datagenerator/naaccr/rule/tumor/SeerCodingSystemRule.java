@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
-import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
+import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
 import com.imsweb.datagenerator.utils.RandomUtils;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
 
-public class SeerCodingSystemRule extends NaaccrDataGeneratorRule {
+public class SeerCodingSystemRule extends NaaccrDataGeneratorTumorRule {
 
     // unique identifier for this rule
     public static final String ID = "seer-coding-system";
@@ -26,14 +28,14 @@ public class SeerCodingSystemRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
+    public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
 
         // don't assign anything prior to 2004
-        if (!inDxYearRange(record, 2004, null))
+        if (!inDxYearRange(tumor, 2004, null))
             return;
 
         String code;
-        int yearDx = Integer.parseInt(record.get("dateOfDiagnosisYear"));
+        int yearDx = Integer.parseInt(tumor.getItemValue("dateOfDiagnosisYear"));
 
         if (yearDx > 2003 && yearDx < 2007)
             code = "7";    // If Year of DX > 2003 and < 2007, SEER Coding Sys--Current must equal 7 (2004 SEER Coding Manual).
@@ -52,9 +54,13 @@ public class SeerCodingSystemRule extends NaaccrDataGeneratorRule {
             code = "D";    // If Year of DX is 2013, SEER Coding Sys--Current must equal D (2013 SEER Coding Manual).
         else if (yearDx == 2014)
             code = "E";    // If Year of DX is 2014, SEER Coding Sys--Current must equal E (2014 SEER Coding Manual).
+        else if (yearDx == 2015)
+            code = "F";    // If Year of DX is 2015 , SEER Coding Sys--Current must equal F (2015 SEER Coding Manual).
+        else if (yearDx == 2016 || yearDx == 2017)
+            code = "G";    // If Year of DX is 2016-2017, SEER Coding Sys--Current must equal G (2016 SEER Coding Manual).
         else
-            code = "F";    // If Year of DX is 2015 or later, SEER Coding Sys--Current must equal F (2015 SEER Coding Manual).
+            code = "H";    // If Year of DX is 2015 or later, SEER Coding Sys--Current must equal F (2018 SEER Coding Manual).
 
-        record.put("seerCodingSysCurrent", code);
+        setValue(tumor, "seerCodingSysCurrent", code);
     }
 }

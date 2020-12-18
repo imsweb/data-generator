@@ -11,6 +11,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPOutputStream;
@@ -18,6 +20,8 @@ import java.util.zip.GZIPOutputStream;
 import com.imsweb.datagenerator.utils.Distribution;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
 
 /**
  * This NAACCR Data Generators uses (and requires) a NAACCR fixed-columns layout.
@@ -78,7 +82,23 @@ public class NaaccrFixedColumnsDataGenerator extends NaaccrDataGenerator {
      * @return generated patient as a list of tumor maps, never null
      */
     public List<Map<String, String>> generatePatient(int numTumors, NaaccrDataGeneratorOptions options) {
-        return generatePatientAsListOfMaps(numTumors, options);
+        Patient patient = internalGeneratePatient(numTumors, options);
+
+        List<Map<String, String>> records = new ArrayList<>();
+
+        for (Tumor tumor : patient.getTumors()) {
+            Map<String, String> record = new HashMap<>();
+
+            if (options != null && options.getRegistryId() != null)
+                record.put("registryId", options.getRegistryId());
+
+            patient.getItems().forEach(i -> record.put(i.getNaaccrId(), i.getValue()));
+            tumor.getItems().forEach(i -> record.put(i.getNaaccrId(), i.getValue()));
+
+            records.add(record);
+        }
+
+        return records;
     }
 
     /**

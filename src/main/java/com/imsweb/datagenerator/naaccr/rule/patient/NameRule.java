@@ -7,11 +7,12 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
-import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
+import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorPatientRule;
 import com.imsweb.datagenerator.utils.DistributionUtils;
 import com.imsweb.datagenerator.utils.RandomUtils;
+import com.imsweb.naaccrxml.entity.Patient;
 
-public class NameRule extends NaaccrDataGeneratorRule {
+public class NameRule extends NaaccrDataGeneratorPatientRule {
 
     // unique identifier for this rule
     public static final String ID = "name";
@@ -39,46 +40,46 @@ public class NameRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
-        record.put("nameLast", getLastNameByRace(record));
-        record.put("nameMiddle", getMiddleName(record));
-        record.put("nameFirst", getFirstName(record));
-        record.put("namePrefix", getPrefix(record));
-        record.put("nameSuffix", getSuffix(record));
+    public void execute(Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
+        setValue(patient, "nameLast", getLastNameByRace(patient));
+        setValue(patient, "nameMiddle", getMiddleName(patient));
+        setValue(patient, "nameFirst", getFirstName(patient));
+        setValue(patient, "namePrefix", getPrefix(patient));
+        setValue(patient, "nameSuffix", getSuffix(patient));
 
         String surnameKey = _useMaidenNameField ? "nameMaiden" : "nameBirthSurname";
-        record.put(surnameKey, getBirthSurnameName(record));
+        setValue(patient, surnameKey, getBirthSurnameName(patient));
         // if a birth surname was created and returned, generate a new last name
-        if (!StringUtils.isBlank(record.get(surnameKey)))
-            record.put("nameLast", getSpouseLastName(record));
+        if (!StringUtils.isBlank(patient.getItemValue(surnameKey)))
+            setValue(patient, "nameLast", getSpouseLastName(patient));
     }
 
     /**
      * Generates a random last name based on patient's assigned race
-     * @param record patient record map
+     * @param patient current patient
      * @return randomly generated surname
      */
-    protected String getLastNameByRace(Map<String, String> record) {
-        return DistributionUtils.getNameLast(record.get("spanishHispanicOrigin"), record.get("race1"));
+    protected String getLastNameByRace(Patient patient) {
+        return DistributionUtils.getNameLast(patient.getItemValue("spanishHispanicOrigin"), patient.getItemValue("race1"));
     }
 
     /**
      * Based on patient sex, returns a random first name
-     * @param record patient record map
+     * @param patient current patient
      * @return randomly selected first name
      */
-    protected String getFirstName(Map<String, String> record) {
-        return DistributionUtils.getNameFirst(record.get("sex"));
+    protected String getFirstName(Patient patient) {
+        return DistributionUtils.getNameFirst(patient.getItemValue("sex"));
     }
 
     /**
      * Based on patient sex returns a random middle name. There is a 5% chance only the middle
      * initial will be returned.
-     * @param record patient record map
+     * @param patient current patient
      * @return randomly selected middle name or middle initial
      */
-    protected String getMiddleName(Map<String, String> record) {
-        String name = DistributionUtils.getNameFirst(record.get("sex"));
+    protected String getMiddleName(Patient patient) {
+        String name = DistributionUtils.getNameFirst(patient.getItemValue("sex"));
 
         // 1/20 chance middle name will be abbreviated
         return RandomUtils.nextInt(20) == 0 ? name.charAt(0) + "." : name;
@@ -86,15 +87,15 @@ public class NameRule extends NaaccrDataGeneratorRule {
 
     /**
      * Returns a random name prefix (Mr, Ms, Rev,...) based on the sex of the patient
-     * @param record patient record map
+     * @param patient current patient
      * @return name prefix
      */
-    protected String getPrefix(Map<String, String> record) {
+    protected String getPrefix(Patient patient) {
         // 98% chance prefix will be blank
         if (RandomUtils.nextInt(100) > 1)
             return "";
 
-        if ("1".equals(record.get("sex")))
+        if ("1".equals(patient.getItemValue("sex")))
             return _VALUES_PREFIXES_MALE[RandomUtils.nextInt(_VALUES_PREFIXES_MALE.length)];
         else
             return _VALUES_PREFIXES_FEMALE[RandomUtils.nextInt(_VALUES_PREFIXES_FEMALE.length)];
@@ -102,16 +103,16 @@ public class NameRule extends NaaccrDataGeneratorRule {
 
     /**
      * Returns a random name suffix (Jr, MD, III,...) based on sex of patient
-     * @param record patient record map
+     * @param patient current patient
      * @return name suffix
      */
-    protected String getSuffix(Map<String, String> record) {
+    protected String getSuffix(Patient patient) {
         // 97% chance suffix will be blank
         if (RandomUtils.nextInt(100) > 2)
             return "";
 
         String suffix = "";
-        if ("1".equals(record.get("sex")))
+        if ("1".equals(patient.getItemValue("sex")))
             suffix = _VALUES_SUFFIXES_MALE[RandomUtils.nextInt(_VALUES_SUFFIXES_MALE.length)];
         // 50% chance to use non-male specific suffix
         if (RandomUtils.nextInt(1) == 0)
@@ -123,15 +124,15 @@ public class NameRule extends NaaccrDataGeneratorRule {
     /**
      * If patient is female, this method will return a birth surname name 60% of the time. It will return a blank string otherwise. The surname is
      * assigned by simply reassigning the already generated last name to the surname name, since it already accounts for the patient's race.
-     * @param record patient record map
+     * @param patient current patient
      * @return patient's birth surname (same as current last name) or blank if no surname name
      */
-    protected String getBirthSurnameName(Map<String, String> record) {
+    protected String getBirthSurnameName(Patient patient) {
         String birthSurname = "";
-        if ("2".equals(record.get("sex")))
+        if ("2".equals(patient.getItemValue("sex")))
             if (RandomUtils.nextInt(100) < 60)
                 // patient is female and will have a birth surname - use the already generated last name
-                birthSurname = record.get("nameLast");
+                birthSurname = patient.getItemValue("nameLast");
         return birthSurname;
     }
 
@@ -139,7 +140,7 @@ public class NameRule extends NaaccrDataGeneratorRule {
      * Produces a new last name independent of current patient. This is used as the new surname when a birth surname is present
      * @return random last name
      */
-    protected String getSpouseLastName(Map<String, String> record) {
-        return DistributionUtils.getNameLast(record.get("spanishHispanicOrigin"), record.get("race1"));
+    protected String getSpouseLastName(Patient patient) {
+        return DistributionUtils.getNameLast(patient.getItemValue("spanishHispanicOrigin"), patient.getItemValue("race1"));
     }
 }

@@ -3,15 +3,16 @@
  */
 package com.imsweb.datagenerator.naaccr.rule.tumor;
 
-import java.util.List;
 import java.util.Map;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
-import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
+import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
 import com.imsweb.datagenerator.provider.physician.PhysicianDto;
 import com.imsweb.datagenerator.utils.RandomUtils;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
 
-public class PhysicianRule extends NaaccrDataGeneratorRule {
+public class PhysicianRule extends NaaccrDataGeneratorTumorRule {
 
     // unique identifier for this rule
     public static final String ID = "physician";
@@ -24,20 +25,20 @@ public class PhysicianRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
+    public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         if (options != null && options.getPhysicians() != null && !options.getPhysicians().isEmpty()) {
             // Pick a random physician for each visit.
             PhysicianDto physicianManaging = options.getPhysicians().get(RandomUtils.nextInt(options.getPhysicians().size()));
-            record.put("npiPhysicianManaging", physicianManaging.getNpi());
-            record.put("physicianManaging", physicianManaging.getLastName() + ", " + physicianManaging.getFirstName());
+            setValue(tumor, "npiPhysicianManaging", physicianManaging.getNpi());
+            setValue(tumor, "physicianManaging", physicianManaging.getLastName() + ", " + physicianManaging.getFirstName());
 
             PhysicianDto physicianFollowup = options.getPhysicians().get(RandomUtils.nextInt(options.getPhysicians().size()));
-            record.put("npiPhysicianFollowUp", physicianFollowup.getNpi());
-            record.put("physicianFollowUp", physicianFollowup.getLastName() + ", " + physicianFollowup.getFirstName());
+            setValue(tumor, "npiPhysicianFollowUp", physicianFollowup.getNpi());
+            setValue(tumor, "physicianFollowUp", physicianFollowup.getLastName() + ", " + physicianFollowup.getFirstName());
 
             PhysicianDto physicianPrimary = options.getPhysicians().get(RandomUtils.nextInt(options.getPhysicians().size()));
-            record.put("npiPhysicianPrimarySurg", physicianPrimary.getNpi());
-            record.put("physicianPrimarySurg", physicianPrimary.getLastName() + ", " + physicianPrimary.getFirstName());
+            setValue(tumor, "npiPhysicianPrimarySurg", physicianPrimary.getNpi());
+            setValue(tumor, "physicianPrimarySurg", physicianPrimary.getLastName() + ", " + physicianPrimary.getFirstName());
         }
 
     }

@@ -22,6 +22,9 @@ import com.imsweb.datagenerator.provider.physician.PhysicianDto;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.FixedColumnsField;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
+import com.imsweb.naaccrxml.entity.Item;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
 
 public class NaaccrFixedColumnsDataGeneratorTest {
 
@@ -110,9 +113,6 @@ public class NaaccrFixedColumnsDataGeneratorTest {
 
         // remove unknown tumor rule
         Assert.assertFalse(generator.removeTumorRule("hum?"));
-
-        // replace unknown tumor rule
-        Assert.assertFalse(generator.replacePatientRule(new TestTumorRule(null)));
     }
 
     @Test
@@ -281,7 +281,7 @@ public class NaaccrFixedColumnsDataGeneratorTest {
     /**
      * Testing patient rule. only assigns a single value to the nameLast field in the output file.
      */
-    private static class TestPatientRule extends NaaccrDataGeneratorRule {
+    private static class TestPatientRule extends NaaccrDataGeneratorPatientRule {
 
         private final String _value;
 
@@ -291,15 +291,15 @@ public class NaaccrFixedColumnsDataGeneratorTest {
         }
 
         @Override
-        public void execute(Map<String, String> patient, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
-            patient.put("nameLast", _value);
+        public void execute(Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
+            patient.addItem(new Item("nameLast", _value));
         }
     }
 
     /**
      * Testing tumor rule. only assigns a single value to the primarySite field in the output file.
      */
-    private static class TestTumorRule extends NaaccrDataGeneratorRule {
+    private static class TestTumorRule extends NaaccrDataGeneratorTumorRule {
 
         private final String _value;
 
@@ -309,8 +309,8 @@ public class NaaccrFixedColumnsDataGeneratorTest {
         }
 
         @Override
-        public void execute(Map<String, String> tumor, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
-            tumor.put("primarySite", _value);
+        public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
+            patient.addItem(new Item("primarySite", _value));
         }
     }
 

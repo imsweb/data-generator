@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
-import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
+import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
 
-public class AgeRule extends NaaccrDataGeneratorRule {
+public class AgeRule extends NaaccrDataGeneratorTumorRule {
 
     // unique identifier for this rule
     public static final String ID = "age-at-dx";
@@ -27,17 +29,17 @@ public class AgeRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
-        int birthYear = Integer.parseInt(record.get("dateOfBirthYear"));
-        int birthMonth = Integer.parseInt(record.get("dateOfBirthMonth"));
-        int birthDay = Integer.parseInt(record.get("dateOfBirthDay"));
+    public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
+        int birthYear = Integer.parseInt(patient.getItemValue("dateOfBirthYear"));
+        int birthMonth = Integer.parseInt(patient.getItemValue("dateOfBirthMonth"));
+        int birthDay = Integer.parseInt(patient.getItemValue("dateOfBirthDay"));
         LocalDate dateOfBirth = LocalDate.of(birthYear, birthMonth, birthDay);
 
-        int dxYear = Integer.parseInt(record.get("dateOfDiagnosisYear"));
-        int dxMonth = Integer.parseInt(record.get("dateOfDiagnosisMonth"));
-        int dxDay = Integer.parseInt(record.get("dateOfDiagnosisDay"));
+        int dxYear = Integer.parseInt(tumor.getItemValue("dateOfDiagnosisYear"));
+        int dxMonth = Integer.parseInt(tumor.getItemValue("dateOfDiagnosisMonth"));
+        int dxDay = Integer.parseInt(tumor.getItemValue("dateOfDiagnosisDay"));
         LocalDate dxDate = LocalDate.of(dxYear, dxMonth, dxDay);
 
-        record.put("ageAtDiagnosis", String.format("%03d", ChronoUnit.YEARS.between(dateOfBirth, dxDate)));
+        setValue(tumor, "ageAtDiagnosis", String.format("%03d", ChronoUnit.YEARS.between(dateOfBirth, dxDate)));
     }
 }

@@ -1,13 +1,13 @@
 package com.imsweb.datagenerator.naaccr.rule.patient;
 
-import java.util.List;
 import java.util.Map;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
-import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
+import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorPatientRule;
 import com.imsweb.datagenerator.utils.DistributionUtils;
+import com.imsweb.naaccrxml.entity.Patient;
 
-public class VitalStatusRule extends NaaccrDataGeneratorRule {
+public class VitalStatusRule extends NaaccrDataGeneratorPatientRule {
 
     // unique identifier for this rule
     public static final String ID = "vital-status";
@@ -20,13 +20,13 @@ public class VitalStatusRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
+    public void execute(Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         String value = DistributionUtils.getVitalStatus();
 
         // recode 4 into 0 if we have to
         if ("0".equals(value) && options != null && options.getVitalStatusDeadValue() != null)
             value = options.getVitalStatusDeadValue();
 
-        record.put("vitalStatus", value);
+        setValue(patient, "vitalStatus", value);
     }
 }

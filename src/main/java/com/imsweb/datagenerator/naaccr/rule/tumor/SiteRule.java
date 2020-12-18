@@ -1,17 +1,18 @@
 package com.imsweb.datagenerator.naaccr.rule.tumor;
 
-import java.util.List;
 import java.util.Map;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
-import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
+import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
 import com.imsweb.datagenerator.utils.DistributionUtils;
 import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
 
 import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_CURRENT_TUMOR_INDEX;
 import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_SITE_FREQ_MAP;
 
-public class SiteRule extends NaaccrDataGeneratorRule {
+public class SiteRule extends NaaccrDataGeneratorTumorRule {
 
     // unique identifier for this rule
     public static final String ID = "site";
@@ -24,32 +25,32 @@ public class SiteRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> tumor, List<Map<String, String>> otherTumors, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
+    public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
 
         Integer currentTumorIndex = (Integer)context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX);
 
         @SuppressWarnings("unchecked")
         Map<Integer, SiteFrequencyDto> siteFreqMap = (Map<Integer, SiteFrequencyDto>)context.get(CONTEXT_FLAG_SITE_FREQ_MAP);
         if (currentTumorIndex != null && siteFreqMap != null) {
-            tumor.put("primarySite", siteFreqMap.get(currentTumorIndex).getSite());
-            tumor.put("histologicTypeIcdO3", siteFreqMap.get(currentTumorIndex).getHistology());
-            tumor.put("behaviorCodeIcdO3", siteFreqMap.get(currentTumorIndex).getBehavior());
+            setValue(tumor, "primarySite", siteFreqMap.get(currentTumorIndex).getSite());
+            setValue(tumor, "histologicTypeIcdO3", siteFreqMap.get(currentTumorIndex).getHistology());
+            setValue(tumor, "behaviorCodeIcdO3", siteFreqMap.get(currentTumorIndex).getBehavior());
         }
 
-        if (!propertyHasValue(tumor, "primarySite")) {
-            SiteFrequencyDto dto = DistributionUtils.getSite(tumor.get("sex"));
-            tumor.put("primarySite", dto.getSite());
-            tumor.put("histologicTypeIcdO3", dto.getHistology());
-            tumor.put("behaviorCodeIcdO3", dto.getBehavior());
+        if (!hasValue(tumor, "primarySite")) {
+            SiteFrequencyDto dto = DistributionUtils.getSite(patient.getItemValue("sex"));
+            setValue(tumor, "primarySite", dto.getSite());
+            setValue(tumor, "histologicTypeIcdO3", dto.getHistology());
+            setValue(tumor, "behaviorCodeIcdO3", dto.getBehavior());
         }
 
         // set grade and laterality to 9, unknown
-        tumor.put("grade", "9");
+        setValue(tumor, "grade", "9");
 
-        if (tumor.get("primarySite").equals("C809"))
+        if ("C809".equals(tumor.getItemValue("primarySite")))
             // laterality should be 0 if site is C809 (unknown)
-            tumor.put("laterality", "0");
+            setValue(tumor, "laterality", "0");
         else
-            tumor.put("laterality", "9");
+            setValue(tumor, "laterality", "9");
     }
 }

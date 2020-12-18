@@ -92,7 +92,7 @@ public class NaaccrXmlDataGenerator extends NaaccrDataGenerator {
      * @return generated patient as a list of tumor maps, never null
      */
     public Patient generatePatient(int numTumors, NaaccrDataGeneratorOptions options) {
-        return createPatient(generatePatientAsListOfMaps(numTumors, options));
+        return internalGeneratePatient(numTumors, options);
     }
 
     /**

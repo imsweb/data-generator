@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
-import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
+import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
 
-public class DateOfConclusiveDxRule extends NaaccrDataGeneratorRule {
+public class DateOfConclusiveDxRule extends NaaccrDataGeneratorTumorRule {
 
     // unique identifier for this rule
     public static final String ID = "date-conclusive-dx";
@@ -25,15 +27,15 @@ public class DateOfConclusiveDxRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
+    public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
 
         // don't assign anything prior to 2007
-        if (!inDxYearRange(record, 2007, null))
+        if (!inDxYearRange(tumor, 2007, null))
             return;
 
         // for now this is set to the DX date...
-        record.put("dateConclusiveDxYear", record.get("dateOfDiagnosisYear"));
-        record.put("dateConclusiveDxMonth", record.get("dateOfDiagnosisMonth"));
-        record.put("dateConclusiveDxDay", record.get("dateOfDiagnosisDay"));
+        setValue(tumor, "dateConclusiveDxYear", tumor.getItemValue("dateOfDiagnosisYear"));
+        setValue(tumor, "dateConclusiveDxMonth", tumor.getItemValue("dateOfDiagnosisMonth"));
+        setValue(tumor, "dateConclusiveDxDay", tumor.getItemValue("dateOfDiagnosisDay"));
     }
 }

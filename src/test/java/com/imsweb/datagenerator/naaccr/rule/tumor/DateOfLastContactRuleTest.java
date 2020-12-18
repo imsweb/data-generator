@@ -1,32 +1,36 @@
 package com.imsweb.datagenerator.naaccr.rule.tumor;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.imsweb.naaccrxml.entity.Item;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
+
 public class DateOfLastContactRuleTest {
 
-    private DateOfLastContactRule _rule = new DateOfLastContactRule();
+    private final DateOfLastContactRule _rule = new DateOfLastContactRule();
 
     @Test
     public void testExecute() {
-        List<Map<String, String>> otherRecords = new ArrayList<>();
+        Patient patient = new Patient();
+
+        Tumor tumor = new Tumor();
+        patient.addTumor(tumor);
+
         Map<String, Object> context = new HashMap<>();
 
-        Map<String, String> rec = new HashMap<>();
-
         // for now, the date is just set to the DX date...
-        rec.put("dateOfDiagnosisYear", "2005");
-        rec.put("dateOfDiagnosisMonth", "07");
-        rec.put("dateOfDiagnosisDay", "04");
-        _rule.execute(rec, otherRecords, null, context);
-        Assert.assertEquals("2005", rec.get("dateOfLastContactYear"));
-        Assert.assertEquals("07", rec.get("dateOfLastContactMonth"));
-        Assert.assertEquals("04", rec.get("dateOfLastContactDay"));
+        tumor.addItem(new Item("dateOfDiagnosisYear", "2005"));
+        tumor.addItem(new Item("dateOfDiagnosisMonth", "07"));
+        tumor.addItem(new Item("dateOfDiagnosisDay", "04"));
+        _rule.execute(tumor, patient, null, context);
+        Assert.assertEquals("2005", tumor.getItemValue("dateOfLastContactYear"));
+        Assert.assertEquals("07", tumor.getItemValue("dateOfLastContactMonth"));
+        Assert.assertEquals("04", tumor.getItemValue("dateOfLastContactDay"));
 
     }
 }

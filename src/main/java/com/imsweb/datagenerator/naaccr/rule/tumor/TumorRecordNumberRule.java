@@ -1,12 +1,13 @@
 package com.imsweb.datagenerator.naaccr.rule.tumor;
 
-import java.util.List;
 import java.util.Map;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
-import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
+import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
 
-public class TumorRecordNumberRule extends NaaccrDataGeneratorRule {
+public class TumorRecordNumberRule extends NaaccrDataGeneratorTumorRule {
 
     // unique identifier for this rule
     public static final String ID = "tumor-record-number";
@@ -19,7 +20,7 @@ public class TumorRecordNumberRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
-        record.put("tumorRecordNumber", String.format("%02d", otherRecords.size() + 1));
+    public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
+        setValue(tumor, "tumorRecordNumber", String.format("%02d", patient.getTumors().size() + 1));
     }
 }

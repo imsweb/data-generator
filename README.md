@@ -41,7 +41,6 @@ The NAACCR generator current provides rules for the following fields:
  - Date of Birth, Birthplace Country and State
  - Current address
  - Computed Ethnicity
- - IHS
  - Registry ID
  - Tumor Record Number
  - SEER Record Number

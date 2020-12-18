@@ -3,61 +3,57 @@
  */
 package com.imsweb.datagenerator.naaccr;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.imsweb.naaccrxml.entity.Item;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
+
 public class NaaccrDataGeneratorRuleTest {
 
-    private NaaccrDataGeneratorRule _rule = new NaaccrDataGeneratorRule("id", "name") {
+    private final NaaccrDataGeneratorTumorRule _rule = new NaaccrDataGeneratorTumorRule("id", "name") {
         @Override
-        public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
+        public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         }
     };
 
     @Test
     public void testDxYearInRange() {
-        Map<String, String> tumor = new HashMap<>();
+        Tumor tumor = new Tumor();
 
         Assert.assertFalse(_rule.inDxYearRange(tumor, null, null));
         Assert.assertFalse(_rule.inDxYearRange(tumor, 2000, 2010));
 
         // put a value in the DX year
-        tumor.put("dateOfDiagnosisYear", "2005");
+        tumor.addItem(new Item("dateOfDiagnosisYear", "2005"));
         Assert.assertTrue(_rule.inDxYearRange(tumor, 2004, 2006));
         Assert.assertTrue(_rule.inDxYearRange(tumor, 2004, 2005));
         Assert.assertTrue(_rule.inDxYearRange(tumor, 2005, 2006));
         Assert.assertFalse(_rule.inDxYearRange(tumor, 2006, 2010));
 
         // check without lower bound on year
-        tumor.put("dateOfDiagnosisYear", "1950");
+        tumor.getItem("dateOfDiagnosisYear").setValue("1950");
         Assert.assertTrue(_rule.inDxYearRange(tumor, null, 2010));
         Assert.assertFalse(_rule.inDxYearRange(tumor, null, 1949));
 
         // check without upper bound on year
-        tumor.put("dateOfDiagnosisYear", "3000");
+        tumor.getItem("dateOfDiagnosisYear").setValue("3000");
         Assert.assertTrue(_rule.inDxYearRange(tumor, 2010, null));
         Assert.assertFalse(_rule.inDxYearRange(tumor, 3001, null));
     }
 
     @Test
-    public void testGetCurrentYear() {
-        Assert.assertNotNull(_rule.getCurrentYear());
-    }
-
-    @Test
     public void testPropertyHasValue() {
-        Map<String, String> record = new HashMap<>();
-        record.put("sec", "1");
-        Assert.assertFalse(_rule.propertyHasValue(record, "sex"));
-        record.put("sex", "");
-        Assert.assertFalse(_rule.propertyHasValue(record, "sex"));
-        record.put("sex", null);
-        Assert.assertFalse(_rule.propertyHasValue(record, "sex"));
-        record.put("sex", "1");
-        Assert.assertTrue(_rule.propertyHasValue(record, "sex"));
+        Patient patient = new Patient();
+        Assert.assertFalse(_rule.hasValue(patient, "sex"));
+        patient.addItem(new Item("sex", ""));
+        Assert.assertFalse(_rule.hasValue(patient, "sex"));
+        patient.getItem("sex").setValue(null);
+        Assert.assertFalse(_rule.hasValue(patient, "sex"));
+        patient.getItem("sex").setValue("1");
+        Assert.assertTrue(_rule.hasValue(patient, "sex"));
     }
 }

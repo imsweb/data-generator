@@ -1,9 +1,7 @@
 package com.imsweb.datagenerator.naaccr.rule.tumor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
@@ -11,6 +9,9 @@ import org.junit.Test;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
+import com.imsweb.naaccrxml.entity.Item;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
 
 import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_AGE_GROUP_MAP;
 import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_CURRENT_TUMOR_INDEX;
@@ -20,7 +21,7 @@ import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_S
 
 public class DateOfDiagnosisRuleTest {
 
-    private DateOfDiagnosisRule _rule = new DateOfDiagnosisRule();
+    private final DateOfDiagnosisRule _rule = new DateOfDiagnosisRule();
 
     @Test
     public void testExecute() {
@@ -29,34 +30,34 @@ public class DateOfDiagnosisRuleTest {
 
         // run the entire test 10 times (each run simulates multiple tumors for a single patient)
         for (int i = 0; i < 10; i++) {
-            List<Map<String, String>> records = new ArrayList<>();
-
+            Patient patient = new Patient();
             // generate 10 tumors for this patient
             for (int j = 0; j < 10; j++) {
-                Map<String, String> rec = new HashMap<>();
+                Tumor tumor = new Tumor();
+                patient.addTumor(tumor);
+
                 context = new HashMap<>();
 
-                _rule.execute(rec, records, null, context);
+                _rule.execute(tumor, patient, null, context);
 
-                Assert.assertTrue(rec.get("dateOfDiagnosisYear").matches("\\d{4}"));
-                Assert.assertTrue(rec.get("dateOfDiagnosisMonth").matches("\\d{1,2}"));
-                Assert.assertTrue(rec.get("dateOfDiagnosisDay").matches("\\d{1,2}"));
-
-                records.add(rec);
+                Assert.assertTrue(tumor.getItemValue("dateOfDiagnosisYear").matches("\\d{4}"));
+                Assert.assertTrue(tumor.getItemValue("dateOfDiagnosisMonth").matches("\\d{1,2}"));
+                Assert.assertTrue(tumor.getItemValue("dateOfDiagnosisDay").matches("\\d{1,2}"));
             }
 
             // first current year should be between current year and 10 years ago (since no options are provided)
             int currentYear = LocalDate.now().getYear();
-            int firstAssignedYear = Integer.parseInt(records.get(0).get("dateOfDiagnosisYear"));
+            int firstAssignedYear = Integer.parseInt(patient.getTumor(0).getItemValue("dateOfDiagnosisYear"));
             Assert.assertTrue(firstAssignedYear >= currentYear - 10 && firstAssignedYear <= currentYear);
 
             // other years should all be on or after the first assigned year
-            for (Map<String, String> otherRec : records) {
-                int assignedYear = Integer.parseInt(otherRec.get("dateOfDiagnosisYear"));
+            for (Tumor otherTum : patient.getTumors()) {
+                int assignedYear = Integer.parseInt(otherTum.getItemValue("dateOfDiagnosisYear"));
                 Assert.assertTrue(assignedYear >= currentYear - 10 && assignedYear <= currentYear && assignedYear >= firstAssignedYear);
 
                 // all dates generated should be on or before the current date because no options were passed
-                LocalDate dxDate = LocalDate.of(Integer.parseInt(otherRec.get("dateOfDiagnosisYear")), Integer.parseInt(otherRec.get("dateOfDiagnosisMonth")), Integer.parseInt(otherRec.get("dateOfDiagnosisDay")));
+                LocalDate dxDate = LocalDate.of(Integer.parseInt(otherTum.getItemValue("dateOfDiagnosisYear")), Integer.parseInt(otherTum.getItemValue("dateOfDiagnosisMonth")),
+                        Integer.parseInt(otherTum.getItemValue("dateOfDiagnosisDay")));
                 Assert.assertTrue("Future date: " + dxDate.toString(), LocalDate.now().plusDays(1).isAfter(dxDate));
             }
         }
@@ -79,24 +80,28 @@ public class DateOfDiagnosisRuleTest {
         context.put(CONTEXT_FLAG_AGE_GROUP_MAP, ageGroupMap);
         context.put(CONTEXT_FLAG_MAX_AGE_GROUP, 5);
 
-
-        Map<String, String> rec = new HashMap<>();
-        rec.put("dateOfBirthYear", "1940");
-        rec.put("dateOfBirthMonth", "7");
-        rec.put("dateOfBirthDay", "1");
+        Patient patient = new Patient();
+        patient.addItem(new Item("dateOfBirthYear", "1940"));
+        patient.addItem(new Item("dateOfBirthMonth", "7"));
+        patient.addItem(new Item("dateOfBirthDay", "1"));
 
         NaaccrDataGeneratorOptions options = new NaaccrDataGeneratorOptions();
         options.setMaxDxYear(2005);
 
-        _rule.execute(rec, null, options, context);
+        Tumor tumor = new Tumor();
+        patient.addTumor(tumor);
 
-        LocalDate dateOfDx = LocalDate.of(Integer.valueOf(rec.get("dateOfDiagnosisYear")), Integer.valueOf(rec.get("dateOfDiagnosisMonth")), Integer.valueOf(rec.get("dateOfDiagnosisDay")));
+        _rule.execute(tumor, patient, options, context);
+
+        LocalDate dateOfDx = LocalDate.of(
+                Integer.parseInt(tumor.getItemValue("dateOfDiagnosisYear")),
+                Integer.parseInt(tumor.getItemValue("dateOfDiagnosisMonth")),
+                Integer.parseInt(tumor.getItemValue("dateOfDiagnosisDay")));
         LocalDate dateOfBirth = LocalDate.of(1940, 7, 1);
 
         LocalDate startDate = dateOfBirth.plusYears(5 * 10);
         LocalDate endDate = options.getMaxDxDate();
         Assert.assertTrue(dateOfDx.toString(), dateOfDx.isAfter(startDate) && dateOfDx.isBefore(endDate));
-
 
     }
 }

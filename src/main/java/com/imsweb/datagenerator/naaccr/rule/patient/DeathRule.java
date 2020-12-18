@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
-import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
+import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorPatientRule;
+import com.imsweb.naaccrxml.entity.Patient;
 
-public class DeathRule extends NaaccrDataGeneratorRule {
+public class DeathRule extends NaaccrDataGeneratorPatientRule {
 
     // unique identifier for this rule
     public static final String ID = "death";
@@ -25,10 +26,10 @@ public class DeathRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
-        if ("1".equals(record.get("vitalStatus"))) {
-            record.put("causeOfDeath", "0000");
-            record.put("icdRevisionNumber", "0");
+    public void execute(Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
+        if ("1".equals(patient.getItemValue("vitalStatus"))) {
+            setValue(patient, "causeOfDeath", "0000");
+            setValue(patient, "icdRevisionNumber", "0");
         }
     }
 }

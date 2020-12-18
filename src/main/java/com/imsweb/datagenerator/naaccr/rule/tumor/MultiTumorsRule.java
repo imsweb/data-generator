@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
-import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
+import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
 
-public class MultiTumorsRule extends NaaccrDataGeneratorRule {
+public class MultiTumorsRule extends NaaccrDataGeneratorTumorRule {
 
     // unique identifier for this rule
     public static final String ID = "multi-tumors";
@@ -25,18 +27,18 @@ public class MultiTumorsRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
+    public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
 
         // don't assign anything prior to 2007
-        if (!inDxYearRange(record, 2007, null))
+        if (!inDxYearRange(tumor, 2007, null))
             return;
 
         // for now this is set to the DX date...
-        record.put("dateOfMultTumorsYear", record.get("dateOfDiagnosisYear"));
-        record.put("dateOfMultTumorsMonth", record.get("dateOfDiagnosisMonth"));
-        record.put("dateOfMultTumorsDay", record.get("dateOfDiagnosisDay"));
+        setValue(tumor, "dateOfMultTumorsYear", tumor.getItemValue("dateOfDiagnosisYear"));
+        setValue(tumor, "dateOfMultTumorsMonth", tumor.getItemValue("dateOfDiagnosisMonth"));
+        setValue(tumor, "dateOfMultTumorsDay", tumor.getItemValue("dateOfDiagnosisDay"));
 
-        record.put("multiTumorRptAsOnePrim", "99");
-        record.put("multiplicityCounter", "99");
+        setValue(tumor, "multiTumorRptAsOnePrim", "99");
+        setValue(tumor, "multiplicityCounter", "99");
     }
 }

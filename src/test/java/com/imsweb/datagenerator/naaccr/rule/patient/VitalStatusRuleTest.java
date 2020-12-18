@@ -9,9 +9,11 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.imsweb.naaccrxml.entity.Patient;
+
 public class VitalStatusRuleTest {
 
-    private VitalStatusRule _rule = new VitalStatusRule();
+    private final VitalStatusRule _rule = new VitalStatusRule();
 
     @Test
     public void testExecute() {
@@ -20,10 +22,10 @@ public class VitalStatusRuleTest {
 
         // test the rule ten times, asserting that the execute() method always assigns a valid vital status code to the patient
         for (int i = 0; i < 10; i++) {
-            Map<String, String> rec = new HashMap<>();
+            Patient patient = new Patient();
             Map<String, Object> context = new HashMap<>();
-            _rule.execute(rec, null, null, context);
-            Assert.assertTrue(validVs.contains(rec.get("vitalStatus")));
+            _rule.execute(patient, null, context);
+            Assert.assertTrue(validVs.contains(patient.getItemValue("vitalStatus")));
         }
     }
 }

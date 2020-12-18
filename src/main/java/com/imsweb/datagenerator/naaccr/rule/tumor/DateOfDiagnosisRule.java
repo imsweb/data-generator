@@ -2,18 +2,19 @@ package com.imsweb.datagenerator.naaccr.rule.tumor;
 
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
-import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorRule;
+import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
 import com.imsweb.datagenerator.utils.RandomUtils;
+import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.Tumor;
 
 import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_AGE_GROUP_MAP;
 import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_CURRENT_TUMOR_INDEX;
 
-public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
+public class DateOfDiagnosisRule extends NaaccrDataGeneratorTumorRule {
 
     // unique identifier for this rule
     public static final String ID = "date-of-diagnosis";
@@ -26,7 +27,7 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
     }
 
     @Override
-    public void execute(Map<String, String> record, List<Map<String, String>> otherRecords, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
+    public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
 
         // latest possible date set only by options if defined
         Set<LocalDate> maxDxDates = new HashSet<>();
@@ -37,19 +38,20 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
         // never go before min date defined in options, or current date minus ten years if options not defined
         minDxDates.add(options == null ? LocalDate.now().minusYears(10) : options.getMinDxDate());
         // never go before the year of birth
-        if (propertyHasValue(record, "dateOfBirthYear"))
-            minDxDates.add(LocalDate.of(Integer.parseInt(record.get("dateOfBirthYear")) + 1, 1, 1));
+        minDxDates.add(LocalDate.of(Integer.parseInt(patient.getItemValue("dateOfBirthYear")) + 1, 1, 1));
         // never go before dx date of patient's most recent tumor (if this isn't the first one)
-        if (otherRecords != null && !otherRecords.isEmpty()) {
-            Map<String, String> lastTumor = otherRecords.get(otherRecords.size() - 1);
-            minDxDates.add(LocalDate.of(Integer.parseInt(lastTumor.get("dateOfDiagnosisYear")), Integer.parseInt(lastTumor.get("dateOfDiagnosisMonth")),
-                    Integer.parseInt(lastTumor.get("dateOfDiagnosisDay"))));
+        if (!patient.getTumors().isEmpty()) {
+            Tumor lastTumor = patient.getTumor(patient.getTumors().size() - 1);
+            minDxDates.add(LocalDate.of(
+                    Integer.parseInt(lastTumor.getItemValue("dateOfDiagnosisYear")),
+                    Integer.parseInt(lastTumor.getItemValue("dateOfDiagnosisMonth")),
+                    Integer.parseInt(lastTumor.getItemValue("dateOfDiagnosisDay"))));
         }
 
         if (context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX) != null) {
-            int birthYear = Integer.parseInt(record.get("dateOfBirthYear"));
-            int birthMonth = Integer.parseInt(record.get("dateOfBirthMonth"));
-            int birthDay = Integer.parseInt(record.get("dateOfBirthDay"));
+            int birthYear = Integer.parseInt(patient.getItemValue("dateOfBirthYear"));
+            int birthMonth = Integer.parseInt(patient.getItemValue("dateOfBirthMonth"));
+            int birthDay = Integer.parseInt(patient.getItemValue("dateOfBirthDay"));
             LocalDate dateOfBirth = LocalDate.of(birthYear, birthMonth, birthDay);
 
             // PROBLEM: This brakes 3 previous rules:
@@ -67,12 +69,10 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorRule {
             maxDxDates.add(maxDate);
         }
 
-
-
         LocalDate randomDate = RandomUtils.getRandomDateBetween(minDxDates, maxDxDates);
 
-        record.put("dateOfDiagnosisYear", Integer.toString(randomDate.getYear()));
-        record.put("dateOfDiagnosisMonth", Integer.toString(randomDate.getMonthValue()));
-        record.put("dateOfDiagnosisDay", Integer.toString(randomDate.getDayOfMonth()));
+        setValue(tumor, "dateOfDiagnosisYear", Integer.toString(randomDate.getYear()));
+        setValue(tumor, "dateOfDiagnosisMonth", Integer.toString(randomDate.getMonthValue()));
+        setValue(tumor, "dateOfDiagnosisDay", Integer.toString(randomDate.getDayOfMonth()));
     }
 }

@@ -6,18 +6,20 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.imsweb.naaccrxml.entity.Patient;
+
 public class HispanicOriginRuleTest {
 
-    private HispanicOriginRule _rule = new HispanicOriginRule();
+    private final HispanicOriginRule _rule = new HispanicOriginRule();
 
     @Test
     public void testExecute() {
         // test the rule ten times
         for (int i = 0; i < 10; i++) {
-            Map<String, String> rec = new HashMap<>();
+            Patient patient = new Patient();
             Map<String, Object> context = new HashMap<>();
-            _rule.execute(rec, null, null, context);
-            Assert.assertTrue(rec.get("spanishHispanicOrigin").matches("^\\d$"));
+            _rule.execute(patient, null, context);
+            Assert.assertTrue(patient.getItemValue("spanishHispanicOrigin").matches("^\\d$"));
         }
     }
 }
