@@ -224,7 +224,7 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
     }
 
     // helper, creates a single patient
-    protected Patient internalGeneratePatient(int numTumors, NaaccrDataGeneratorOptions options) {
+    protected Patient internalGeneratePatient(int numTumors, NaaccrDataGeneratorOptions options, boolean useFullDates) {
         // make sure number of tumors is valid
         if (numTumors < 1)
             throw new IllegalArgumentException("Number of tumors must be greater than 0");
@@ -238,10 +238,20 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
 
         // execute the patient rules once; we will copy the resulting values in each tumor
         Patient patient = new Patient();
+
+        // if there is pre-processing constant values, set them
+        if (options.getConstantPatientValuesPreProcessing() != null)
+            for (Entry<String, String> entry : options.getConstantPatientValuesPreProcessing().entrySet())
+                setValue(patient, entry.getKey(), entry.getValue());
+
         for (NaaccrDataGeneratorPatientRule rule : _patientRules)
             if (allPropertiesHaveValue(patient, null, rule.getRequiredProperties()))
                 rule.execute(patient, options, context);
-        addFullDates(patient);
+
+        // if there is post-processing constant values, set them
+        if (options.getConstantPatientValuesPostProcessing() != null)
+            for (Entry<String, String> entry : options.getConstantPatientValuesPostProcessing().entrySet())
+                setValue(patient, entry.getKey(), entry.getValue());
 
         // filter created keys to make sure they are in the layout
         for (Item item : patient.getItems().stream().filter(item -> isInvalidValidField(item.getNaaccrId())).collect(Collectors.toList()))
@@ -254,27 +264,32 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
             Tumor tumor = new Tumor();
 
             // if there is pre-processing constant values, set them
-            if (options.getConstantValuesPreProcessing() != null)
-                for (Entry<String, String> entry : options.getConstantValuesPreProcessing().entrySet())
+            if (options.getConstantTumorValuesPreProcessing() != null)
+                for (Entry<String, String> entry : options.getConstantTumorValuesPreProcessing().entrySet())
                     setValue(tumor, entry.getKey(), entry.getValue());
 
             // execute the tumor rules
             for (NaaccrDataGeneratorTumorRule rule : _tumorRules)
                 if (allPropertiesHaveValue(patient, tumor, rule.getRequiredProperties()))
                     rule.execute(tumor, patient, options, context);
-            addFullDates(tumor);
 
             // filter created keys to make sure they are in the layout
             for (Item item : tumor.getItems().stream().filter(item -> isInvalidValidField(item.getNaaccrId())).collect(Collectors.toList()))
                 tumor.removeItem(item);
 
             // if there is post-processing constant values, set them
-            if (options.getConstantValuesPostProcessing() != null)
-                for (Entry<String, String> entry : options.getConstantValuesPostProcessing().entrySet())
+            if (options.getConstantTumorValuesPostProcessing() != null)
+                for (Entry<String, String> entry : options.getConstantTumorValuesPostProcessing().entrySet())
                     setValue(tumor, entry.getKey(), entry.getValue());
 
             // we are done with this tumor, add it to the result
             patient.addTumor(tumor);
+        }
+
+        if (useFullDates) {
+            addFullDates(patient);
+            for (Tumor tumor : patient.getTumors())
+                addFullDates(tumor);
         }
 
         return patient;
@@ -357,13 +372,17 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
             String monthVal = entity.getItemValue(prop + "Month");
             String dayVal = entity.getItemValue(prop + "Day");
 
-            StringBuilder val = new StringBuilder(yearVal);
+            StringBuilder val = new StringBuilder(StringUtils.leftPad(yearVal, 4, '0'));
             if (!StringUtils.isBlank(monthVal))
-                val.append(monthVal);
+                val.append(StringUtils.leftPad(monthVal, 2, '0'));
             if (!StringUtils.isBlank(dayVal))
-                val.append(dayVal);
+                val.append(StringUtils.leftPad(dayVal, 2, '0'));
 
             setValue(entity, prop, val.toString());
+
+            entity.removeItem(prop + "Year");
+            entity.removeItem(prop + "Month");
+            entity.removeItem(prop + "Day");
         }
 
     }

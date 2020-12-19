@@ -31,7 +31,6 @@ public class SiteRuleTest {
                 Patient patient = new Patient();
 
                 Tumor tumor = new Tumor();
-                patient.addTumor(tumor);
 
                 patient.addItem(new Item("sex", sex));
                 _rule.execute(tumor, patient, null, context);
@@ -61,9 +60,8 @@ public class SiteRuleTest {
         context.put(CONTEXT_FLAG_MAX_AGE_GROUP, 5);
 
         Patient patient = new Patient();
-        Tumor tumor = new Tumor();
-        patient.addTumor(tumor);
         patient.addItem(new Item("sex", "1"));
+        Tumor tumor = new Tumor();
         _rule.execute(tumor, patient, null, context);
 
         Assert.assertEquals("C000", tumor.getItemValue("primarySite"));
@@ -91,9 +89,8 @@ public class SiteRuleTest {
         context.put(CONTEXT_FLAG_MAX_AGE_GROUP, 5);
 
         patient = new Patient();
-        tumor = new Tumor();
-        patient.addTumor(tumor);
         patient.addItem(new Item("sex", "1"));
+        tumor = new Tumor();
         _rule.execute(tumor, patient, null, context);
 
         Assert.assertEquals("C809", tumor.getItemValue("primarySite"));

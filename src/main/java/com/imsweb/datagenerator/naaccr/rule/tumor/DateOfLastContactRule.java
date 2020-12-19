@@ -30,8 +30,8 @@ public class DateOfLastContactRule extends NaaccrDataGeneratorTumorRule {
     public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
 
         // for now this is set to the DX date (they are assigned in order, so the DOLC will end up being the last one)
-        setValue(tumor, "dateOfLastContactYear", tumor.getItemValue("dateOfDiagnosisYear"));
-        setValue(tumor, "dateOfLastContactMonth", tumor.getItemValue("dateOfDiagnosisMonth"));
-        setValue(tumor, "dateOfLastContactDay", tumor.getItemValue("dateOfDiagnosisDay"));
+        setValue(patient, "dateOfLastContactYear", tumor.getItemValue("dateOfDiagnosisYear"));
+        setValue(patient, "dateOfLastContactMonth", tumor.getItemValue("dateOfDiagnosisMonth"));
+        setValue(patient, "dateOfLastContactDay", tumor.getItemValue("dateOfDiagnosisDay"));
     }
 }

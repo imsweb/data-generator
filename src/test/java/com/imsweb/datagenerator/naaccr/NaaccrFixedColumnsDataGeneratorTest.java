@@ -141,12 +141,12 @@ public class NaaccrFixedColumnsDataGeneratorTest {
         Assert.assertEquals("HI", patient.get(0).get("addrAtDxState"));
 
         // test pre-processing constant value (since we are using a field that has a rule, it should be overridden)
-        options.setConstantValuesPreProcessing(Collections.singletonMap("nameLast", "TEST"));
+        options.setConstantPatientValuesPreProcessing(Collections.singletonMap("nameLast", "TEST"));
         patient = generator.generatePatient(1, options);
         Assert.assertNotEquals("TEST", patient.get(0).get("nameLast"));
 
         // test post-processing constant value (this value should NOT be overridden)
-        options.setConstantValuesPostProcessing(Collections.singletonMap("nameLast", "TEST"));
+        options.setConstantPatientValuesPostProcessing(Collections.singletonMap("nameLast", "TEST"));
         patient = generator.generatePatient(1, options);
         Assert.assertEquals("TEST", patient.get(0).get("nameLast"));
 

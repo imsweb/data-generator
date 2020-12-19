@@ -16,28 +16,27 @@ public class MaritalStatusRuleTest {
 
     @Test
     public void testExecute() {
-        Patient patient = new Patient();
-
         Map<String, Object> context = new HashMap<>();
 
-        // test with no maiden name
+        // test with no birth surname
         for (int i = 0; i < 5; i++) {
+            Patient patient = new Patient();
             Tumor tumor = new Tumor();
-            patient.addTumor(tumor);
-            patient.addItem(new Item("nameMaiden", ""));
             _rule.execute(tumor, patient, null, context);
             int maritalStatus = Integer.parseInt(tumor.getItemValue("maritalStatusAtDx"));
             Assert.assertTrue(maritalStatus >= 1 && maritalStatus <= 6);
+            patient.addTumor(tumor);
         }
 
-        // test with maiden name
+        // test with birth surname
         for (int i = 0; i < 5; i++) {
+            Patient patient = new Patient();
+            patient.addItem(new Item("nameBirthSurname", "Something"));
             Tumor tumor = new Tumor();
-            patient.addTumor(tumor);
-            patient.addItem(new Item("nameMaiden", "MaidenNameTest"));
             _rule.execute(tumor, patient, null, context);
             int maritalStatus = Integer.parseInt(tumor.getItemValue("maritalStatusAtDx"));
             Assert.assertTrue(maritalStatus >= 2 && maritalStatus <= 5);
+            patient.addTumor(tumor);
         }
     }
 }

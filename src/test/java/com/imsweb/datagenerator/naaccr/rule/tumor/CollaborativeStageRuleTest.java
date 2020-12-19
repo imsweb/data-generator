@@ -22,7 +22,6 @@ public class CollaborativeStageRuleTest {
         Patient patient = new Patient();
 
         Tumor tumor = new Tumor();
-        patient.addTumor(tumor);
 
         // valid codes for CSInput fields, as defined in their tables
         List<String> extList = new ArrayList<>(Arrays.asList("000", "010", "020", "050", "060", "070", "080", "100", "200", "300", "400", "450", "600", "700", "800", "810", "950", "999"));

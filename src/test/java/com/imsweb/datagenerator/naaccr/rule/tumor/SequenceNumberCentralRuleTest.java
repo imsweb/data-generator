@@ -21,27 +21,27 @@ public class SequenceNumberCentralRuleTest {
 
         // create a single tumor for the patient and verify sequence number is 00
         Tumor tumor = new Tumor();
-        patient.addTumor(tumor);
         _rule.execute(tumor, patient, null, context);
         Assert.assertEquals("00", tumor.getItemValue("sequenceNumberCentral"));
+        patient.addTumor(tumor);
 
         // add a second tumor to the same patient
         Tumor tumor2 = new Tumor();
-        patient.addTumor(tumor2);
-        _rule.execute(tumor, patient, null, context);
+        _rule.execute(tumor2, patient, null, context);
         // verify the previous tumor seq. no. changed from 00 to 01
         Assert.assertEquals("01", patient.getTumor(0).getItemValue("sequenceNumberCentral"));
         // verify this new tumor's seq. no. is 02
-        Assert.assertEquals("02", tumor.getItemValue("sequenceNumberCentral"));
+        Assert.assertEquals("02", tumor2.getItemValue("sequenceNumberCentral"));
+        patient.addTumor(tumor2);
 
         // add a third tumor to the same patient
         Tumor tumor3 = new Tumor();
-        patient.addTumor(tumor3);
-        _rule.execute(tumor, patient, null, context);
+        _rule.execute(tumor3, patient, null, context);
         // verify sequence numbers of previous two tumors
         Assert.assertEquals("01", patient.getTumor(0).getItemValue("sequenceNumberCentral"));
         Assert.assertEquals("02", patient.getTumor(1).getItemValue("sequenceNumberCentral"));
         // verify this new tumor's seq. no. is 03
-        Assert.assertEquals("03", tumor.getItemValue("sequenceNumberCentral"));
+        Assert.assertEquals("03", tumor3.getItemValue("sequenceNumberCentral"));
+        patient.addTumor(tumor3);
     }
 }

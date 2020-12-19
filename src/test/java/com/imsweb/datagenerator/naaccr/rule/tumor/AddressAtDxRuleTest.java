@@ -19,7 +19,6 @@ public class AddressAtDxRuleTest {
         Patient patient = new Patient();
 
         Tumor tumor = new Tumor();
-        patient.addTumor(tumor);
 
         // if not state is available, address fields should be blank
         Map<String, Object> context = new HashMap<>();
@@ -37,16 +36,16 @@ public class AddressAtDxRuleTest {
             _rule.execute(tumor, patient, options, context);
 
             // verify city name pattern
-            Assert.assertTrue(tumor.getItemValue("addrAtDxCity").matches("^[\\w .]+$"));
+            Assert.assertTrue("Iteration #" + i, tumor.getItemValue("addrAtDxCity").matches("^[\\w .]+$"));
             // verify 2 letter state
-            Assert.assertTrue(tumor.getItemValue("addrAtDxState").matches("^[A-Z]{2}$"));
+            Assert.assertTrue("Iteration #" + i, tumor.getItemValue("addrAtDxState").matches("^[A-Z]{2}$"));
             // verify 5 or 9 digit zip code
-            Assert.assertTrue(tumor.getItemValue("addrAtDxPostalCode").matches("^\\d{5}$") || tumor.getItemValue("addressCurrentPostalCode").matches("^\\d{9}$"));
+            Assert.assertTrue("Iteration #" + i, tumor.getItemValue("addrAtDxPostalCode").matches("^\\d{5}$") || tumor.getItemValue("addressCurrentPostalCode").matches("^\\d{9}$"));
             // verify length and pattern of street name
-            Assert.assertTrue(tumor.getItemValue("addrAtDxNoStreet").length() <= 60);
-            Assert.assertTrue(tumor.getItemValue("addrAtDxNoStreet").matches("^\\d+ [\\w .]+ \\w+\\.?$"));
+            Assert.assertTrue("Iteration #" + i, tumor.getItemValue("addrAtDxNoStreet").length() <= 60);
+            Assert.assertTrue("Iteration #" + i, tumor.getItemValue("addrAtDxNoStreet").matches("^\\d+ [\\w .]+ \\w+\\.?$"));
             // verify 3 digit county code
-            Assert.assertTrue(tumor.getItemValue("countyAtDx").matches("^\\d{3}$"));
+            Assert.assertTrue("Iteration #" + i, tumor.getItemValue("countyAtDx").matches("^\\d{3}$"));
         }
     }
 }

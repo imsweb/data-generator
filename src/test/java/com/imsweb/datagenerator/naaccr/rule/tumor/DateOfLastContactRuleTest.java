@@ -19,7 +19,6 @@ public class DateOfLastContactRuleTest {
         Patient patient = new Patient();
 
         Tumor tumor = new Tumor();
-        patient.addTumor(tumor);
 
         Map<String, Object> context = new HashMap<>();
 
@@ -28,9 +27,9 @@ public class DateOfLastContactRuleTest {
         tumor.addItem(new Item("dateOfDiagnosisMonth", "07"));
         tumor.addItem(new Item("dateOfDiagnosisDay", "04"));
         _rule.execute(tumor, patient, null, context);
-        Assert.assertEquals("2005", tumor.getItemValue("dateOfLastContactYear"));
-        Assert.assertEquals("07", tumor.getItemValue("dateOfLastContactMonth"));
-        Assert.assertEquals("04", tumor.getItemValue("dateOfLastContactDay"));
+        Assert.assertEquals("2005", patient.getItemValue("dateOfLastContactYear"));
+        Assert.assertEquals("07", patient.getItemValue("dateOfLastContactMonth"));
+        Assert.assertEquals("04", patient.getItemValue("dateOfLastContactDay"));
 
     }
 }

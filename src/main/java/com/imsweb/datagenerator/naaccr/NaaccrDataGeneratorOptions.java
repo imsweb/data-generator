@@ -19,11 +19,17 @@ public class NaaccrDataGeneratorOptions {
     // the state abbreviation (upper-cased) to use to generate the address information (no address info will be generated if left null)
     protected String _state;
 
-    // properties to set to a specific value before running any rules (those would be overridden by the value set by a rule; they can be used as default values)
-    protected Map<String, String> _constantValuesPreProcessing;
+    // patient properties to set to a specific value before running any rules (those would be overridden by the value set by a rule; they can be used as default values)
+    protected Map<String, String> _constantPatientValuesPreProcessing;
 
-    // properties to set to a specific value after running any rules (those would override the value set by a rule)
-    protected Map<String, String> _constantValuesPostProcessing;
+    // patient properties to set to a specific value after running any rules (those would override the value set by a rule)
+    protected Map<String, String> _constantPatientValuesPostProcessing;
+
+    // tumor properties to set to a specific value before running any rules (those would be overridden by the value set by a rule; they can be used as default values)
+    protected Map<String, String> _constantTumorValuesPreProcessing;
+
+    // tumor properties to set to a specific value after running any rules (those would override the value set by a rule)
+    protected Map<String, String> _constantTumorValuesPostProcessing;
 
     // maximum year of diagnosis (inclusive), current year if not provided
     protected Integer _maxDxYear;
@@ -69,24 +75,36 @@ public class NaaccrDataGeneratorOptions {
         _state = state;
     }
 
-    public Map<String, String> getConstantValuesPreProcessing() {
-        return _constantValuesPreProcessing;
+    public Map<String, String> getConstantPatientValuesPreProcessing() {
+        return _constantPatientValuesPreProcessing;
     }
 
-    public void setConstantValuesPreProcessing(Map<String, String> constantValuesPreProcessing) {
-        _constantValuesPreProcessing = constantValuesPreProcessing;
+    public void setConstantPatientValuesPreProcessing(Map<String, String> constantPatientValuesPreProcessing) {
+        _constantPatientValuesPreProcessing = constantPatientValuesPreProcessing;
     }
 
-    public Map<String, String> getConstantValuesPostProcessing() {
-        return _constantValuesPostProcessing;
+    public Map<String, String> getConstantPatientValuesPostProcessing() {
+        return _constantPatientValuesPostProcessing;
     }
 
-    public void setConstantValuesPostProcessing(Map<String, String> constantValuesPostProcessing) {
-        _constantValuesPostProcessing = constantValuesPostProcessing;
+    public void setConstantPatientValuesPostProcessing(Map<String, String> constantPatientValuesPostProcessing) {
+        _constantPatientValuesPostProcessing = constantPatientValuesPostProcessing;
     }
 
-    public Integer getMaxDxYear() {
-        return _maxDxYear;
+    public Map<String, String> getConstantTumorValuesPreProcessing() {
+        return _constantTumorValuesPreProcessing;
+    }
+
+    public void setConstantTumorValuesPreProcessing(Map<String, String> constantTumorValuesPreProcessing) {
+        _constantTumorValuesPreProcessing = constantTumorValuesPreProcessing;
+    }
+
+    public Map<String, String> getConstantTumorValuesPostProcessing() {
+        return _constantTumorValuesPostProcessing;
+    }
+
+    public void setConstantTumorValuesPostProcessing(Map<String, String> constantTumorValuesPostProcessing) {
+        _constantTumorValuesPostProcessing = constantTumorValuesPostProcessing;
     }
 
     /**
@@ -98,10 +116,6 @@ public class NaaccrDataGeneratorOptions {
         if (_minDxYear != null && _minDxYear > maxDxYear)
             throw new IllegalArgumentException("Max DX Year must be greater than or equal to Min DX Year (" + _minDxYear + ")");
         _maxDxYear = maxDxYear;
-    }
-
-    public Integer getMinDxYear() {
-        return _minDxYear;
     }
 
     /**

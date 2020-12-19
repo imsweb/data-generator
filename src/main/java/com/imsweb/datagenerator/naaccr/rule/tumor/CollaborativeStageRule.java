@@ -89,7 +89,7 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorTumorRule {
 
     @Override
     public List<String> getRequiredProperties() {
-        return Arrays.asList("primarySite", "histologicTypeIcdO3", "behaviorCodeIcdO3", "grade", "dateOfDiagnosisYear", "ageAtDiagnosis", "vitalStatus", "typeOfReportingSource");
+        return Arrays.asList("primarySite", "histologicTypeIcdO3", "behaviorCodeIcdO3", "grade", "dateOfDiagnosisYear", "ageAtDiagnosis", "typeOfReportingSource");
     }
 
     @Override
@@ -364,12 +364,12 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorTumorRule {
             case "nodes_eval":
             case "mets_eval":
                 // for living patients (VS=1), remove eval values specifying evidence from autopsy
-                if (patient.getItemValue("vitalStatus").equals("1"))
+                if ("1".equals(patient.getItemValue("vitalStatus")))
                     invalidValues.add("8");
                 break;
             case "extension_eval":
                 // for living patients (VS=1), remove eval values specifying evidence from autopsy
-                if (patient.getItemValue("vitalStatus").equals("1"))
+                if ("1".equals(patient.getItemValue("vitalStatus")))
                     if (schemaId.equals("prostate"))
                         invalidValues.addAll(Arrays.asList("3", "8"));
                     else

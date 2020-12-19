@@ -38,7 +38,8 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorTumorRule {
         // never go before min date defined in options, or current date minus ten years if options not defined
         minDxDates.add(options == null ? LocalDate.now().minusYears(10) : options.getMinDxDate());
         // never go before the year of birth
-        minDxDates.add(LocalDate.of(Integer.parseInt(patient.getItemValue("dateOfBirthYear")) + 1, 1, 1));
+        if (hasValue(patient, "dateOfBirthYear"))
+            minDxDates.add(LocalDate.of(Integer.parseInt(patient.getItemValue("dateOfBirthYear")) + 1, 1, 1));
         // never go before dx date of patient's most recent tumor (if this isn't the first one)
         if (!patient.getTumors().isEmpty()) {
             Tumor lastTumor = patient.getTumor(patient.getTumors().size() - 1);

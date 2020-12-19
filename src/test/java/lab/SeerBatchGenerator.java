@@ -93,7 +93,7 @@ public class SeerBatchGenerator {
         // create the options
         NaaccrDataGeneratorOptions options = new NaaccrDataGeneratorOptions();
         options.setState(registry.getState());
-        options.setConstantValuesPostProcessing(constantValues);
+        options.setConstantPatientValuesPostProcessing(constantValues);
 
         // create the generator and generate the file
         NaaccrFixedColumnsDataGenerator generator = new NaaccrFixedColumnsDataGenerator(_LAYOUT);

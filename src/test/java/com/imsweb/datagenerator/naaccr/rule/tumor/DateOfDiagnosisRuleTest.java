@@ -34,7 +34,6 @@ public class DateOfDiagnosisRuleTest {
             // generate 10 tumors for this patient
             for (int j = 0; j < 10; j++) {
                 Tumor tumor = new Tumor();
-                patient.addTumor(tumor);
 
                 context = new HashMap<>();
 
@@ -43,6 +42,8 @@ public class DateOfDiagnosisRuleTest {
                 Assert.assertTrue(tumor.getItemValue("dateOfDiagnosisYear").matches("\\d{4}"));
                 Assert.assertTrue(tumor.getItemValue("dateOfDiagnosisMonth").matches("\\d{1,2}"));
                 Assert.assertTrue(tumor.getItemValue("dateOfDiagnosisDay").matches("\\d{1,2}"));
+
+                patient.addTumor(tumor);
             }
 
             // first current year should be between current year and 10 years ago (since no options are provided)
@@ -89,7 +90,6 @@ public class DateOfDiagnosisRuleTest {
         options.setMaxDxYear(2005);
 
         Tumor tumor = new Tumor();
-        patient.addTumor(tumor);
 
         _rule.execute(tumor, patient, options, context);
 

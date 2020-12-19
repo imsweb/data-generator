@@ -82,7 +82,7 @@ public class NaaccrFixedColumnsDataGenerator extends NaaccrDataGenerator {
      * @return generated patient as a list of tumor maps, never null
      */
     public List<Map<String, String>> generatePatient(int numTumors, NaaccrDataGeneratorOptions options) {
-        Patient patient = internalGeneratePatient(numTumors, options);
+        Patient patient = internalGeneratePatient(numTumors, options, false);
 
         List<Map<String, String>> records = new ArrayList<>();
 
