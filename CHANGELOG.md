@@ -2,8 +2,9 @@
 
 **Changes in version 1.18**
 
-- Fixed NAACCR XML generator not providing the user-defined dictonaries to the XML writer.
+- Fixed NAACCR XML generator not providing the user-defined dictionaries to the XML writer.
 - Changed name rule so it assigns field 'nameBirthSurname' instead of 'nameMaiden' for NAACCR version 210 and later.
+- Added NAACCR XML library dependency version 7.6.
 - Updated Layout library from version 2.0 to version 3.1.
 - Updated Algorithms library from version 2.14 to version 2.18.
 - Updated Staging client library from version 4.8 to version 5.0.

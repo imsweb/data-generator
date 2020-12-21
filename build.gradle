@@ -20,7 +20,7 @@ repositories {
 
 dependencies {
     api 'com.imsweb:layout:3.1'
-    api 'com.imsweb:naaccr-xml:7.3'
+    api 'com.imsweb:naaccr-xml:7.6'
 
     implementation 'com.imsweb:algorithms:2.18'
     implementation 'com.imsweb:staging-client-java:5.0'
