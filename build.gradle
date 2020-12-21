@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
     api 'com.imsweb:layout:3.1'
+    api 'com.imsweb:naaccr-xml:7.3'
 
     implementation 'com.imsweb:algorithms:2.18'
     implementation 'com.imsweb:staging-client-java:5.0'
@@ -119,7 +120,7 @@ if (version.endsWith('-SNAPSHOT'))
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
-    gradleVersion = '6.0.1'
+    gradleVersion = '6.7'
     distributionType = Wrapper.DistributionType.ALL
 }
 
