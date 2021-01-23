@@ -4,9 +4,10 @@
 
 - Fixed NAACCR XML generator not providing the user-defined dictionaries to the XML writer.
 - Changed name rule so it assigns field 'nameBirthSurname' instead of 'nameMaiden' for NAACCR version 210 and later.
-- Added NAACCR XML library dependency version 7.6.
-- Updated Layout library from version 2.0 to version 3.1.
-- Updated Algorithms library from version 2.14 to version 2.18.
+- Added SPM segment generation to the HL7 data generator.
+- Added NAACCR XML library dependency version 7.7.
+- Updated Layout library from version 2.0 to version 3.2.
+- Updated Algorithms library from version 2.14 to version 3.0.
 - Updated Staging client library from version 4.8 to version 5.0.
 - Updated Commons Lang library from version 3.10 to version 3.11.
 
