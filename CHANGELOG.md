@@ -1,5 +1,9 @@
 ## Synthetic data generator
 
+**Changes in version 1.19**
+
+- Fixed HL7 generator, SMP segment was not generated in the proper order.
+
 **Changes in version 1.18**
 
 - Fixed NAACCR XML generator not providing the user-defined dictionaries to the XML writer.

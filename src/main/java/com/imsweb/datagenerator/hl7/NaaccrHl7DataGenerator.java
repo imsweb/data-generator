@@ -60,8 +60,8 @@ public class NaaccrHl7DataGenerator implements DataGenerator {
         _rules.add(new NextOfKinSegmentRule());
         _rules.add(new PatientVisitSegmentRule());
         _rules.add(new CommonOrderSegmentRule());
-        _rules.add(new SpecimenSegmentRule());
         _rules.add(new ObservationRequestSegmentRule());
+        _rules.add(new SpecimenSegmentRule());
         _rules.add(new ObservationSegmentRule());
     }
 
