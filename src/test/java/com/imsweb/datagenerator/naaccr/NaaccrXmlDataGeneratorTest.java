@@ -17,6 +17,7 @@ import testing.TestingUtils;
 
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.naaccrxml.NaaccrXmlLayout;
+import com.imsweb.naaccrxml.NaaccrXmlUtils;
 import com.imsweb.naaccrxml.entity.Patient;
 
 public class NaaccrXmlDataGeneratorTest {
@@ -36,6 +37,7 @@ public class NaaccrXmlDataGeneratorTest {
         Assert.assertEquals(8, patients.get(0).getItemValue("dateOfBirth").length());
         Assert.assertTrue(patients.get(0).getAllValidationErrors().isEmpty());
         Assert.assertFalse(LayoutFactory.discoverFormat(file).isEmpty());
+        Assert.assertTrue(NaaccrXmlUtils.readXmlFile(file, null, null, null).getUserDictionaryUri().isEmpty());
 
         // regular file, 10 records
         file = TestingUtils.createFile("naaccr-data-generator-10-tumors.xml");

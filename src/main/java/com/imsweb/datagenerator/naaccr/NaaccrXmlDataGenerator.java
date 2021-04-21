@@ -10,7 +10,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.zip.GZIPOutputStream;
 
 import com.imsweb.datagenerator.utils.Distribution;
@@ -23,6 +25,7 @@ import com.imsweb.naaccrxml.PatientXmlWriter;
 import com.imsweb.naaccrxml.entity.Item;
 import com.imsweb.naaccrxml.entity.NaaccrData;
 import com.imsweb.naaccrxml.entity.Patient;
+import com.imsweb.naaccrxml.entity.dictionary.NaaccrDictionary;
 
 /**
  * This NAACCR Data Generators uses (and requires) a NAACCR XML layout.
@@ -140,7 +143,10 @@ public class NaaccrXmlDataGenerator extends NaaccrDataGenerator {
         if (options.getRegistryId() != null)
             rootData.addItem(new Item("registryId", options.getRegistryId()));
 
-        try (PatientXmlWriter writer = new PatientXmlWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), rootData, writerOptions, _xmlLayout.getUserDictionaries())) {
+        List<NaaccrDictionary> userDictionaries = _xmlLayout.getUserDictionaries().stream()
+                .filter(d -> !NaaccrXmlDictionaryUtils.isDefaultUserDictionary(d))
+                .collect(Collectors.toList());
+        try (PatientXmlWriter writer = new PatientXmlWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), rootData, writerOptions, userDictionaries)) {
             int numCreatedTumors = 0;
             while (numCreatedTumors < numTumors) {
                 int numTumorForThisPatient = Math.min(numTumGen == null ? options.getNumTumorsPerPatient() : numTumGen.getValue(), numTumors - numCreatedTumors);
