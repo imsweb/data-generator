@@ -3,12 +3,17 @@
  */
 package com.imsweb.datagenerator.naaccr;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import java.util.zip.GZIPOutputStream;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -385,5 +390,12 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
             entity.removeItem(prop + "Day");
         }
 
+    }
+
+    protected OutputStream createOutputStream(File file) throws IOException {
+        OutputStream os = new FileOutputStream(file);
+        if (file.getName().toLowerCase().endsWith(".gz"))
+            os = new GZIPOutputStream(os);
+        return os;
     }
 }

@@ -4,7 +4,6 @@
 package com.imsweb.datagenerator.naaccr;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -13,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.zip.GZIPOutputStream;
 
 import com.imsweb.datagenerator.utils.Distribution;
 import com.imsweb.layout.LayoutFactory;
@@ -132,21 +130,21 @@ public class NaaccrXmlDataGenerator extends NaaccrDataGenerator {
         // create a random distribution for the number of tumors, if we have to
         Distribution<Integer> numTumGen = options.getNumTumorsPerPatient() == null ? getNumTumorsPerPatientDistribution() : null;
 
-        // handle a compress file
-        OutputStream os = new FileOutputStream(file);
-        if (file.getName().toLowerCase().endsWith(".gz"))
-            os = new GZIPOutputStream(os);
-
+        // create XML root data
         NaaccrData rootData = new NaaccrData();
         rootData.setBaseDictionaryUri(NaaccrXmlDictionaryUtils.getBaseDictionaryByVersion(_xmlLayout.getLayoutVersion()).getDictionaryUri());
         rootData.setRecordType(_xmlLayout.getRecordType());
         if (options.getRegistryId() != null)
             rootData.addItem(new Item("registryId", options.getRegistryId()));
 
+        // filter user dictionaries (never write the default ones)
         List<NaaccrDictionary> userDictionaries = _xmlLayout.getUserDictionaries().stream()
                 .filter(d -> !NaaccrXmlDictionaryUtils.isDefaultUserDictionary(d))
                 .collect(Collectors.toList());
-        try (PatientXmlWriter writer = new PatientXmlWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), rootData, writerOptions, userDictionaries)) {
+
+        // create file and write to it
+        try (OutputStream os = createOutputStream(file);
+             PatientXmlWriter writer = new PatientXmlWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), rootData, writerOptions, userDictionaries)) {
             int numCreatedTumors = 0;
             while (numCreatedTumors < numTumors) {
                 int numTumorForThisPatient = Math.min(numTumGen == null ? options.getNumTumorsPerPatient() : numTumGen.getValue(), numTumors - numCreatedTumors);

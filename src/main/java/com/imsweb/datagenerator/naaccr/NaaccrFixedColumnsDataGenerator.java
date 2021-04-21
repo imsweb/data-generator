@@ -5,7 +5,6 @@ package com.imsweb.datagenerator.naaccr;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.GZIPOutputStream;
 
 import com.imsweb.datagenerator.utils.Distribution;
 import com.imsweb.layout.LayoutFactory;
@@ -132,12 +130,9 @@ public class NaaccrFixedColumnsDataGenerator extends NaaccrDataGenerator {
         // create a random distribution for the number of tumors, if we have to
         Distribution<Integer> numTumGen = options.getNumTumorsPerPatient() == null ? getNumTumorsPerPatientDistribution() : null;
 
-        // handle a compress file
-        OutputStream os = new FileOutputStream(file);
-        if (file.getName().toLowerCase().endsWith(".gz"))
-            os = new GZIPOutputStream(os);
-
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8))) {
+        // create the file and write to it
+        try (OutputStream os = createOutputStream(file);
+             Writer writer = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8))) {
             int numCreatedTumors = 0;
             while (numCreatedTumors < numTumors) {
                 int numTumorForThisPatient = numTumGen == null ? options.getNumTumorsPerPatient() : numTumGen.getValue();
