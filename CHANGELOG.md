@@ -4,6 +4,9 @@
 
 - Updated Staging client library from version 5.0 to version 6.0.0.
 - Updated CS library from version 02.05.50.4 to version 02.05.50.7.
+- Updated Layout library from version 3.2 to version 3.3.
+- Updated Algorithms library from version 3.0 to version 3.3.
+- Updated NAACCR XML library from version 7.7 to version 7.12.
 
 **Changes in version 1.20**
 
