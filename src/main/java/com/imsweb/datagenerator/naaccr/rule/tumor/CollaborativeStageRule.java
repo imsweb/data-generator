@@ -13,7 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
 import com.imsweb.datagenerator.utils.RandomUtils;
-import com.imsweb.decisionengine.Endpoint.EndpointType;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
 import com.imsweb.staging.Staging;
@@ -23,13 +22,14 @@ import com.imsweb.staging.cs.CsSchemaLookup;
 import com.imsweb.staging.cs.CsStagingData;
 import com.imsweb.staging.cs.CsStagingData.CsInput;
 import com.imsweb.staging.cs.CsStagingData.CsOutput;
-import com.imsweb.staging.entities.StagingColumnDefinition;
-import com.imsweb.staging.entities.StagingEndpoint;
-import com.imsweb.staging.entities.StagingRange;
-import com.imsweb.staging.entities.StagingSchema;
-import com.imsweb.staging.entities.StagingSchemaInput;
-import com.imsweb.staging.entities.StagingTable;
-import com.imsweb.staging.entities.StagingTableRow;
+import com.imsweb.staging.entities.ColumnDefinition;
+import com.imsweb.staging.entities.Endpoint;
+import com.imsweb.staging.entities.Endpoint.EndpointType;
+import com.imsweb.staging.entities.Input;
+import com.imsweb.staging.entities.Range;
+import com.imsweb.staging.entities.Schema;
+import com.imsweb.staging.entities.Table;
+import com.imsweb.staging.entities.TableRow;
 
 public class CollaborativeStageRule extends NaaccrDataGeneratorTumorRule {
 
@@ -99,11 +99,11 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorTumorRule {
         if (!inDxYearRange(tumor, 2004, 2015))
             return;
 
-        List<StagingSchema> lookup = _staging.lookupSchema(new CsSchemaLookup(tumor.getItemValue("primarySite"), tumor.getItemValue("histologicTypeIcdO3")));
+        List<Schema> lookup = _staging.lookupSchema(new CsSchemaLookup(tumor.getItemValue("primarySite"), tumor.getItemValue("histologicTypeIcdO3")));
 
         // get first schema - if multiple schemas returned, this will only be used to get a discriminator, and lookup will be repeated
-        StagingSchema schema = _staging.getSchema(lookup.get(0).getId());
-        Map<String, StagingSchemaInput> inputMap = schema.getInputMap();
+        Schema schema = _staging.getSchema(lookup.get(0).getId());
+        Map<String, ? extends Input> inputMap = schema.getInputMap();
         String schemaId = schema.getId();
 
         // assign discriminator to ssf25
@@ -237,15 +237,15 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorTumorRule {
      * @return random value
      */
     private String getRandomValueFromTable(String tableName, String key, Tumor tumor, Patient patient, String schemaId) {
-        StagingTable table = _staging.getTable(tableName);
+        Table table = _staging.getTable(tableName);
 
         // get a random row from the table
-        List<StagingTableRow> tableRows = getValidTableRows(table, key, tumor, patient, schemaId);
-        StagingTableRow randomRow = tableRows.get(RandomUtils.nextInt(tableRows.size()));
+        List<TableRow> tableRows = getValidTableRows(table, key, tumor, patient, schemaId);
+        TableRow randomRow = tableRows.get(RandomUtils.nextInt(tableRows.size()));
 
         // get a random value or value range from the row using key
-        List<StagingRange> stringRange = randomRow.getColumnInput(key);
-        StagingRange randomStringRange = stringRange.get(RandomUtils.nextInt(stringRange.size()));
+        List<? extends Range> stringRange = randomRow.getColumnInput(key);
+        Range randomStringRange = stringRange.get(RandomUtils.nextInt(stringRange.size()));
 
         // if no range, return high value, otherwise pick a random value in range and return it
         String value;
@@ -269,35 +269,35 @@ public class CollaborativeStageRule extends NaaccrDataGeneratorTumorRule {
      * @param schemaId schema for this tumor
      * @return list of rows containing valid key values
      */
-    private List<StagingTableRow> getValidTableRows(StagingTable table, String key, Tumor tumor, Patient patient, String schemaId) {
-        List<StagingTableRow> validRows = new ArrayList<>();
+    private List<TableRow> getValidTableRows(Table table, String key, Tumor tumor, Patient patient, String schemaId) {
+        List<TableRow> validRows = new ArrayList<>();
 
         // get the index number of the description column
         Integer descriptionColumnNumber = null;
 
         // find the description column number
-        List<StagingColumnDefinition> stagingColumnDefinitions = table.getColumnDefinitions();
+        List<? extends ColumnDefinition> stagingColumnDefinitions = table.getColumnDefinitions();
         for (int i = 0; i < stagingColumnDefinitions.size(); i++)
             if (stagingColumnDefinitions.get(i).getType().toString().equals("DESCRIPTION"))
                 descriptionColumnNumber = i;
 
-        List<StagingTableRow> tableRows = table.getTableRows();
+        List<? extends TableRow> tableRows = table.getTableRows();
         List<List<String>> tableRawRows = table.getRawRows();
         int rowsInTable = tableRows.size();
 
         for (int i = 0; i < rowsInTable; i++) {
 
-            StagingTableRow row = tableRows.get(i);
+            TableRow row = tableRows.get(i);
 
             // check invalid values list - omit any input values that are marked invalid
-            List<StagingRange> inputs = row.getColumnInput(key);
+            List<? extends Range> inputs = row.getColumnInput(key);
             boolean isInvalidValue = !inputs.isEmpty() && getInvalidValues(key, tumor, patient, schemaId).contains(inputs.get(0).getHigh());
 
             // check for error in endpoints - omit these from table
-            List<StagingEndpoint> endpoints = row.getEndpoints();
+            List<? extends Endpoint> endpoints = row.getEndpoints();
             boolean isErrorEndPoint = false;
             if (endpoints != null && !endpoints.isEmpty())
-                for (StagingEndpoint endpoint : endpoints)
+                for (Endpoint endpoint : endpoints)
                     isErrorEndPoint |= endpoint.getType().equals(EndpointType.ERROR);
 
             // check for obsolete note in description - omit these
