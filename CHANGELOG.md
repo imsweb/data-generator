@@ -1,5 +1,10 @@
 ## Synthetic data generator
 
+**Changes in version 1.22**
+
+- Updated Staging client library from version 6.0.0 to version 6.1.0.
+- Updated CS library from version 02.05.50.7 to version 02.05.50.8.
+
 **Changes in version 1.21**
 
 - Updated Staging client library from version 5.0 to version 6.0.0.
