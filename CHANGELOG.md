@@ -1,5 +1,9 @@
 ## Synthetic data generator
 
+- Updated Layout library from version 3.3 to version 3.4.
+- Updated Algorithms library from version 3.3 to version 3.4.
+- Updated NAACCR XML library from version 7.12 to version 7.13.
+
 **Changes in version 1.22**
 
 - Updated Staging client library from version 6.0.0 to version 6.1.0.
