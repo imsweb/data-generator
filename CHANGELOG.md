@@ -1,6 +1,6 @@
 ## Synthetic data generator
 
-**Changes in version 1.23**
+**Changes in version 1.24**
 
 - Updated NAACCR XML library from version 7.13 to version 8.2.
 - Updated Layout library from version 3.4 to version 4.5.
