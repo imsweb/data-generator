@@ -19,16 +19,16 @@ repositories {
 }
 
 dependencies {
-    api 'com.imsweb:layout:3.4'
-    api 'com.imsweb:naaccr-xml:7.13'
+    api 'com.imsweb:layout:4.5'
+    api 'com.imsweb:naaccr-xml:8.2'
 
     implementation 'com.imsweb:algorithms:3.4'
     implementation 'com.imsweb:staging-client-java:6.1.0'
     implementation 'com.imsweb:staging-algorithm-cs:02.05.50.8'
-    implementation 'org.apache.commons:commons-lang3:3.11'
-    implementation 'commons-io:commons-io:2.7'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'commons-io:commons-io:2.11.0'
 
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.2'
 }
 
 // enforce UTF-8, display the compilation warnings
