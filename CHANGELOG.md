@@ -4,6 +4,7 @@
 
 - Updated NAACCR XML library from version 7.13 to version 8.2.
 - Updated Layout library from version 3.4 to version 4.5.
+- Updated Algorithms library from version 3.4 to version 3.5.
 - Updated Commons Lang library from version 3.11 to version 3.12.0.
 - Updated Commons IO library from version 2.7 to version 2.11.0.
 

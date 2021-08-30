@@ -22,7 +22,7 @@ dependencies {
     api 'com.imsweb:layout:4.5'
     api 'com.imsweb:naaccr-xml:8.2'
 
-    implementation 'com.imsweb:algorithms:3.4'
+    implementation 'com.imsweb:algorithms:3.5'
     implementation 'com.imsweb:staging-client-java:6.1.0'
     implementation 'com.imsweb:staging-algorithm-cs:02.05.50.8'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
