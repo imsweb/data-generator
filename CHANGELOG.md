@@ -1,5 +1,10 @@
 ## Synthetic data generator
 
+**Changes in version 1.25**
+
+- Updated NAACCR XML library from version 8.2 to version 8.3.
+- Updated Layout library from version 3.5 to version 4.6.
+
 **Changes in version 1.24**
 
 - Updated NAACCR XML library from version 7.13 to version 8.2.
