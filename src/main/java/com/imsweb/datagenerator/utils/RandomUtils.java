@@ -1,5 +1,6 @@
 package com.imsweb.datagenerator.utils;
 
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
@@ -8,7 +9,7 @@ import java.util.Random;
 
 public class RandomUtils {
 
-    private static final Random _RANDOM = new Random();
+    private static final Random _RANDOM = new SecureRandom();
 
     /**
      * Generates a random integer between 0 (inclusive) and the requested bound (exclusive).

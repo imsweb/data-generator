@@ -5,6 +5,7 @@ package com.imsweb.datagenerator.utils;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +71,7 @@ public class DistributionUtils {
     }
 
     public static List<String> getAllStates() {
-        return _STATES;
+        return Collections.unmodifiableList(_STATES);
     }
 
     public static String getNameLast() {
