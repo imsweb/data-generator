@@ -161,7 +161,7 @@ signing {
 nexusPublishing {
     repositories {
         sonatype {
-            stagingProfileId = 'ImsValidationProfileId'
+            stagingProfileId = 'ImsDataGeneratorProfileId'
 
             username = project.findProperty("nexusUsername")
             password = project.findProperty("nexusPassword")
