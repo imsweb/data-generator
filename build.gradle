@@ -26,11 +26,15 @@ dependencies {
     api 'com.imsweb:naaccr-xml:8.3'
 
     implementation 'com.imsweb:algorithms:3.5'
-    implementation 'com.imsweb:staging-client-java:6.1.0'
-    implementation 'com.imsweb:staging-algorithm-cs:02.05.50.8'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'commons-io:commons-io:2.11.0'
 
+    testImplementation 'com.imsweb:seerutils:5.6'
+    testImplementation 'com.imsweb:validation:2.25'
+    testImplementation 'com.imsweb:staging-client-java:6.2.0'
+    testImplementation 'com.imsweb:staging-algorithm-cs:02.05.50.9'
+    testImplementation 'com.imsweb:staging-algorithm-tnm:1.9.8'
+    testImplementation 'com.imsweb:staging-algorithm-eod-public:2.1.1'
     testImplementation 'junit:junit:4.13.2'
 }
 

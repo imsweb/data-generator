@@ -34,7 +34,6 @@ import com.imsweb.datagenerator.naaccr.rule.patient.VitalStatusRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.AddressAtDxRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.AgeRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.CensusRule;
-import com.imsweb.datagenerator.naaccr.rule.tumor.CollaborativeStageRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.DateOfConclusiveDxRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.DateOfDiagnosisRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.DateOfInitialRxRule;
@@ -52,6 +51,7 @@ import com.imsweb.datagenerator.naaccr.rule.tumor.SeerRecordNumberRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.SeerTypeOfFollowUpRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.SequenceNumberCentralRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.SiteRule;
+import com.imsweb.datagenerator.naaccr.rule.tumor.StagingInputRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.TumorMarkerRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.TumorRecordNumberRule;
 import com.imsweb.datagenerator.utils.Distribution;
@@ -127,7 +127,7 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
         _tumorRules.add(new SeerCodingSystemRule());
         _tumorRules.add(new MultiTumorsRule());
         _tumorRules.add(new DateOfConclusiveDxRule());
-        _tumorRules.add(new CollaborativeStageRule());
+        _tumorRules.add(new StagingInputRule());
         _tumorRules.add(new FacilityRule());
         _tumorRules.add(new PhysicianRule());
     }

@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
  * most likely that particular value will be returned).
  * @param <T> the type of the value
  */
+@SuppressWarnings("unused")
 public class Distribution<T> {
 
     /**
@@ -75,7 +76,7 @@ public class Distribution<T> {
                 String line = reader.readLine();
                 while (line != null) {
                     DistributionElement<D> element = new DistributionElement<>();
-                    String[] values = StringUtils.split(line, ',');
+                    String[] values = StringUtils.splitPreserveAllTokens(line, ',');
                     if (values.length == 1) {
                         element.setValue((D)values[0]);
                         element.setFrequency(1D);
@@ -85,10 +86,14 @@ public class Distribution<T> {
                         element.setFrequency(Double.parseDouble(values[0]));
                     }
                     else {
-                        Object obj = valueType.getDeclaredConstructor().newInstance();
-                        for (Map.Entry<Integer, String> entry : columnsMapping.entrySet())
+                        D obj = valueType.getDeclaredConstructor().newInstance();
+                        for (Map.Entry<Integer, String> entry : columnsMapping.entrySet()) {
+                            int idx = entry.getKey();
+                            if (idx >= values.length)
+                                throw new RuntimeException("Invalid column index " + idx + " for line " + line);
                             valueType.getMethod("set" + StringUtils.capitalize(entry.getValue()), String.class).invoke(obj, values[entry.getKey()]);
-                        element.setValue((D)obj);
+                        }
+                        element.setValue(obj);
                         element.setFrequency(Double.parseDouble(values[0]));
                     }
                     elements.add(element);
@@ -107,7 +112,7 @@ public class Distribution<T> {
     private List<DistributionElement<T>> _frequencies;
 
     // frequencies total
-    private double _frequenciesTotal;
+    private final double _frequenciesTotal;
 
     /**
      * Constructor.

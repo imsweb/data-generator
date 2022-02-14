@@ -20,6 +20,7 @@ import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
  * <br/><br/>
  * The main purpose of this class is to provide caching for those distributions so the data is not loaded several times by different rules...
  */
+@SuppressWarnings("ConstantConditions")
 public class DistributionUtils {
 
     private static Distribution<String> _DIST_NAME_LAST_WHITE, _DIST_NAME_LAST_BLACK, _DIST_NAME_LAST_API, _DIST_NAME_LAST_HISP;
@@ -31,18 +32,19 @@ public class DistributionUtils {
     private static Distribution<SiteFrequencyDto> _DIST_SITE_MALE, _DIST_SITE_FEMALE;
     private static Distribution<String> _DIST_STREET_NAME;
     private static Distribution<String> _DIST_STREET_SUFFIX;
-    private static Map<String, Distribution<CityFrequencyDto>> _DIST_CITIES = new HashMap<>();
+    private static final Map<String, Distribution<CityFrequencyDto>> _DIST_CITIES = new HashMap<>();
     private static Distribution<String> _DIST_STATE;
-    private static Map<String, Distribution<String>> _DIST_SITE_AGE_GROUPS = new HashMap<>();
-    private static Map<String, Distribution<FacilityFrequencyDto>> _DIST_FACILITIES = new HashMap<>();
-    private static Map<String, Distribution<PhysicianFrequencyDto>> _DIST_PHYSICIANS = new HashMap<>();
+    private static final Map<String, Distribution<String>> _DIST_SITE_AGE_GROUPS = new HashMap<>();
+    private static final Map<String, Distribution<FacilityFrequencyDto>> _DIST_FACILITIES = new HashMap<>();
+    private static final Map<String, Distribution<PhysicianFrequencyDto>> _DIST_PHYSICIANS = new HashMap<>();
 
     // API races
-    private static List<String> _API_RACES = Arrays.asList("04", "05", "06", "07", "08", "10", "11", "12", "13", "14", "15", "16", "17", "20", "21", "22", "25", "26", "27", "28", "30", "31", "32",
+    private static final List<String> _API_RACES = Arrays.asList("04", "05", "06", "07", "08", "10", "11", "12", "13", "14", "15", "16", "17", "20", "21", "22", "25", "26", "27", "28", "30", "31",
+            "32",
             "96", "97");
 
     // states
-    private static List<String> _STATES = Arrays.asList("AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI",
+    private static final List<String> _STATES = Arrays.asList("AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI",
             "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY");
 
     /**
@@ -68,6 +70,8 @@ public class DistributionUtils {
         _DIST_SITE_AGE_GROUPS.clear();
         _DIST_FACILITIES.clear();
         _DIST_PHYSICIANS.clear();
+
+        StagingUtils.clearCache();
     }
 
     public static List<String> getAllStates() {
@@ -142,6 +146,9 @@ public class DistributionUtils {
             mapping.put(1, "site");
             mapping.put(2, "histology");
             mapping.put(3, "behavior");
+            mapping.put(4, "csSchemaId");
+            mapping.put(5, "tnmSchemaId");
+            mapping.put(6, "eodSchemaId");
             _DIST_SITE_MALE = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/sites_sex_male.csv"), SiteFrequencyDto.class, mapping);
             _DIST_SITE_FEMALE = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/sites_sex_female.csv"), SiteFrequencyDto.class, mapping);
         }
@@ -205,7 +212,7 @@ public class DistributionUtils {
 
         return Integer.parseInt(distribution.getValue());
     }
-  
+
     public static FacilityFrequencyDto getFacility() {
         return getFacility(null);
     }

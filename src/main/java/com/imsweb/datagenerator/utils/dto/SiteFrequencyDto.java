@@ -11,6 +11,12 @@ public class SiteFrequencyDto {
 
     private String _behavior;
 
+    private String _csSchemaId;
+
+    private String _tnmSchemaId;
+
+    private String _eodSchemaId;
+
     public String getSite() {
         return _site;
     }
@@ -33,5 +39,29 @@ public class SiteFrequencyDto {
 
     public void setBehavior(String behavior) {
         _behavior = behavior;
+    }
+
+    public String getCsSchemaId() {
+        return _csSchemaId;
+    }
+
+    public void setCsSchemaId(String csSchemaId) {
+        _csSchemaId = csSchemaId;
+    }
+
+    public String getTnmSchemaId() {
+        return _tnmSchemaId;
+    }
+
+    public void setTnmSchemaId(String tnmSchemaId) {
+        _tnmSchemaId = tnmSchemaId;
+    }
+
+    public String getEodSchemaId() {
+        return _eodSchemaId;
+    }
+
+    public void setEodSchemaId(String eodSchemaId) {
+        _eodSchemaId = eodSchemaId;
     }
 }
