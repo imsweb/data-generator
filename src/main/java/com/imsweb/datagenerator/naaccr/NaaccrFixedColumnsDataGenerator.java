@@ -17,6 +17,7 @@ import java.util.Map;
 
 import com.imsweb.datagenerator.utils.Distribution;
 import com.imsweb.layout.LayoutFactory;
+import com.imsweb.layout.record.RecordLayoutOptions;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
@@ -133,12 +134,16 @@ public class NaaccrFixedColumnsDataGenerator extends NaaccrDataGenerator {
         // create the file and write to it
         try (OutputStream os = createOutputStream(file);
              Writer writer = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8))) {
+
+            RecordLayoutOptions layoutOptions = new RecordLayoutOptions();
+            layoutOptions.setValueTooLongHandling(RecordLayoutOptions.VAL_TOO_LONG_NULLIFY);
+
             int numCreatedTumors = 0;
             while (numCreatedTumors < numTumors) {
                 int numTumorForThisPatient = numTumGen == null ? options.getNumTumorsPerPatient() : numTumGen.getValue();
                 // never create more tumors than requested, so we use a min() call
                 for (Map<String, String> tumor : generatePatient(Math.min(numTumorForThisPatient, numTumors - numCreatedTumors), options)) {
-                    _layout.writeRecord(writer, tumor);
+                    _layout.writeRecord(writer, tumor, layoutOptions);
                     numCreatedTumors++;
                 }
             }

@@ -22,8 +22,8 @@ repositories {
 }
 
 dependencies {
-    api 'com.imsweb:layout:4.6'
-    api 'com.imsweb:naaccr-xml:8.3'
+    api 'com.imsweb:layout:4.8'
+    api 'com.imsweb:naaccr-xml:8.9'
 
     implementation 'com.imsweb:algorithms:3.5'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
