@@ -1,7 +1,8 @@
 ## Synthetic data generator
 
-**Changes in version 1.25**
+**Changes in version 1.26**
 
+- Removed NHIA and NAPIIA rules to remove dependency to Algorithms library. 
 - Replaced CS rule by new Staging Input rule covering CS, TNM and EOD inputs.
 - Updated NAACCR XML library from version 8.3 to version 8.9.
 - Updated Layout library from version 4.6 to version 4.8.
