@@ -69,7 +69,7 @@ public class StagingUtils {
 
         Map<String, Distribution<String>> data = _CS_DATA.get(csSchemaKey);
         if (data == null)
-            throw new RuntimeException("Unable to find map for CS staging key " + csSchemaKey);
+            return new HashMap<>();
 
         return getStagingValues(data);
     }
@@ -86,7 +86,7 @@ public class StagingUtils {
 
         Map<String, Distribution<String>> data = _TNM_DATA.get(tnmSchemaKey);
         if (data == null)
-            throw new RuntimeException("Unable to find map for TNM staging key " + tnmSchemaKey);
+            return new HashMap<>();
 
         return getStagingValues(data);
     }
@@ -103,7 +103,7 @@ public class StagingUtils {
 
         Map<String, Distribution<String>> data = _EOD_DATA.get(eodSchemaKey);
         if (data == null)
-            throw new RuntimeException("Unable to find map for EOD staging key " + eodSchemaKey);
+            return new HashMap<>();
 
         return getStagingValues(data);
     }

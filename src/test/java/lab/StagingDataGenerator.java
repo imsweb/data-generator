@@ -78,9 +78,9 @@ public class StagingDataGenerator {
             lookup.setHistology(hist);
             lookup.setInput("sex", filename.contains("female") ? "2" : "1");
 
-            List<Schema> csSchemas = cs.lookupSchema(lookup);
-            List<Schema> tnmSchemas = tnm.lookupSchema(lookup);
-            List<Schema> eodSchemas = eod.lookupSchema(lookup);
+            Schema csSchema = filterSchemas(cs.lookupSchema(lookup));
+            Schema tnmSchema = filterSchemas(tnm.lookupSchema(lookup));
+            Schema eodSchema = filterSchemas(eod.lookupSchema(lookup));
 
             List<String> newLines = new ArrayList<>();
             newLines.add(freq);
@@ -88,25 +88,25 @@ public class StagingDataGenerator {
             newLines.add(hist);
             newLines.add(beh);
 
-            if (!csSchemas.isEmpty()) {
-                info.getCsSchemas().add(csSchemas.get(0).getId());
-                String key = keyCache.computeIfAbsent(csSchemas.get(0).getId(), k -> String.valueOf(keyCache.size() + 1));
+            if (csSchema != null) {
+                info.getCsSchemas().add(csSchema.getId());
+                String key = keyCache.computeIfAbsent(csSchema.getId(), k -> String.valueOf(keyCache.size() + 1));
                 newLines.add(key);
             }
             else
                 newLines.add("");
 
-            if (!tnmSchemas.isEmpty()) {
-                info.getTnmSchemas().add(tnmSchemas.get(0).getId());
-                String key = keyCache.computeIfAbsent(tnmSchemas.get(0).getId(), k -> String.valueOf(keyCache.size() + 1));
+            if (tnmSchema != null) {
+                info.getTnmSchemas().add(tnmSchema.getId());
+                String key = keyCache.computeIfAbsent(tnmSchema.getId(), k -> String.valueOf(keyCache.size() + 1));
                 newLines.add(key);
             }
             else
                 newLines.add("");
 
-            if (!eodSchemas.isEmpty()) {
-                info.getEodSchemas().add(eodSchemas.get(0).getId());
-                String key = keyCache.computeIfAbsent(eodSchemas.get(0).getId(), k -> String.valueOf(keyCache.size() + 1));
+            if (eodSchema != null) {
+                info.getEodSchemas().add(eodSchema.getId());
+                String key = keyCache.computeIfAbsent(eodSchema.getId(), k -> String.valueOf(keyCache.size() + 1));
                 newLines.add(key);
             }
             else
@@ -123,8 +123,22 @@ public class StagingDataGenerator {
         }
     }
 
-    private static void createStagingFiles(Staging stating, Set<String> schemas, String filename, Map<String, String> keyCache) throws IOException {
+    private static Schema filterSchemas(List<Schema> schemas) {
+        Set<String> exclusions = getInputExclusions();
 
+        // only include a schema if it has at least one non-obsolete input (some TNM schema are completely obsolete)
+        return schemas.stream()
+                .filter(schema -> {
+                    for (Input input : schema.getInputs().stream().sorted(Comparator.comparing(Input::getNaaccrXmlId)).collect(Collectors.toList()))
+                        if (!exclusions.contains(input.getKey()) && !input.getName().contains("OBSOLETE"))
+                            return true;
+                    return false;
+                })
+                .findFirst()
+                .orElse(null);
+    }
+
+    private static Set<String> getInputExclusions() {
         // these are the input we don't want to set
         Set<String> exclusions = new HashSet<>();
         exclusions.add("site");
@@ -135,6 +149,13 @@ public class StagingDataGenerator {
         exclusions.add("grade");
         exclusions.add("age_dx");
         exclusions.add("ssf25"); // we are always taking the first schema, we don't use discriminators...
+        return exclusions;
+    }
+
+    private static void createStagingFiles(Staging stating, Set<String> schemas, String filename, Map<String, String> keyCache) throws IOException {
+
+        // these are the input we don't want to set
+        Set<String> exclusions = getInputExclusions();
 
         File file = new File(TestingUtils.getWorkingDirectory() + "/src/main/resources/" + filename);
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {

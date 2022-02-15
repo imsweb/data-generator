@@ -10,11 +10,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.imsweb.datagenerator.utils.Distribution;
+import com.imsweb.datagenerator.utils.DistributionElement;
 import com.imsweb.datagenerator.utils.DistributionUtils;
+import com.imsweb.datagenerator.utils.StagingUtils;
 import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
 import com.imsweb.naaccrxml.entity.Item;
 import com.imsweb.naaccrxml.entity.Patient;
@@ -89,6 +93,32 @@ public class StagingInputRuleTest {
         for (Item item : tumor.getItems())
             if (!exceptions.contains(item.getNaaccrId()))
                 Assert.assertTrue(item.getNaaccrId() + ": " + item.getValue(), validValue.matcher(item.getValue()).matches());
+    }
+
+    @Test
+    @SuppressWarnings("ConstantConditions")
+    public void testReferencedSchemas() {
+        Map<Integer, String> mapping = new HashMap<>();
+        mapping.put(1, "site");
+        mapping.put(2, "histology");
+        mapping.put(3, "behavior");
+        mapping.put(4, "csSchemaId");
+        mapping.put(5, "tnmSchemaId");
+        mapping.put(6, "eodSchemaId");
+        checkReferencedSchema(Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/sites_sex_male.csv"), SiteFrequencyDto.class, mapping));
+        checkReferencedSchema(Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/sites_sex_female.csv"), SiteFrequencyDto.class, mapping));
+    }
+
+    private void checkReferencedSchema(Distribution<SiteFrequencyDto> distribution) {
+        for (DistributionElement<SiteFrequencyDto> element : distribution.getFrequencies()) {
+            SiteFrequencyDto dto = element.getValue();
+            if (!StringUtils.isBlank(dto.getCsSchemaId()))
+                Assert.assertFalse(dto.getSite() + "," + dto.getHistology() + "/" + StagingUtils.unformatKey(dto.getCsSchemaId()), StagingUtils.getCsValues(dto.getCsSchemaId()).isEmpty());
+            if (!StringUtils.isBlank(dto.getTnmSchemaId()))
+                Assert.assertFalse(dto.getSite() + "," + dto.getHistology() + "/" + StagingUtils.unformatKey(dto.getTnmSchemaId()), StagingUtils.getTnmValues(dto.getTnmSchemaId()).isEmpty());
+            if (!StringUtils.isBlank(dto.getEodSchemaId()))
+                Assert.assertFalse(dto.getSite() + "," + dto.getHistology() + "/" + StagingUtils.unformatKey(dto.getEodSchemaId()), StagingUtils.getEodValues(dto.getEodSchemaId()).isEmpty());
+        }
     }
 
     //    @SuppressWarnings("ConstantConditions")
