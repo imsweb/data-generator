@@ -29,6 +29,7 @@ import com.imsweb.layout.hl7.entity.Hl7Message;
 /**
  * A data generator can be used to create fake NAACCR HL7 data files.
  */
+@SuppressWarnings("unused")
 public class NaaccrHl7DataGenerator implements DataGenerator {
 
     // the layout used for this generator (the layout defines the variables that can be used in the rules)
@@ -68,6 +69,47 @@ public class NaaccrHl7DataGenerator implements DataGenerator {
     @Override
     public String getId() {
         return _layout.getLayoutId();
+    }
+
+    /**
+     * Adds a new rule
+     * @param rule rule to be added
+     */
+    public void addRule(NaaccrHl7DataGeneratorRule rule) {
+        _rules.add(rule);
+    }
+
+    /**
+     * Removes the requested rule.
+     * @param ruleId rule ID to remove
+     * @return true if the rule was actually removed
+     */
+    public boolean removeRule(String ruleId) {
+        return _rules.remove(getRule(ruleId));
+    }
+
+    /**
+     * Replaced an existing rule by the provided rule, both rules must have the same ID.
+     * @param newRule new rule to replace with
+     * @return true if the rule was actually replaced
+     */
+    public boolean replaceRule(NaaccrHl7DataGeneratorRule newRule) {
+        int idx = _rules.indexOf(newRule);
+        if (idx != -1) {
+            _rules.set(idx, newRule);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns the requested rule from this generator.
+     */
+    public NaaccrHl7DataGeneratorRule getRule(String ruleId) {
+        for (NaaccrHl7DataGeneratorRule rule : _rules)
+            if (ruleId.equals(rule.getId()))
+                return rule;
+        return null;
     }
 
     /**
