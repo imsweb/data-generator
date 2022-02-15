@@ -2,6 +2,12 @@
 
 **Changes in version 1.25**
 
+- Replaced CS rule by new Staging Input rule covering CS, TNM and EOD inputs.
+- Updated NAACCR XML library from version 8.3 to version 8.9.
+- Updated Layout library from version 4.6 to version 4.8.
+
+**Changes in version 1.25**
+
 - Updated NAACCR XML library from version 8.2 to version 8.3.
 - Updated Layout library from version 3.5 to version 4.6.
 
