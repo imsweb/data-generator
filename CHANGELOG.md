@@ -1,5 +1,9 @@
 ## Synthetic data generator
 
+**Changes in version 1.27**
+
+- Fixed StagingInput rule that assigned variable sex by mistake.
+
 **Changes in version 1.26**
 
 - Removed NHIA and NAPIIA rules to remove dependency to Algorithms library. 
