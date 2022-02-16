@@ -3,10 +3,13 @@
  */
 package lab;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -45,7 +48,7 @@ public class StagingDataGenerator {
 
         SchemaInfo info = new SchemaInfo();
 
-        Map<String, String> keyCache = new HashMap<>();
+        Map<String, String> keyCache = readOldKeys("frequencies/staging_keys.csv");
 
         updateSchemasInSiteFile(cs, tnm, eod, "frequencies/sites_sex_female.csv", info, keyCache);
         updateSchemasInSiteFile(cs, tnm, eod, "frequencies/sites_sex_male.csv", info, keyCache);
@@ -59,6 +62,29 @@ public class StagingDataGenerator {
             for (String key : keyCache.keySet().stream().sorted().collect(Collectors.toList()))
                 writer.write(key + "," + keyCache.get(key) + "\r\n");
         }
+    }
+
+    @SuppressWarnings("SameParameterValue")
+    private static Map<String, String> readOldKeys(String filePath) {
+        Map<String, String> keyCache = new HashMap<>();
+
+        File keysFile = new File(TestingUtils.getWorkingDirectory() + "/src/main/resources/" + filePath);
+        if (keysFile.exists()) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(keysFile), StandardCharsets.US_ASCII))) {
+                String line = reader.readLine();
+                while (line != null) {
+                    String[] parts = StringUtils.split(line, ',');
+                    keyCache.put(parts[0], parts[1]);
+                    line = reader.readLine();
+                }
+
+            }
+            catch (IOException e) {
+                throw new RuntimeException("Unable to read staging keys", e);
+            }
+        }
+
+        return keyCache;
     }
 
     private static void updateSchemasInSiteFile(Staging cs, Staging tnm, Staging eod, String filename, SchemaInfo info, Map<String, String> keyCache) throws Exception {
@@ -148,6 +174,7 @@ public class StagingDataGenerator {
         exclusions.add("behavior");
         exclusions.add("grade");
         exclusions.add("age_dx");
+        exclusions.add("sex");
         exclusions.add("ssf25"); // we are always taking the first schema, we don't use discriminators...
         return exclusions;
     }

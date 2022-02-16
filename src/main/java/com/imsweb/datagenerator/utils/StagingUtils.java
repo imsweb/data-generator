@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -41,7 +42,7 @@ public class StagingUtils {
         if (_KEYS == null) {
             _KEYS = new HashMap<>();
             try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("frequencies/staging_keys.csv");
-                 BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+                 BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.US_ASCII))) {
                 String line = reader.readLine();
                 while (line != null) {
                     String[] parts = StringUtils.split(line, ',');
@@ -159,7 +160,7 @@ public class StagingUtils {
 
         String line = null;
         try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("frequencies/" + filename);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+             BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.US_ASCII))) {
             line = reader.readLine();
             while (line != null) {
                 String[] parts = StringUtils.split(line, ',');

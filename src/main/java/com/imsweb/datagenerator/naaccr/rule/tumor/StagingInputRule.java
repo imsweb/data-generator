@@ -54,7 +54,7 @@ public class StagingInputRule extends NaaccrDataGeneratorTumorRule {
 
                 if (randomValidValues != null)
                     for (Entry<String, String> entry : randomValidValues.entrySet())
-                        setValue(tumor, entry.getKey(), entry.getValue());
+                        setValue(tumor, entry.getKey(), entry.getValue().trim());
             }
         }
     }
