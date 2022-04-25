@@ -2,6 +2,11 @@
 
 **Changes in version 1.27**
 
+- Updated NAACCR XML library from version 8.9 to version 8.10.
+- Updated Layout library from version 4.8 to version 4.9.
+
+**Changes in version 1.27**
+
 - Fixed StagingInput rule that assigned variable sex by mistake.
 
 **Changes in version 1.26**
