@@ -5,6 +5,7 @@ package com.imsweb.datagenerator.naaccr.rule.tumor;
 
 import java.util.Map;
 
+import com.imsweb.datagenerator.RandomTextGeneratorUtil;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
 import com.imsweb.naaccrxml.entity.Patient;
@@ -21,11 +22,11 @@ public class DxProcTextRule extends NaaccrDataGeneratorTumorRule {
 
     @Override
     public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
-        setValue(tumor, "textDxProcLabTests", "");
-        setValue(tumor, "textDxProcOp", "");
-        setValue(tumor, "textDxProcPath", "");
-        setValue(tumor, "textDxProcPe", "");
-        setValue(tumor, "textDxProcScopes", "");
-        setValue(tumor, "textDxProcXRayScan", "");
+        setValue(tumor, "textDxProcLabTests", RandomTextGeneratorUtil.getRandomText());
+        setValue(tumor, "textDxProcOp", RandomTextGeneratorUtil.getRandomText());
+        setValue(tumor, "textDxProcPath", RandomTextGeneratorUtil.getRandomText());
+        setValue(tumor, "textDxProcPe", RandomTextGeneratorUtil.getRandomText());
+        setValue(tumor, "textDxProcScopes", RandomTextGeneratorUtil.getRandomText());
+        setValue(tumor, "textDxProcXRayScan", RandomTextGeneratorUtil.getRandomText());
     }
 }

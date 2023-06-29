@@ -5,6 +5,7 @@ package com.imsweb.datagenerator.naaccr.rule.tumor;
 
 import java.util.Map;
 
+import com.imsweb.datagenerator.RandomTextGeneratorUtil;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
 import com.imsweb.naaccrxml.entity.Patient;
@@ -21,11 +22,11 @@ public class SiteTextRule extends NaaccrDataGeneratorTumorRule {
 
     @Override
     public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
-        setValue(tumor, "textPrimarySiteTitle", "");
-        setValue(tumor, "textHistologyTitle", "");
-        setValue(tumor, "textStaging", "");
-        setValue(tumor, "textSurgery", ""); // rxTextSurgery
-        setValue(tumor, "textRemarks", "");
+        setValue(tumor, "textPrimarySiteTitle", RandomTextGeneratorUtil.getRandomText());
+        setValue(tumor, "textHistologyTitle", RandomTextGeneratorUtil.getRandomText());
+        setValue(tumor, "textStaging", RandomTextGeneratorUtil.getRandomText());
+        setValue(tumor, "textSurgery", RandomTextGeneratorUtil.getRandomText()); // rxTextSurgery
+        setValue(tumor, "textRemarks", RandomTextGeneratorUtil.getRandomText());
 //        setValue(tumor, "", ""); // path comments
 //        setValue(tumor, "", ""); // path formal dx
 //        setValue(tumor, "", ""); // path full text

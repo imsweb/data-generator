@@ -5,6 +5,7 @@ package com.imsweb.datagenerator.naaccr.rule.tumor;
 
 import java.util.Map;
 
+import com.imsweb.datagenerator.RandomTextGeneratorUtil;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
 import com.imsweb.naaccrxml.entity.Patient;
@@ -21,11 +22,11 @@ public class RxTextRule extends NaaccrDataGeneratorTumorRule {
 
     @Override
     public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
-        setValue(tumor, "rxTextRadiation", "");
-        setValue(tumor, "rxTextRadiationOther", "");
-        setValue(tumor, "rxTextChemo", "");
-        setValue(tumor, "rxTextHormone", "");
-        setValue(tumor, "rxTextBrm", "");
-        setValue(tumor, "rxTextOther", "");
+        setValue(tumor, "rxTextRadiation", RandomTextGeneratorUtil.getRandomText());
+        setValue(tumor, "rxTextRadiationOther", RandomTextGeneratorUtil.getRandomText());
+        setValue(tumor, "rxTextChemo", RandomTextGeneratorUtil.getRandomText());
+        setValue(tumor, "rxTextHormone", RandomTextGeneratorUtil.getRandomText());
+        setValue(tumor, "rxTextBrm", RandomTextGeneratorUtil.getRandomText());
+        setValue(tumor, "rxTextOther", RandomTextGeneratorUtil.getRandomText());
     }
 }
