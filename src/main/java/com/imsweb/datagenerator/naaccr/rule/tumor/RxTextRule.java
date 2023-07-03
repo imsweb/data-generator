@@ -24,10 +24,10 @@ public class RxTextRule extends NaaccrDataGeneratorTumorRule {
     public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         setValue(tumor, "rxTextRadiation", RandomTextGeneratorUtil.getRandomText()); // radiation beam
         setValue(tumor, "rxTextRadiationOther", RandomTextGeneratorUtil.getRandomText());
+        setValue(tumor, "rxTextSurgery", RandomTextGeneratorUtil.getRandomText());
         setValue(tumor, "rxTextChemo", RandomTextGeneratorUtil.getRandomText());
         setValue(tumor, "rxTextHormone", RandomTextGeneratorUtil.getRandomText());
         setValue(tumor, "rxTextBrm", RandomTextGeneratorUtil.getRandomText());
         setValue(tumor, "rxTextOther", RandomTextGeneratorUtil.getRandomText());
-        setValue(tumor, "rxSummTransplntEndocr", RandomTextGeneratorUtil.getRandomText());
     }
 }

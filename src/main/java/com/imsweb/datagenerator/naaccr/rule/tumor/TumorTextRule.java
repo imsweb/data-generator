@@ -23,7 +23,6 @@ public class TumorTextRule extends NaaccrDataGeneratorTumorRule {
     @Override
     public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         setValue(tumor, "textStaging", RandomTextGeneratorUtil.getRandomText());
-        setValue(tumor, "rxTextSurgery", RandomTextGeneratorUtil.getRandomText());
         setValue(tumor, "textRemarks", RandomTextGeneratorUtil.getRandomText());
         setValue(tumor, "ehrReporting", RandomTextGeneratorUtil.getRandomText());
     }
