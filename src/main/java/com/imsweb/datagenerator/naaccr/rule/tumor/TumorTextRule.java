@@ -11,17 +11,20 @@ import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
 
-public class EhrReportingRule extends NaaccrDataGeneratorTumorRule {
+public class TumorTextRule extends NaaccrDataGeneratorTumorRule {
 
     // unique identifier for this rule
-    public static final String ID = "ehr-reporting";
+    public static final String ID = "tumor-text";
 
-    public EhrReportingRule() {
-        super(ID, "EHR Reporting");
+    public TumorTextRule() {
+        super(ID, "Tumor Text fields");
     }
 
     @Override
     public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
+        setValue(tumor, "textStaging", RandomTextGeneratorUtil.getRandomText());
+        setValue(tumor, "rxTextSurgery", RandomTextGeneratorUtil.getRandomText());
+        setValue(tumor, "textRemarks", RandomTextGeneratorUtil.getRandomText());
         setValue(tumor, "ehrReporting", RandomTextGeneratorUtil.getRandomText());
     }
 }
