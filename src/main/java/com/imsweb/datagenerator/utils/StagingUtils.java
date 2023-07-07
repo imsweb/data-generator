@@ -21,9 +21,15 @@ public class StagingUtils {
 
     private static Map<String, String> _KEYS;
 
-    private static Map<String, Map<String, Distribution<String>>> _CS_DATA, _TNM_DATA, _EOD_DATA;
+    private static Map<String, Map<String, Distribution<String>>> _CS_DATA;
+    private static Map<String, Map<String, Distribution<String>>> _TNM_DATA;
+    private static Map<String, Map<String, Distribution<String>>> _EOD_DATA;
 
     private static final Pattern _STARTS_WITH_LETTER_PATTERN = Pattern.compile("^([A-Z]).+");
+
+    private StagingUtils() {
+        // hide constructor
+    }
 
     /**
      * Clears all the cached data, forcing it to be (lazily) re-initialized if needed.
