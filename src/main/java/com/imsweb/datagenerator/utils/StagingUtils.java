@@ -38,7 +38,7 @@ public class StagingUtils {
     /**
      * Schema ID and field ID (NAACCR XML ID) are coded in the data (for optimization); this method can be used to "decode" a key.
      */
-    public static String unformatKey(String key) {
+    public static synchronized String unformatKey(String key) {
         if (_KEYS == null) {
             _KEYS = new HashMap<>();
             try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("frequencies/staging_keys.csv");
@@ -61,7 +61,7 @@ public class StagingUtils {
     /**
      * Returns a random valid CS values for each relevant field (NAACCR XML ID) of the provided (coded) schema.
      */
-    public static Map<String, String> getCsValues(String csSchemaKey) {
+    public static synchronized Map<String, String> getCsValues(String csSchemaKey) {
         if (StringUtils.isBlank(csSchemaKey))
             return new HashMap<>();
 
@@ -78,7 +78,7 @@ public class StagingUtils {
     /**
      * Returns a random valid TNM values for each relevant field (NAACCR XML ID) of the provided (coded) schema.
      */
-    public static Map<String, String> getTnmValues(String tnmSchemaKey) {
+    public static synchronized Map<String, String> getTnmValues(String tnmSchemaKey) {
         if (StringUtils.isBlank(tnmSchemaKey))
             return new HashMap<>();
 
@@ -95,7 +95,7 @@ public class StagingUtils {
     /**
      * Returns a random valid EOD values for each relevant field (NAACCR XML ID) of the provided (coded) schema.
      */
-    public static Map<String, String> getEodValues(String eodSchemaKey) {
+    public static synchronized Map<String, String> getEodValues(String eodSchemaKey) {
         if (StringUtils.isBlank(eodSchemaKey))
             return new HashMap<>();
 

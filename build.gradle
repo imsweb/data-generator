@@ -102,7 +102,7 @@ checkstyle {
 
 // spotbugs plugin settings
 spotbugs {
-    ignoreFailures = true
+    ignoreFailures = false
     excludeFilter = project(':').file("config/spotbugs/spotbugs-exclude.xml")
 }
 
