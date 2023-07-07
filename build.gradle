@@ -13,8 +13,6 @@ plugins {
 group = 'com.imsweb'
 version = file('VERSION').text.trim()
 description = 'Cancer-related synthetic data generator.'
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
 
 println "Starting build using JDK ${Runtime.version().feature()}"
 
@@ -51,6 +49,9 @@ tasks.withType(Javadoc) {
 
 // generate javadoc and sources (required by Nexus)
 java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
     withJavadocJar()
     withSourcesJar()
 }
@@ -188,6 +189,6 @@ if (version.endsWith('-SNAPSHOT')) {
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
-    gradleVersion = '7.6'
+    gradleVersion = '8.2'
     distributionType = Wrapper.DistributionType.ALL
 }
