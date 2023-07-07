@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'checkstyle'
+    id 'jacoco'
     id 'com.github.spotbugs' version '5.0.14'
     id 'maven-publish'
     id 'signing'
@@ -104,6 +105,13 @@ spotbugs {
     ignoreFailures = true
     excludeFilter = project(':').file("config/spotbugs/spotbugs-exclude.xml")
 }
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+    }
+}
+test.finalizedBy jacocoTestReport
 
 // needed to deploy to Maven Central
 publishing {
