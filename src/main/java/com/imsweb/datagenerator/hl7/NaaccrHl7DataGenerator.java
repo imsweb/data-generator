@@ -52,7 +52,7 @@ public class NaaccrHl7DataGenerator implements DataGenerator {
      */
     public NaaccrHl7DataGenerator(NaaccrHl7Layout layout) {
         if (layout == null)
-            throw new RuntimeException("A layout is required for creating a NAACCR HL7 data generator!");
+            throw new IllegalStateException("A layout is required for creating a NAACCR HL7 data generator!");
         _layout = layout;
 
         _rules = new ArrayList<>();
@@ -159,7 +159,7 @@ public class NaaccrHl7DataGenerator implements DataGenerator {
      */
     public void generateFile(File file, int numMessages, NaaccrHl7DataGeneratorOptions options) throws IOException {
         if (numMessages < 1)
-            throw new RuntimeException("Number of messages must be greater than 0.");
+            throw new IllegalStateException("Number of messages must be greater than 0.");
 
         // handle a compress file
         OutputStream os = new FileOutputStream(file);

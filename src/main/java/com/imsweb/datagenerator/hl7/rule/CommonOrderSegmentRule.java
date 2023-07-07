@@ -26,7 +26,8 @@ public class CommonOrderSegmentRule extends NaaccrHl7DataGeneratorRule {
         String facilityStreet = DistributionUtils.getStreetName();
 
         // address
-        String[] facilityAddress = null, orderingAddress = null;
+        String[] facilityAddress = null;
+        String[] orderingAddress = null;
         if (options != null && options.getState() != null) {
             CityFrequencyDto dto1 = DistributionUtils.getCity(options.getState());
             facilityAddress = new String[] {facilityStreet, null, dto1.getCity(), dto1.getState(), dto1.getZip()};

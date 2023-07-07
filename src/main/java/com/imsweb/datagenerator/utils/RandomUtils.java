@@ -81,9 +81,9 @@ public class RandomUtils {
      */
     public static LocalDate getRandomDateBetween(Collection<LocalDate> minDates, Collection<LocalDate> maxDates) {
         if (minDates == null || minDates.isEmpty())
-            throw new RuntimeException("At least one min date must be provided");
+            throw new IllegalArgumentException("At least one min date must be provided");
         if (maxDates == null || maxDates.isEmpty())
-            throw new RuntimeException("At least one max date must be provided");
+            throw new IllegalArgumentException("At least one max date must be provided");
         return getRandomDateBetween(Collections.max(minDates), Collections.min(maxDates));
     }
 
@@ -92,7 +92,7 @@ public class RandomUtils {
      */
     public static LocalDate getRandomDateBetween(LocalDate date1, LocalDate date2) {
         if (date1 == null || date2 == null)
-            throw new RuntimeException("Neither date may be null");
+            throw new IllegalArgumentException("Neither date may be null");
         int randomOffset = RandomUtils.nextIntInRange(0, Math.abs((int)ChronoUnit.DAYS.between(date1, date2)));
         return date1.isBefore(date2) ? date1.plusDays(randomOffset) : date2.plusDays(randomOffset);
     }

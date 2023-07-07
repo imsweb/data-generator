@@ -55,19 +55,22 @@ public class ComputedEthnicityRule extends NaaccrDataGeneratorPatientRule {
         String computedEthnicity;
         if (birthSurnameMatch && isFemale)
             computedEthnicity = "7";    // hispanic maiden name (female)
-        else if (!lastNameMatch)
-            if (isFemale)
+        else if (!lastNameMatch) {
+            if (isFemale) {
                 if (birthSurnameEmpty)
                     computedEthnicity = "3";    // non-hispanic last name, missing maiden name
                 else
                     computedEthnicity = "1";    // non-hispanic last name, non-hispanic maiden name
+            }
             else
                 computedEthnicity = "2";    // non-hispanic last name, did not check maiden name; or patient was male
-        else if (isFemale)
+        }
+        else if (isFemale) {
             if (birthSurnameEmpty)
                 computedEthnicity = "6";    // hispanic last name, missing maiden name
             else
                 computedEthnicity = "4";    // hispanic last name, non-hispanic maiden name
+        }
         else
             computedEthnicity = "5";    // hispanic last name, did not check maiden name; or patient was male
 

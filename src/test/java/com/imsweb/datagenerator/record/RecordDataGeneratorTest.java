@@ -144,11 +144,11 @@ public class RecordDataGeneratorTest {
         // and finally, let's add a rule for the unique field
         generator.addRule(new RecordDataGeneratorRule("field1-rule", "Field 1") {
             @Override
-            public void execute(Map<String, String> record, Map<String, Object> options) {
+            public void execute(Map<String, String> rec, Map<String, Object> options) {
                 if (options != null && Boolean.TRUE.equals(options.get("uppercase")))
-                    record.put("field1", "X");
+                    rec.put("field1", "X");
                 else
-                    record.put("field1", "x");
+                    rec.put("field1", "x");
 
             }
         });

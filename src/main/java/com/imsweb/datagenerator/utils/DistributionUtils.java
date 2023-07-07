@@ -23,13 +23,18 @@ import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
 @SuppressWarnings("ConstantConditions")
 public class DistributionUtils {
 
-    private static Distribution<String> _DIST_NAME_LAST_WHITE, _DIST_NAME_LAST_BLACK, _DIST_NAME_LAST_API, _DIST_NAME_LAST_HISP;
-    private static Distribution<String> _DIST_NAME_FIRST_MALE, _DIST_NAME_FIRST_FEMALE;
+    private static Distribution<String> _DIST_NAME_LAST_WHITE;
+    private static Distribution<String> _DIST_NAME_LAST_BLACK;
+    private static Distribution<String> _DIST_NAME_LAST_API;
+    private static Distribution<String> _DIST_NAME_LAST_HISP;
+    private static Distribution<String> _DIST_NAME_FIRST_MALE;
+    private static Distribution<String> _DIST_NAME_FIRST_FEMALE;
     private static Distribution<String> _DIST_RACE;
     private static Distribution<String> _DIST_HISPANIC_ORIGIN;
     private static Distribution<String> _DIST_SEX;
     private static Distribution<String> _DIST_VITAL_STATUS;
-    private static Distribution<SiteFrequencyDto> _DIST_SITE_MALE, _DIST_SITE_FEMALE;
+    private static Distribution<SiteFrequencyDto> _DIST_SITE_MALE;
+    private static Distribution<SiteFrequencyDto> _DIST_SITE_FEMALE;
     private static Distribution<String> _DIST_STREET_NAME;
     private static Distribution<String> _DIST_STREET_SUFFIX;
     private static final Map<String, Distribution<CityFrequencyDto>> _DIST_CITIES = new HashMap<>();
@@ -46,6 +51,10 @@ public class DistributionUtils {
     // states
     private static final List<String> _STATES = Arrays.asList("AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI",
             "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY");
+
+    private DistributionUtils() {
+        // hidden constructor
+    }
 
     /**
      * Clears all the cached distributions, forcing them to be (lazily) re-initialized if needed.
