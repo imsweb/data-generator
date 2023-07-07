@@ -86,15 +86,15 @@ public class NaaccrFixedColumnsDataGenerator extends NaaccrDataGenerator {
         List<Map<String, String>> records = new ArrayList<>();
 
         for (Tumor tumor : patient.getTumors()) {
-            Map<String, String> record = new HashMap<>();
+            Map<String, String> rec = new HashMap<>();
 
             if (options != null && options.getRegistryId() != null)
-                record.put("registryId", options.getRegistryId());
+                rec.put("registryId", options.getRegistryId());
 
-            patient.getItems().forEach(i -> record.put(i.getNaaccrId(), i.getValue()));
-            tumor.getItems().forEach(i -> record.put(i.getNaaccrId(), i.getValue()));
+            patient.getItems().forEach(i -> rec.put(i.getNaaccrId(), i.getValue()));
+            tumor.getItems().forEach(i -> rec.put(i.getNaaccrId(), i.getValue()));
 
-            records.add(record);
+            records.add(rec);
         }
 
         return records;

@@ -8,9 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.imsweb.datagenerator.utils.Distribution;
@@ -154,14 +152,4 @@ public class NaaccrXmlDataGenerator extends NaaccrDataGenerator {
         }
     }
 
-    /**
-     * Returns the distribution to use for generating the number of tumors for a specific patient.
-     */
-    public Distribution<Integer> getNumTumorsPerPatientDistribution() {
-        Map<Integer, Double> frequencies = new HashMap<>();
-        frequencies.put(1, 95.0);
-        frequencies.put(2, 4.0);
-        frequencies.put(3, 1.0);
-        return Distribution.of(frequencies);
-    }
 }

@@ -52,7 +52,7 @@ public class StagingUtils {
 
             }
             catch (IOException e) {
-                throw new RuntimeException("Unable to read staging keys", e);
+                throw new IllegalStateException("Unable to read staging keys", e);
             }
         }
         return _KEYS.get(key);
@@ -175,7 +175,7 @@ public class StagingUtils {
 
         }
         catch (RuntimeException | IOException e) {
-            throw new RuntimeException("Unable to read staging data: " + line, e);
+            throw new IllegalStateException("Unable to read staging data: " + line, e);
         }
 
         return result;

@@ -40,7 +40,7 @@ public class RecordDataGenerator implements DataGenerator {
      */
     public RecordDataGenerator(RecordLayout layout) {
         if (layout == null)
-            throw new RuntimeException("A layout is required for creating a record-based data generator!");
+            throw new IllegalArgumentException("A layout is required for creating a record-based data generator!");
         _layout = layout;
         _rules = new ArrayList<>();
     }
@@ -71,12 +71,12 @@ public class RecordDataGenerator implements DataGenerator {
      * @return the created record
      */
     public Map<String, String> generateRecord(Map<String, Object> options) {
-        Map<String, String> record = new HashMap<>();
+        Map<String, String> rec = new HashMap<>();
 
         for (RecordDataGeneratorRule rule : _rules)
-            rule.execute(record, options);
+            rule.execute(rec, options);
 
-        return record;
+        return rec;
     }
 
     /**
@@ -87,7 +87,7 @@ public class RecordDataGenerator implements DataGenerator {
      */
     public void generateFile(File file, int numRecords, Map<String, Object> options) throws IOException {
         if (numRecords < 1)
-            throw new RuntimeException("Number of records must be greater than 0.");
+            throw new IllegalArgumentException("Number of records must be greater than 0.");
 
         // handle a compress file
         OutputStream os = new FileOutputStream(file);

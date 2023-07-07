@@ -18,11 +18,6 @@ import com.imsweb.datagenerator.utils.dto.PhysicianFrequencyDto;
  */
 public class PhysicianDataGenerator implements DataGenerator {
 
-    /**
-     * Constructor
-     */
-    public PhysicianDataGenerator() {}
-
     @Override
     public String getId() {
         return "FacilityDataGenerator";
