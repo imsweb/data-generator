@@ -30,7 +30,7 @@ dependencies {
     implementation 'commons-io:commons-io:2.13.0'
 
     testImplementation 'com.imsweb:seerutils:5.6'
-    testImplementation 'com.imsweb:validation:2.26'
+    testImplementation 'com.imsweb:validation:3.1'
     testImplementation 'com.imsweb:staging-client-java:10.2.0'
     testImplementation 'com.imsweb:staging-client-java-cs:10.2.0'
     testImplementation 'com.imsweb:staging-client-java-eod-public:10.2.0'
