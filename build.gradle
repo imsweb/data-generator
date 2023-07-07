@@ -88,15 +88,6 @@ sonarqube {
 ossIndexAudit {
     dependencyGraph = true
     printBanner = false
-
-    // only set proxy if running outside of Github Actions
-    if (!System.getenv().GITHUB_ACTIONS) {
-        proxyConfiguration {
-            protocol = 'http'
-            host = 'webproxy-btp.imsweb.com'
-            port = 8080
-        }
-    }
 }
 check.dependsOn 'ossIndexAudit'
 
