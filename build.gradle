@@ -31,10 +31,10 @@ dependencies {
 
     testImplementation 'com.imsweb:seerutils:5.6'
     testImplementation 'com.imsweb:validation:2.26'
-    testImplementation 'com.imsweb:staging-client-java:6.2.0'
-    testImplementation 'com.imsweb:staging-algorithm-cs:02.05.50.9'
-    testImplementation 'com.imsweb:staging-algorithm-tnm:1.9.8'
-    testImplementation 'com.imsweb:staging-algorithm-eod-public:2.1.1'
+    testImplementation 'com.imsweb:staging-client-java:10.2.0'
+    testImplementation 'com.imsweb:staging-client-java-cs:10.2.0'
+    testImplementation 'com.imsweb:staging-client-java-eod-public:10.2.0'
+    testImplementation 'com.imsweb:staging-client-java-tnm:10.2.0'
     testImplementation 'junit:junit:4.13.2'
 }
 
