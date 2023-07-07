@@ -58,6 +58,7 @@ The NAACCR generator current provides rules for the following fields:
  - Type of Reporting Source
  - Census fields
  - RX Summary fields
+ - RX Text fields (random data only)
  - SEER Type of Follow Up
  - Primary Payer at DX
  - Tumor Marker 1, 2 and 3
@@ -67,6 +68,8 @@ The NAACCR generator current provides rules for the following fields:
  - Collaborative Stage fields
  - NHIA
  - NAPIIA
+ - Diagnostic Procedure Text fields (random data only)
+ - Tumor Text fields (random data only)
 
 Here is an example using the NAACCR generator:
 ```java
