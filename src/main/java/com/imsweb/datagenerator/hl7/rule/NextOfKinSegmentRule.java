@@ -23,7 +23,8 @@ public class NextOfKinSegmentRule extends NaaccrHl7DataGeneratorRule {
     public void execute(Hl7Message message, NaaccrHl7DataGeneratorOptions options, Map<String, Object> context) {
 
         // get ethnicity/race from the context so we use the same ones as the patient
-        String hispanicOrigin = (String)context.get("hispanicOrigin"), race = (String)context.get("race");
+        String hispanicOrigin = (String)context.get("hispanicOrigin");
+        String race = (String)context.get("race");
 
         // address
         String[] address = null;

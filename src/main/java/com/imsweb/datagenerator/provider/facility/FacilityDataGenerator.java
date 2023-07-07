@@ -18,11 +18,6 @@ import com.imsweb.datagenerator.utils.dto.FacilityFrequencyDto;
  */
 public class FacilityDataGenerator implements DataGenerator {
 
-    /**
-     * Constructor
-     */
-    public FacilityDataGenerator() {}
-
     @Override
     public String getId() {
         return "FacilityDataGenerator";

@@ -90,7 +90,7 @@ public class Distribution<T> {
                         for (Map.Entry<Integer, String> entry : columnsMapping.entrySet()) {
                             int idx = entry.getKey();
                             if (idx >= values.length)
-                                throw new RuntimeException("Invalid column index " + idx + " for line " + line);
+                                throw new IllegalStateException("Invalid column index " + idx + " for line " + line);
                             valueType.getMethod("set" + StringUtils.capitalize(entry.getValue()), String.class).invoke(obj, values[entry.getKey()]);
                         }
                         element.setValue(obj);
@@ -104,7 +104,7 @@ public class Distribution<T> {
             return new Distribution<>(elements);
         }
         catch (IOException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            throw new RuntimeException("Unable to process provided distribution URL", e);
+            throw new IllegalStateException("Unable to process provided distribution URL", e);
         }
     }
 

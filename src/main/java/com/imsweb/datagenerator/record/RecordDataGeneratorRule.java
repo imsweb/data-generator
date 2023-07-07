@@ -35,7 +35,7 @@ public abstract class RecordDataGeneratorRule implements DataGeneratorRule {
     /**
      * Execute the logic of the rule on the provided record.
      */
-    public abstract void execute(Map<String, String> record, Map<String, Object> options);
+    public abstract void execute(Map<String, String> rec, Map<String, Object> options);
 
     @Override
     public boolean equals(Object o) {

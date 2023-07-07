@@ -1,5 +1,7 @@
 # Data Generator
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=data-generator&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=data-generator)
+[![integration](https://github.com/imsweb/data-generator/workflows/integration/badge.svg)](https://github.com/imsweb/data-generator/actions)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.imsweb/data-generator/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.imsweb/data-generator)
 
 This Java library can be used to create cancer-related synthetic data files.
