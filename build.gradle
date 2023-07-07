@@ -1,12 +1,13 @@
 plugins {
     id 'java-library'
     id 'checkstyle'
-    id 'com.github.spotbugs' version '5.0.3'
+    id 'com.github.spotbugs' version '5.0.14'
     id 'maven-publish'
     id 'signing'
     id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
     id 'org.sonatype.gradle.plugins.scan' version '2.2.2'
-    id "com.github.ben-manes.versions" version '0.39.0'
+    id "com.github.ben-manes.versions" version '0.47.0'
+    id "org.sonarqube" version "3.5.0.2730"
 }
 
 group = 'com.imsweb'
@@ -26,7 +27,7 @@ dependencies {
     api 'com.imsweb:naaccr-xml:8.10'
 
     implementation 'org.apache.commons:commons-lang3:3.12.0'
-    implementation 'commons-io:commons-io:2.11.0'
+    implementation 'commons-io:commons-io:2.13.0'
 
     testImplementation 'com.imsweb:seerutils:5.6'
     testImplementation 'com.imsweb:validation:2.26'
@@ -67,11 +68,19 @@ jar {
                 'Automatic-Module-Name': 'com.imsweb.datagenerator',
                 'Main-Class': 'com.imsweb.datagenerator.gui.StandaloneNaaccrDataGenerator')
     }
-    from ('VERSION') {
+    from('VERSION') {
         rename 'VERSION', 'DATA-GENERATOR-VERSION'
     }
-    from ('LICENSE') {
+    from('LICENSE') {
         rename 'LICENSE', 'DATA-GENERATOR-LICENSE'
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "imsweb_data-generator"
+        property "sonar.organization", "imsweb"
+        property "sonar.host.url", "https://sonarcloud.io"
     }
 }
 
@@ -188,8 +197,6 @@ if (version.endsWith('-SNAPSHOT')) {
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
-    gradleVersion = '7.3.3'
+    gradleVersion = '7.6'
     distributionType = Wrapper.DistributionType.ALL
 }
-
-
