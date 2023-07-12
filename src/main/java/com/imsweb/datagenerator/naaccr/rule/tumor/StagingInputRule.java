@@ -36,11 +36,11 @@ public class StagingInputRule extends NaaccrDataGeneratorTumorRule {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "java:S1905"})
     public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         Map<Integer, SiteDto> siteFreqMap = (Map<Integer, SiteDto>)context.get(CONTEXT_FLAG_SITE_FREQ_MAP);
         if (siteFreqMap != null) {
-            SiteDto siteFrequency = siteFreqMap.get((int)context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX));
+            SiteDto siteFrequency = siteFreqMap.get((Integer)context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX));
             if (siteFrequency != null) {
                 Map<String, String> randomValidValues = null;
 

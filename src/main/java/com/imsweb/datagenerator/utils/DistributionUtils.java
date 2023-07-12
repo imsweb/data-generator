@@ -21,7 +21,7 @@ import com.imsweb.datagenerator.utils.dto.SiteDto;
  * The main purpose of this class is to provide caching for those distributions so the data is not loaded several times by different rules...
  */
 @SuppressWarnings("ConstantConditions")
-public class DistributionUtils {
+public final class DistributionUtils {
 
     private static Distribution<String> _DIST_NAME_LAST_WHITE;
     private static Distribution<String> _DIST_NAME_LAST_BLACK;
