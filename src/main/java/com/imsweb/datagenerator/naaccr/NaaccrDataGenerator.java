@@ -37,6 +37,7 @@ import com.imsweb.datagenerator.naaccr.rule.tumor.DateOfDiagnosisRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.DateOfInitialRxRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.DateOfLastContactRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.DxConfirmationRule;
+import com.imsweb.datagenerator.naaccr.rule.tumor.DxProcTextRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.FacilityRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.MaritalStatusRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.MultiTumorsRule;
@@ -44,11 +45,13 @@ import com.imsweb.datagenerator.naaccr.rule.tumor.PhysicianRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.PrimaryPayerRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.ReportingSourceRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.RxSummaryRule;
+import com.imsweb.datagenerator.naaccr.rule.tumor.RxTextRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.SeerCodingSystemRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.SeerRecordNumberRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.SeerTypeOfFollowUpRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.SequenceNumberCentralRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.SiteRule;
+import com.imsweb.datagenerator.naaccr.rule.tumor.TumorTextRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.StagingInputRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.TumorMarkerRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.TumorRecordNumberRule;
@@ -85,7 +88,7 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
      * Constructor
      * @param useMaidenNameField if true, the name rule will use the 'nameMaiden' field, otherwise it will use the 'nameBirthSurname' field
      */
-    public NaaccrDataGenerator(boolean useMaidenNameField) {
+    protected NaaccrDataGenerator(boolean useMaidenNameField) {
 
         // default patient rules
         _patientRules = new ArrayList<>();
@@ -126,6 +129,9 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
         _tumorRules.add(new StagingInputRule());
         _tumorRules.add(new FacilityRule());
         _tumorRules.add(new PhysicianRule());
+        _tumorRules.add(new TumorTextRule());
+        _tumorRules.add(new DxProcTextRule());
+        _tumorRules.add(new RxTextRule());
     }
 
     /**

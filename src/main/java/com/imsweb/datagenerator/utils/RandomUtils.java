@@ -9,6 +9,13 @@ import java.util.Random;
 
 public class RandomUtils {
 
+    private static final String[] _FILLER_TEXT = new String[] {
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+            "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+            "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    };
+
     private static final Random _RANDOM = new SecureRandom();
 
     /**
@@ -95,5 +102,12 @@ public class RandomUtils {
             throw new IllegalArgumentException("Neither date may be null");
         int randomOffset = RandomUtils.nextIntInRange(0, Math.abs((int)ChronoUnit.DAYS.between(date1, date2)));
         return date1.isBefore(date2) ? date1.plusDays(randomOffset) : date2.plusDays(randomOffset);
+    }
+
+    /**
+     * Returns a random sentence from a pre-defined list.
+     */
+    public static String getRandomText() {
+        return _FILLER_TEXT[nextInt(_FILLER_TEXT.length)];
     }
 }
