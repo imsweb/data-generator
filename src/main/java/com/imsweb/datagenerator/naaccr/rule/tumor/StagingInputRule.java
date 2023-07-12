@@ -36,7 +36,7 @@ public class StagingInputRule extends NaaccrDataGeneratorTumorRule {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "java:S1905"})
+    @SuppressWarnings({"unchecked", "java:S1905"}) // S1905 - the cast from Object to Integer is necessary
     public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         Map<Integer, SiteFrequencyDto> siteFreqMap = (Map<Integer, SiteFrequencyDto>)context.get(CONTEXT_FLAG_SITE_FREQ_MAP);
         if (siteFreqMap != null) {
