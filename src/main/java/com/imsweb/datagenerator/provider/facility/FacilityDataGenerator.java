@@ -37,23 +37,7 @@ public class FacilityDataGenerator implements DataGenerator {
         if (StringUtils.isBlank(options.getState()))
             options.setState("MD");
 
-        // get facility.
-        FacilityFrequencyDto freqFacility = DistributionUtils.getFacility(options.getState());
-
-        FacilityFrequencyDto facility = new FacilityFrequencyDto();
-        facility.setNpi(freqFacility.getNpi());
-        facility.setName(freqFacility.getName());
-        facility.setAddressFirstLine(freqFacility.getAddressFirstLine());
-        facility.setAddressSecondLine(freqFacility.getAddressSecondLine());
-        facility.setAddressCity(freqFacility.getAddressCity());
-        facility.setAddressState(freqFacility.getAddressState());
-        facility.setAddressPostalCode(freqFacility.getAddressPostalCode());
-        facility.setAddressTelephone(freqFacility.getAddressTelephone());
-        facility.setSpecialty01(freqFacility.getSpecialty(0));
-        facility.setSpecialty02(freqFacility.getSpecialty(1));
-        facility.setSpecialty03(freqFacility.getSpecialty(2));
-
-        return facility;
+        return DistributionUtils.getFacility(options.getState());
     }
 
     /**
