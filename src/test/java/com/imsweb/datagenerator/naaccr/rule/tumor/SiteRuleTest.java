@@ -7,7 +7,7 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
+import com.imsweb.datagenerator.utils.dto.SiteDto;
 import com.imsweb.naaccrxml.entity.Item;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
@@ -45,10 +45,10 @@ public class SiteRuleTest {
         context.put(CONTEXT_FLAG_SEX, "1");
         context.put(CONTEXT_FLAG_CURRENT_TUMOR_INDEX, 0);
 
-        Map<Integer, SiteFrequencyDto> siteFreqMap = new HashMap<>();
+        Map<Integer, SiteDto> siteFreqMap = new HashMap<>();
         Map<Integer, Integer> ageGroupMap = new HashMap<>();
 
-        SiteFrequencyDto dto = new SiteFrequencyDto();
+        SiteDto dto = new SiteDto();
         dto.setSite("C000");
         dto.setHistology("8070");
         dto.setBehavior("3");
@@ -77,7 +77,7 @@ public class SiteRuleTest {
         siteFreqMap = new HashMap<>();
         ageGroupMap = new HashMap<>();
 
-        dto = new SiteFrequencyDto();
+        dto = new SiteDto();
         dto.setSite("C809");
         dto.setHistology("8111");
         dto.setBehavior("9");

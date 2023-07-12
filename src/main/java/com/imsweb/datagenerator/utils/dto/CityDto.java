@@ -3,7 +3,7 @@
  */
 package com.imsweb.datagenerator.utils.dto;
 
-public class CityFrequencyDto {
+public class CityDto {
 
     private String _zip;
 

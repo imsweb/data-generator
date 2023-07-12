@@ -9,7 +9,7 @@ import com.imsweb.datagenerator.hl7.NaaccrHl7DataGeneratorOptions;
 import com.imsweb.datagenerator.hl7.NaaccrHl7DataGeneratorRule;
 import com.imsweb.datagenerator.utils.DistributionUtils;
 import com.imsweb.datagenerator.utils.RandomUtils;
-import com.imsweb.datagenerator.utils.dto.CityFrequencyDto;
+import com.imsweb.datagenerator.utils.dto.CityDto;
 import com.imsweb.layout.hl7.Hl7MessageBuilder;
 import com.imsweb.layout.hl7.entity.Hl7Message;
 
@@ -29,7 +29,7 @@ public class NextOfKinSegmentRule extends NaaccrHl7DataGeneratorRule {
         // address
         String[] address = null;
         if (options != null && options.getState() != null) {
-            CityFrequencyDto dto = DistributionUtils.getCity(options.getState());
+            CityDto dto = DistributionUtils.getCity(options.getState());
             address = new String[] {DistributionUtils.getStreetName(), null, dto.getCity(), dto.getState(), dto.getZip()};
         }
 

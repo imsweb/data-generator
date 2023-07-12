@@ -3,7 +3,7 @@
  */
 package com.imsweb.datagenerator.utils.dto;
 
-public class PhysicianFrequencyDto {
+public class PhysicianDto {
 
     private String _npi;
     private String _lastName;

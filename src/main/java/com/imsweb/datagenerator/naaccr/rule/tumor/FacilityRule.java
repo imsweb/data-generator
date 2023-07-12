@@ -7,8 +7,8 @@ import java.util.Map;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
-import com.imsweb.datagenerator.provider.facility.FacilityDto;
 import com.imsweb.datagenerator.utils.RandomUtils;
+import com.imsweb.datagenerator.utils.dto.FacilityDto;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
 

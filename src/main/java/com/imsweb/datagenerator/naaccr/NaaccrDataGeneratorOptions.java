@@ -7,9 +7,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-import com.imsweb.datagenerator.provider.facility.FacilityDto;
-import com.imsweb.datagenerator.provider.physician.PhysicianDto;
 import com.imsweb.datagenerator.utils.DistributionUtils;
+import com.imsweb.datagenerator.utils.dto.FacilityDto;
+import com.imsweb.datagenerator.utils.dto.PhysicianDto;
 
 public class NaaccrDataGeneratorOptions {
 

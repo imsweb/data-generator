@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.imsweb.datagenerator.DataGenerator;
 import com.imsweb.datagenerator.provider.ProviderDataGeneratorOptions;
 import com.imsweb.datagenerator.utils.DistributionUtils;
-import com.imsweb.datagenerator.utils.dto.PhysicianFrequencyDto;
+import com.imsweb.datagenerator.utils.dto.PhysicianDto;
 
 /**
  * A data generator that can be used to create physicians.
@@ -27,7 +27,7 @@ public class PhysicianDataGenerator implements DataGenerator {
      * Generates a single physician.
      * <br/><br/>
      * @param options options
-     * @return generated PhysicianFrequencyDto
+     * @return generated PhysicianDto
      */
     private PhysicianDto generatePhysician(ProviderDataGeneratorOptions options) {
         // make sure options are never null
@@ -37,28 +37,7 @@ public class PhysicianDataGenerator implements DataGenerator {
         if (StringUtils.isBlank(options.getState()))
             options.setState("MD");
 
-        // get physician.
-        PhysicianFrequencyDto freqPhysician = DistributionUtils.getPhysician(options.getState());
-
-        PhysicianDto physician = new PhysicianDto();
-        physician.setNpi(freqPhysician.getNpi());
-        physician.setLastName(freqPhysician.getLastName());
-        physician.setFirstName(freqPhysician.getFirstName());
-        physician.setMiddleName(freqPhysician.getMiddleName());
-        physician.setNamePrefix(freqPhysician.getNamePrefix());
-        physician.setNameSuffix(freqPhysician.getNameSuffix());
-        physician.setCredentials(freqPhysician.getCredentials());
-        physician.setAddressFirstLine(freqPhysician.getAddressFirstLine());
-        physician.setAddressSecondLine(freqPhysician.getAddressSecondLine());
-        physician.setAddressCity(freqPhysician.getAddressCity());
-        physician.setAddressState(freqPhysician.getAddressState());
-        physician.setAddressPostalCode(freqPhysician.getAddressPostalCode());
-        physician.setAddressTelephone(freqPhysician.getAddressTelephone());
-        physician.setSpecialty01(freqPhysician.getSpecialty(0));
-        physician.setSpecialty02(freqPhysician.getSpecialty(1));
-        physician.setSpecialty03(freqPhysician.getSpecialty(2));
-
-        return physician;
+        return DistributionUtils.getPhysician(options.getState());
     }
 
     /**

@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.imsweb.datagenerator.DataGenerator;
 import com.imsweb.datagenerator.provider.ProviderDataGeneratorOptions;
 import com.imsweb.datagenerator.utils.DistributionUtils;
-import com.imsweb.datagenerator.utils.dto.FacilityFrequencyDto;
+import com.imsweb.datagenerator.utils.dto.FacilityDto;
 
 /**
  * A data generator that can be used to create facilities.
@@ -27,7 +27,7 @@ public class FacilityDataGenerator implements DataGenerator {
      * Generates a single facility.
      * <br/><br/>
      * @param options options
-     * @return generated FacilityFrequencyDto
+     * @return generated FacilityDto
      */
     private FacilityDto generateFacility(ProviderDataGeneratorOptions options) {
         // make sure options are never null
@@ -38,7 +38,7 @@ public class FacilityDataGenerator implements DataGenerator {
             options.setState("MD");
 
         // get facility.
-        FacilityFrequencyDto freqFacility = DistributionUtils.getFacility(options.getState());
+        FacilityDto freqFacility = DistributionUtils.getFacility(options.getState());
 
         FacilityDto facility = new FacilityDto();
         facility.setNpi(freqFacility.getNpi());

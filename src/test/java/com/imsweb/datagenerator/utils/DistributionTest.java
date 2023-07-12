@@ -11,7 +11,7 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
+import com.imsweb.datagenerator.utils.dto.SiteDto;
 
 public class DistributionTest {
 
@@ -43,13 +43,13 @@ public class DistributionTest {
         mapping.put(1, "site");
         mapping.put(2, "histology");
         mapping.put(3, "behavior");
-        Distribution<SiteFrequencyDto> dComplexMapUrl = Distribution.of(getUrl("test_distribution_site.csv"), SiteFrequencyDto.class, mapping);
+        Distribution<SiteDto> dComplexMapUrl = Distribution.of(getUrl("test_distribution_site.csv"), SiteDto.class, mapping);
         Assert.assertEquals("C123", dComplexMapUrl.getValue().getSite());
         Assert.assertEquals("8000", dComplexMapUrl.getValue().getHistology());
         Assert.assertEquals("3", dComplexMapUrl.getValue().getBehavior());
 
         // test loading a complex distribution from a GZipped URL (using a single possible value to keep it simple)
-        Distribution<SiteFrequencyDto> dComplexMapGzippedUrl = Distribution.of(getUrl("test_distribution_site.csv.gz"), SiteFrequencyDto.class, mapping);
+        Distribution<SiteDto> dComplexMapGzippedUrl = Distribution.of(getUrl("test_distribution_site.csv.gz"), SiteDto.class, mapping);
         Assert.assertEquals("C123", dComplexMapGzippedUrl.getValue().getSite());
         Assert.assertEquals("8000", dComplexMapGzippedUrl.getValue().getHistology());
         Assert.assertEquals("3", dComplexMapGzippedUrl.getValue().getBehavior());

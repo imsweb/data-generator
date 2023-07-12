@@ -16,9 +16,9 @@ import testing.TestingUtils;
 
 import com.imsweb.datagenerator.provider.ProviderDataGeneratorOptions;
 import com.imsweb.datagenerator.provider.facility.FacilityDataGenerator;
-import com.imsweb.datagenerator.provider.facility.FacilityDto;
 import com.imsweb.datagenerator.provider.physician.PhysicianDataGenerator;
-import com.imsweb.datagenerator.provider.physician.PhysicianDto;
+import com.imsweb.datagenerator.utils.dto.FacilityDto;
+import com.imsweb.datagenerator.utils.dto.PhysicianDto;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.FixedColumnsField;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;

@@ -3,7 +3,7 @@
  */
 package com.imsweb.datagenerator.utils.dto;
 
-public class SiteFrequencyDto {
+public class SiteDto {
 
     private String _site;
 

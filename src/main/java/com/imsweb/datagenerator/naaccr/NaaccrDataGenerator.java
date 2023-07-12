@@ -52,7 +52,7 @@ import com.imsweb.datagenerator.naaccr.rule.tumor.TumorRecordNumberRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.TumorTextRule;
 import com.imsweb.datagenerator.utils.Distribution;
 import com.imsweb.datagenerator.utils.DistributionUtils;
-import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
+import com.imsweb.datagenerator.utils.dto.SiteDto;
 import com.imsweb.naaccrxml.entity.AbstractEntity;
 import com.imsweb.naaccrxml.entity.Item;
 import com.imsweb.naaccrxml.entity.Patient;
@@ -324,11 +324,11 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
         // Pick the sites we want for the tumors. The Tumor sites can influence the patient's age.
         context.put(CONTEXT_FLAG_CURRENT_TUMOR_INDEX, -1);
 
-        Map<Integer, SiteFrequencyDto> siteFreqMap = new HashMap<>();
+        Map<Integer, SiteDto> siteFreqMap = new HashMap<>();
         Map<Integer, Integer> ageGroupMap = new HashMap<>();
         int maxAgeGroup = -1;
         for (int i = 0; i < numTumors; i++) {
-            SiteFrequencyDto dto = DistributionUtils.getSite((String)context.get(CONTEXT_FLAG_SEX));
+            SiteDto dto = DistributionUtils.getSite((String)context.get(CONTEXT_FLAG_SEX));
             siteFreqMap.put(i, dto);
             int iAgeGroup = DistributionUtils.getAgeGroup(dto.getSite());
             ageGroupMap.put(i, iAgeGroup);
