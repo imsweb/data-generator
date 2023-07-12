@@ -10,10 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.imsweb.datagenerator.utils.dto.CityDto;
-import com.imsweb.datagenerator.utils.dto.FacilityDto;
-import com.imsweb.datagenerator.utils.dto.PhysicianDto;
-import com.imsweb.datagenerator.utils.dto.SiteDto;
+import com.imsweb.datagenerator.utils.dto.CityFrequencyDto;
+import com.imsweb.datagenerator.utils.dto.FacilityFrequencyDto;
+import com.imsweb.datagenerator.utils.dto.PhysicianFrequencyDto;
+import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
 
 /**
  * This class provides distributions based on frequencies taken from the SEER data.
@@ -33,15 +33,15 @@ public final class DistributionUtils {
     private static Distribution<String> _DIST_HISPANIC_ORIGIN;
     private static Distribution<String> _DIST_SEX;
     private static Distribution<String> _DIST_VITAL_STATUS;
-    private static Distribution<SiteDto> _DIST_SITE_MALE;
-    private static Distribution<SiteDto> _DIST_SITE_FEMALE;
+    private static Distribution<SiteFrequencyDto> _DIST_SITE_MALE;
+    private static Distribution<SiteFrequencyDto> _DIST_SITE_FEMALE;
     private static Distribution<String> _DIST_STREET_NAME;
     private static Distribution<String> _DIST_STREET_SUFFIX;
-    private static final Map<String, Distribution<CityDto>> _DIST_CITIES = new HashMap<>();
+    private static final Map<String, Distribution<CityFrequencyDto>> _DIST_CITIES = new HashMap<>();
     private static Distribution<String> _DIST_STATE;
     private static final Map<String, Distribution<String>> _DIST_SITE_AGE_GROUPS = new HashMap<>();
-    private static final Map<String, Distribution<FacilityDto>> _DIST_FACILITIES = new HashMap<>();
-    private static final Map<String, Distribution<PhysicianDto>> _DIST_PHYSICIANS = new HashMap<>();
+    private static final Map<String, Distribution<FacilityFrequencyDto>> _DIST_FACILITIES = new HashMap<>();
+    private static final Map<String, Distribution<PhysicianFrequencyDto>> _DIST_PHYSICIANS = new HashMap<>();
 
     // API races
     private static final List<String> _API_RACES = Arrays.asList("04", "05", "06", "07", "08", "10", "11", "12", "13", "14", "15", "16", "17", "20", "21", "22", "25", "26", "27", "28", "30", "31",
@@ -145,11 +145,11 @@ public final class DistributionUtils {
         return _DIST_VITAL_STATUS.getValue();
     }
 
-    public static SiteDto getSite() {
+    public static SiteFrequencyDto getSite() {
         return getSite(null);
     }
 
-    public static SiteDto getSite(String sex) {
+    public static SiteFrequencyDto getSite(String sex) {
         if (_DIST_SITE_MALE == null) {
             Map<Integer, String> mapping = new HashMap<>();
             mapping.put(1, "site");
@@ -158,8 +158,8 @@ public final class DistributionUtils {
             mapping.put(4, "csSchemaId");
             mapping.put(5, "tnmSchemaId");
             mapping.put(6, "eodSchemaId");
-            _DIST_SITE_MALE = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/sites_sex_male.csv"), SiteDto.class, mapping);
-            _DIST_SITE_FEMALE = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/sites_sex_female.csv"), SiteDto.class, mapping);
+            _DIST_SITE_MALE = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/sites_sex_male.csv"), SiteFrequencyDto.class, mapping);
+            _DIST_SITE_FEMALE = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/sites_sex_female.csv"), SiteFrequencyDto.class, mapping);
         }
         if ("2".equals(sex))
             return _DIST_SITE_FEMALE.getValue();
@@ -178,15 +178,15 @@ public final class DistributionUtils {
         return _DIST_STREET_SUFFIX.getValue();
     }
 
-    public static CityDto getCity() {
+    public static CityFrequencyDto getCity() {
         return getCity(null);
     }
 
-    public static CityDto getCity(String state) {
+    public static CityFrequencyDto getCity(String state) {
         if (state == null || !_STATES.contains(state.toUpperCase()))
             state = "MD";
 
-        Distribution<CityDto> distribution = _DIST_CITIES.get(state.toLowerCase());
+        Distribution<CityFrequencyDto> distribution = _DIST_CITIES.get(state.toLowerCase());
         if (distribution == null) {
             Map<Integer, String> mapping = new HashMap<>();
             mapping.put(1, "zip");
@@ -194,7 +194,7 @@ public final class DistributionUtils {
             mapping.put(3, "state");
             mapping.put(4, "longitude");
             mapping.put(5, "latitude");
-            distribution = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/zip_codes/" + state.toLowerCase() + ".csv"), CityDto.class, mapping);
+            distribution = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/zip_codes/" + state.toLowerCase() + ".csv"), CityFrequencyDto.class, mapping);
             _DIST_CITIES.put(state.toLowerCase(), distribution);
         }
         return distribution.getValue();
@@ -222,15 +222,15 @@ public final class DistributionUtils {
         return Integer.parseInt(distribution.getValue());
     }
 
-    public static FacilityDto getFacility() {
+    public static FacilityFrequencyDto getFacility() {
         return getFacility(null);
     }
 
-    public static FacilityDto getFacility(String state) {
+    public static FacilityFrequencyDto getFacility(String state) {
         if (state == null || !_STATES.contains(state.toUpperCase()))
             state = "MD";
 
-        Distribution<FacilityDto> distribution = _DIST_FACILITIES.get(state.toLowerCase());
+        Distribution<FacilityFrequencyDto> distribution = _DIST_FACILITIES.get(state.toLowerCase());
         if (distribution == null) {
             Map<Integer, String> mapping = new HashMap<>();
             mapping.put(1, "npi");
@@ -245,22 +245,22 @@ public final class DistributionUtils {
             mapping.put(10, "specialty02");
             mapping.put(11, "specialty03");
 
-            distribution = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/providers/Facility_" + state.toUpperCase() + ".csv"), FacilityDto.class,
+            distribution = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/providers/Facility_" + state.toUpperCase() + ".csv"), FacilityFrequencyDto.class,
                     mapping);
             _DIST_FACILITIES.put(state.toLowerCase(), distribution);
         }
         return distribution.getValue();
     }
 
-    public static PhysicianDto getPhysician() {
+    public static PhysicianFrequencyDto getPhysician() {
         return getPhysician(null);
     }
 
-    public static PhysicianDto getPhysician(String state) {
+    public static PhysicianFrequencyDto getPhysician(String state) {
         if (state == null || !_STATES.contains(state.toUpperCase()))
             state = "MD";
 
-        Distribution<PhysicianDto> distribution = _DIST_PHYSICIANS.get(state.toLowerCase());
+        Distribution<PhysicianFrequencyDto> distribution = _DIST_PHYSICIANS.get(state.toLowerCase());
         if (distribution == null) {
             Map<Integer, String> mapping = new HashMap<>();
             mapping.put(1, "npi");
@@ -280,7 +280,7 @@ public final class DistributionUtils {
             mapping.put(15, "specialty02");
             mapping.put(16, "specialty03");
 
-            distribution = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/providers/Physician_" + state.toUpperCase() + ".csv"), PhysicianDto.class,
+            distribution = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/providers/Physician_" + state.toUpperCase() + ".csv"), PhysicianFrequencyDto.class,
                     mapping);
             _DIST_PHYSICIANS.put(state.toLowerCase(), distribution);
         }

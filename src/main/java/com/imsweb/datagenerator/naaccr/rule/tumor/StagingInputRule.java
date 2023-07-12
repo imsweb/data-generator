@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
 import com.imsweb.datagenerator.utils.StagingUtils;
-import com.imsweb.datagenerator.utils.dto.SiteDto;
+import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
 
@@ -38,9 +38,9 @@ public class StagingInputRule extends NaaccrDataGeneratorTumorRule {
     @Override
     @SuppressWarnings({"unchecked", "java:S1905"})
     public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
-        Map<Integer, SiteDto> siteFreqMap = (Map<Integer, SiteDto>)context.get(CONTEXT_FLAG_SITE_FREQ_MAP);
+        Map<Integer, SiteFrequencyDto> siteFreqMap = (Map<Integer, SiteFrequencyDto>)context.get(CONTEXT_FLAG_SITE_FREQ_MAP);
         if (siteFreqMap != null) {
-            SiteDto siteFrequency = siteFreqMap.get((Integer)context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX));
+            SiteFrequencyDto siteFrequency = siteFreqMap.get((Integer)context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX));
             if (siteFrequency != null) {
                 Map<String, String> randomValidValues = null;
 

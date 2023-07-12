@@ -3,7 +3,7 @@
  */
 package com.imsweb.datagenerator.utils.dto;
 
-public class FacilityDto {
+public class FacilityFrequencyDto {
 
     private String _npi;
     private String _name;

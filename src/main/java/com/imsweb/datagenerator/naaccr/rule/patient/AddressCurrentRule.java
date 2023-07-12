@@ -6,7 +6,7 @@ import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorPatientRule;
 import com.imsweb.datagenerator.utils.DistributionUtils;
 import com.imsweb.datagenerator.utils.RandomUtils;
-import com.imsweb.datagenerator.utils.dto.CityDto;
+import com.imsweb.datagenerator.utils.dto.CityFrequencyDto;
 import com.imsweb.naaccrxml.entity.Patient;
 
 public class AddressCurrentRule extends NaaccrDataGeneratorPatientRule {
@@ -27,7 +27,7 @@ public class AddressCurrentRule extends NaaccrDataGeneratorPatientRule {
             return;
 
         // get random zip code and with it city and state
-        CityDto dto = DistributionUtils.getCity(options.getState());
+        CityFrequencyDto dto = DistributionUtils.getCity(options.getState());
         setValue(patient, "addrCurrentCity", dto.getCity());
         setValue(patient, "addrCurrentPostalCode", dto.getZip());
         setValue(patient, "addrCurrentState", dto.getState());

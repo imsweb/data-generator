@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.imsweb.datagenerator.DataGenerator;
 import com.imsweb.datagenerator.provider.ProviderDataGeneratorOptions;
 import com.imsweb.datagenerator.utils.DistributionUtils;
-import com.imsweb.datagenerator.utils.dto.PhysicianDto;
+import com.imsweb.datagenerator.utils.dto.PhysicianFrequencyDto;
 
 /**
  * A data generator that can be used to create physicians.
@@ -27,9 +27,9 @@ public class PhysicianDataGenerator implements DataGenerator {
      * Generates a single physician.
      * <br/><br/>
      * @param options options
-     * @return generated PhysicianDto
+     * @return generated PhysicianFrequencyDto
      */
-    private PhysicianDto generatePhysician(ProviderDataGeneratorOptions options) {
+    private PhysicianFrequencyDto generatePhysician(ProviderDataGeneratorOptions options) {
         // make sure options are never null
         if (options == null)
             options = new ProviderDataGeneratorOptions();
@@ -47,14 +47,14 @@ public class PhysicianDataGenerator implements DataGenerator {
      * @param options options
      * @return list of generated physicians
      */
-    public List<PhysicianDto> generatePhysicians(int numProviders, ProviderDataGeneratorOptions options) {
+    public List<PhysicianFrequencyDto> generatePhysicians(int numProviders, ProviderDataGeneratorOptions options) {
         // make sure options are never null
         if (options == null)
             options = new ProviderDataGeneratorOptions();
 
-        List<PhysicianDto> physicians = new ArrayList<>();
+        List<PhysicianFrequencyDto> physicians = new ArrayList<>();
         for (int i = 0; i < numProviders; i++) {
-            PhysicianDto physician = generatePhysician(options);
+            PhysicianFrequencyDto physician = generatePhysician(options);
             if (!physicians.contains(physician))
                 physicians.add(physician);
         }

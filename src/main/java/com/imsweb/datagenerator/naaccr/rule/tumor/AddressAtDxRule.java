@@ -6,7 +6,7 @@ import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
 import com.imsweb.datagenerator.utils.DistributionUtils;
 import com.imsweb.datagenerator.utils.RandomUtils;
-import com.imsweb.datagenerator.utils.dto.CityDto;
+import com.imsweb.datagenerator.utils.dto.CityFrequencyDto;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
 
@@ -39,7 +39,7 @@ public class AddressAtDxRule extends NaaccrDataGeneratorTumorRule {
         }
         else {
             // get random zip code and with it city and state
-            CityDto dto = DistributionUtils.getCity(options.getState());
+            CityFrequencyDto dto = DistributionUtils.getCity(options.getState());
             setValue(tumor, "addrAtDxCity", dto.getCity());
             setValue(tumor, "addrAtDxPostalCode", dto.getZip());
             setValue(tumor, "addrAtDxState", dto.getState());

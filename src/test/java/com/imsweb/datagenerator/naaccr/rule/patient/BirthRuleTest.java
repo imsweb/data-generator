@@ -8,7 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
-import com.imsweb.datagenerator.utils.dto.SiteDto;
+import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
 import com.imsweb.naaccrxml.entity.Patient;
 
 import static com.imsweb.datagenerator.naaccr.NaaccrDataGenerator.CONTEXT_FLAG_AGE_GROUP_MAP;
@@ -48,17 +48,17 @@ public class BirthRuleTest {
         // Use of a context
         context.put(CONTEXT_FLAG_SEX, "1");
 
-        Map<Integer, SiteDto> siteFreqMap = new HashMap<>();
+        Map<Integer, SiteFrequencyDto> siteFreqMap = new HashMap<>();
         Map<Integer, Integer> ageGroupMap = new HashMap<>();
 
-        SiteDto dto = new SiteDto();
+        SiteFrequencyDto dto = new SiteFrequencyDto();
         dto.setSite("C000");
         dto.setHistology("8070");
         dto.setBehavior("3");
         siteFreqMap.put(0, dto);
         ageGroupMap.put(0, 5);
 
-        dto = new SiteDto();
+        dto = new SiteFrequencyDto();
         dto.setSite("C001");
         dto.setHistology("8070");
         dto.setBehavior("3");

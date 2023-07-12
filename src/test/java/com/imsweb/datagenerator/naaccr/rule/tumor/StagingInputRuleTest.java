@@ -19,7 +19,7 @@ import com.imsweb.datagenerator.utils.Distribution;
 import com.imsweb.datagenerator.utils.DistributionElement;
 import com.imsweb.datagenerator.utils.DistributionUtils;
 import com.imsweb.datagenerator.utils.StagingUtils;
-import com.imsweb.datagenerator.utils.dto.SiteDto;
+import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
 import com.imsweb.naaccrxml.entity.Item;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
@@ -51,7 +51,7 @@ public class StagingInputRuleTest {
 
         Map<String, Object> context = new HashMap<>();
         context.put(CONTEXT_FLAG_CURRENT_TUMOR_INDEX, 1);
-        Map<Integer, SiteDto> siteFreqMap = new HashMap<>();
+        Map<Integer, SiteFrequencyDto> siteFreqMap = new HashMap<>();
         siteFreqMap.put(1, DistributionUtils.getSite(sex));
         context.put(CONTEXT_FLAG_SITE_FREQ_MAP, siteFreqMap);
 
@@ -105,13 +105,13 @@ public class StagingInputRuleTest {
         mapping.put(4, "csSchemaId");
         mapping.put(5, "tnmSchemaId");
         mapping.put(6, "eodSchemaId");
-        checkReferencedSchema(Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/sites_sex_male.csv"), SiteDto.class, mapping));
-        checkReferencedSchema(Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/sites_sex_female.csv"), SiteDto.class, mapping));
+        checkReferencedSchema(Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/sites_sex_male.csv"), SiteFrequencyDto.class, mapping));
+        checkReferencedSchema(Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/sites_sex_female.csv"), SiteFrequencyDto.class, mapping));
     }
 
-    private void checkReferencedSchema(Distribution<SiteDto> distribution) {
-        for (DistributionElement<SiteDto> element : distribution.getFrequencies()) {
-            SiteDto dto = element.getValue();
+    private void checkReferencedSchema(Distribution<SiteFrequencyDto> distribution) {
+        for (DistributionElement<SiteFrequencyDto> element : distribution.getFrequencies()) {
+            SiteFrequencyDto dto = element.getValue();
             if (!StringUtils.isBlank(dto.getCsSchemaId()))
                 Assert.assertFalse(dto.getSite() + "," + dto.getHistology() + "/" + StagingUtils.unformatKey(dto.getCsSchemaId()), StagingUtils.getCsValues(dto.getCsSchemaId()).isEmpty());
             if (!StringUtils.isBlank(dto.getTnmSchemaId()))

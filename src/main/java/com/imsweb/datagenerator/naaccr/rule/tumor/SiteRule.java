@@ -5,7 +5,7 @@ import java.util.Map;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
 import com.imsweb.datagenerator.utils.DistributionUtils;
-import com.imsweb.datagenerator.utils.dto.SiteDto;
+import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
 
@@ -30,7 +30,7 @@ public class SiteRule extends NaaccrDataGeneratorTumorRule {
         Integer currentTumorIndex = (Integer)context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX);
 
         @SuppressWarnings("unchecked")
-        Map<Integer, SiteDto> siteFreqMap = (Map<Integer, SiteDto>)context.get(CONTEXT_FLAG_SITE_FREQ_MAP);
+        Map<Integer, SiteFrequencyDto> siteFreqMap = (Map<Integer, SiteFrequencyDto>)context.get(CONTEXT_FLAG_SITE_FREQ_MAP);
         if (currentTumorIndex != null && siteFreqMap != null) {
             setValue(tumor, "primarySite", siteFreqMap.get(currentTumorIndex).getSite());
             setValue(tumor, "histologicTypeIcdO3", siteFreqMap.get(currentTumorIndex).getHistology());
@@ -38,7 +38,7 @@ public class SiteRule extends NaaccrDataGeneratorTumorRule {
         }
 
         if (!hasValue(tumor, "primarySite")) {
-            SiteDto dto = DistributionUtils.getSite(patient.getItemValue("sex"));
+            SiteFrequencyDto dto = DistributionUtils.getSite(patient.getItemValue("sex"));
             setValue(tumor, "primarySite", dto.getSite());
             setValue(tumor, "histologicTypeIcdO3", dto.getHistology());
             setValue(tumor, "behaviorCodeIcdO3", dto.getBehavior());

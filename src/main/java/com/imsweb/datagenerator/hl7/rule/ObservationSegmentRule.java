@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.imsweb.datagenerator.hl7.NaaccrHl7DataGeneratorOptions;
 import com.imsweb.datagenerator.hl7.NaaccrHl7DataGeneratorRule;
-import com.imsweb.datagenerator.utils.dto.SiteDto;
+import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
 import com.imsweb.layout.hl7.Hl7MessageBuilder;
 import com.imsweb.layout.hl7.entity.Hl7Message;
 
@@ -63,7 +63,7 @@ public class ObservationSegmentRule extends NaaccrHl7DataGeneratorRule {
 
         if (options != null && Boolean.TRUE.equals(options.getGenerateSiteAndMorphology())) {
 
-            SiteDto siteDto = (SiteDto)context.get("site");
+            SiteFrequencyDto siteDto = (SiteFrequencyDto)context.get("site");
 
             new Hl7MessageBuilder(message).withSegment("OBX")
                     .withField(1, "5")

@@ -9,7 +9,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.imsweb.datagenerator.provider.ProviderDataGeneratorOptions;
-import com.imsweb.datagenerator.utils.dto.PhysicianDto;
+import com.imsweb.datagenerator.utils.dto.PhysicianFrequencyDto;
 
 public class PhysicianDataGeneratorTest {
 
@@ -20,7 +20,7 @@ public class PhysicianDataGeneratorTest {
         ProviderDataGeneratorOptions options = new ProviderDataGeneratorOptions();
 
         // null options
-        List<PhysicianDto> physicians = generatorPhysician.generatePhysicians(1, options);
+        List<PhysicianFrequencyDto> physicians = generatorPhysician.generatePhysicians(1, options);
         Assert.assertEquals(1, physicians.size());
         Assert.assertNotNull(physicians.get(0).getNpi());
 
