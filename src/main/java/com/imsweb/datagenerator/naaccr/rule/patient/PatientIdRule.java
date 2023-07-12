@@ -6,6 +6,7 @@ import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorPatientRule;
 import com.imsweb.naaccrxml.entity.Patient;
 
+@SuppressWarnings("java:S2160")
 public class PatientIdRule extends NaaccrDataGeneratorPatientRule {
 
     // unique identifier for this rule

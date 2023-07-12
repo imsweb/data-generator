@@ -40,7 +40,7 @@ public class StagingInputRule extends NaaccrDataGeneratorTumorRule {
     public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         Map<Integer, SiteFrequencyDto> siteFreqMap = (Map<Integer, SiteFrequencyDto>)context.get(CONTEXT_FLAG_SITE_FREQ_MAP);
         if (siteFreqMap != null) {
-            SiteFrequencyDto siteFrequency = siteFreqMap.get((Integer)context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX));
+            SiteFrequencyDto siteFrequency = siteFreqMap.get((int)context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX));
             if (siteFrequency != null) {
                 Map<String, String> randomValidValues = null;
 

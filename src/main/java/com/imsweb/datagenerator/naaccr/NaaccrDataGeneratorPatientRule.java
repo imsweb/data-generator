@@ -11,7 +11,7 @@ public abstract class NaaccrDataGeneratorPatientRule extends NaaccrDataGenerator
      * @param id rule ID
      * @param name rule name
      */
-    public NaaccrDataGeneratorPatientRule(String id, String name) {
+    protected NaaccrDataGeneratorPatientRule(String id, String name) {
         super(id, name);
     }
 

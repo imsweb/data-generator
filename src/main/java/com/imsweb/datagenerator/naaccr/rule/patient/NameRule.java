@@ -12,6 +12,7 @@ import com.imsweb.datagenerator.utils.DistributionUtils;
 import com.imsweb.datagenerator.utils.RandomUtils;
 import com.imsweb.naaccrxml.entity.Patient;
 
+@SuppressWarnings("java:S2160")
 public class NameRule extends NaaccrDataGeneratorPatientRule {
 
     // unique identifier for this rule
