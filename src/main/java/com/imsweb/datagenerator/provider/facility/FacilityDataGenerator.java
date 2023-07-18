@@ -29,7 +29,7 @@ public class FacilityDataGenerator implements DataGenerator {
      * @param options options
      * @return generated FacilityFrequencyDto
      */
-    private FacilityDto generateFacility(ProviderDataGeneratorOptions options) {
+    private FacilityFrequencyDto generateFacility(ProviderDataGeneratorOptions options) {
         // make sure options are never null
         if (options == null)
             options = new ProviderDataGeneratorOptions();
@@ -37,23 +37,7 @@ public class FacilityDataGenerator implements DataGenerator {
         if (StringUtils.isBlank(options.getState()))
             options.setState("MD");
 
-        // get facility.
-        FacilityFrequencyDto freqFacility = DistributionUtils.getFacility(options.getState());
-
-        FacilityDto facility = new FacilityDto();
-        facility.setNpi(freqFacility.getNpi());
-        facility.setName(freqFacility.getName());
-        facility.setAddressFirstLine(freqFacility.getAddressFirstLine());
-        facility.setAddressSecondLine(freqFacility.getAddressSecondLine());
-        facility.setAddressCity(freqFacility.getAddressCity());
-        facility.setAddressState(freqFacility.getAddressState());
-        facility.setAddressPostalCode(freqFacility.getAddressPostalCode());
-        facility.setAddressTelephone(freqFacility.getAddressTelephone());
-        facility.setSpecialty01(freqFacility.getSpecialty(0));
-        facility.setSpecialty02(freqFacility.getSpecialty(1));
-        facility.setSpecialty03(freqFacility.getSpecialty(2));
-
-        return facility;
+        return DistributionUtils.getFacility(options.getState());
     }
 
     /**
@@ -63,14 +47,14 @@ public class FacilityDataGenerator implements DataGenerator {
      * @param options options
      * @return list of generated facilities
      */
-    public List<FacilityDto> generateFacilities(int numProviders, ProviderDataGeneratorOptions options) {
+    public List<FacilityFrequencyDto> generateFacilities(int numProviders, ProviderDataGeneratorOptions options) {
         // make sure options are never null
         if (options == null)
             options = new ProviderDataGeneratorOptions();
 
-        List<FacilityDto> facilities = new ArrayList<>();
+        List<FacilityFrequencyDto> facilities = new ArrayList<>();
         for (int i = 0; i < numProviders; i++) {
-            FacilityDto facility = generateFacility(options);
+            FacilityFrequencyDto facility = generateFacility(options);
             if (!facilities.contains(facility))
                 facilities.add(facility);
         }

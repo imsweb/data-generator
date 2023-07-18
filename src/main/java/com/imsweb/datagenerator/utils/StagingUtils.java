@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 
 @SuppressWarnings("ConstantConditions")
-public class StagingUtils {
+public final class StagingUtils {
 
     private static Map<String, String> _KEYS;
 

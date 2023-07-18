@@ -59,7 +59,7 @@ public class DateOfDiagnosisRuleTest {
                 // all dates generated should be on or before the current date because no options were passed
                 LocalDate dxDate = LocalDate.of(Integer.parseInt(otherTum.getItemValue("dateOfDiagnosisYear")), Integer.parseInt(otherTum.getItemValue("dateOfDiagnosisMonth")),
                         Integer.parseInt(otherTum.getItemValue("dateOfDiagnosisDay")));
-                Assert.assertTrue("Future date: " + dxDate.toString(), LocalDate.now().plusDays(1).isAfter(dxDate));
+                Assert.assertTrue("Future date: " + dxDate, LocalDate.now().plusDays(1).isAfter(dxDate));
             }
         }
 

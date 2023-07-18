@@ -105,7 +105,7 @@ public class PatientIdentifierSegmentRule extends NaaccrHl7DataGeneratorRule {
                 .withField(7, DateTimeFormatter.ofPattern("yyyyMMdd").format(dob))
 
                 // PID-8: sex (M, F, U)
-                .withField(8, "1".equals(sex) ? "M" : "2".equals(sex) ? "F" : "U")
+                .withField(8, getSex(sex))
 
                 // PID-9: alias -> not set
 
@@ -131,5 +131,18 @@ public class PatientIdentifierSegmentRule extends NaaccrHl7DataGeneratorRule {
 
         // PID-23: birth place -> not set
 
+    }
+
+    private String getSex(String num) {
+        String sex;
+
+        if ("1".equals(num))
+            sex = "M";
+        else if ("2".equals(num))
+            sex = "F";
+        else
+            sex = "U";
+
+        return sex;
     }
 }

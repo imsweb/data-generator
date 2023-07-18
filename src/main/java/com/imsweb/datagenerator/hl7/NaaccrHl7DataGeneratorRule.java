@@ -8,17 +8,17 @@ import com.imsweb.layout.hl7.entity.Hl7Message;
 public abstract class NaaccrHl7DataGeneratorRule implements DataGeneratorRule {
 
     // the unique ID of this rule
-    private String _id;
+    private final String _id;
 
     // the name of this rule
-    private String _name;
+    private final String _name;
 
     /**
      * Constructor.
      * @param id rule ID
      * @param name rule name
      */
-    public NaaccrHl7DataGeneratorRule(String id, String name) {
+    protected NaaccrHl7DataGeneratorRule(String id, String name) {
         _id = id;
         _name = name;
     }

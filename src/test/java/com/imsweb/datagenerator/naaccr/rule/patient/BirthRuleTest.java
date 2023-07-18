@@ -82,7 +82,7 @@ public class BirthRuleTest {
                 Integer.parseInt(patient.getItemValue("dateOfBirthDay")));
         LocalDate startDate = options.getMinDxDate().minusYears(80).minusDays(1);
         LocalDate endDate = options.getMaxDxDate().minusYears(80).plusDays(1);
-        String assertMsg = assignedDate.toString() + ": Not between " + startDate.toString() + " and " + endDate.toString();
+        String assertMsg = assignedDate + ": Not between " + startDate + " and " + endDate;
         Assert.assertTrue(assertMsg, assignedDate.isAfter(startDate) && assignedDate.isBefore(endDate));
 
         // 10 year range maximum 1920 - 1930.
@@ -95,7 +95,7 @@ public class BirthRuleTest {
                 Integer.parseInt(patient.getItemValue("dateOfBirthDay")));
         startDate = options.getMinDxDate().minusYears(80).minusDays(1);
         endDate = options.getMaxDxDate().minusYears(80).plusDays(1);
-        assertMsg = assignedDate.toString() + ": Not between " + startDate.toString() + " and " + endDate.toString();
+        assertMsg = assignedDate + ": Not between " + startDate + " and " + endDate;
         Assert.assertTrue(assertMsg, assignedDate.isAfter(startDate) && assignedDate.isBefore(endDate));
 
     }

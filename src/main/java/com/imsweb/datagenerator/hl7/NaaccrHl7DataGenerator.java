@@ -2,11 +2,11 @@ package com.imsweb.datagenerator.hl7;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -162,11 +162,11 @@ public class NaaccrHl7DataGenerator implements DataGenerator {
             throw new IllegalStateException("Number of messages must be greater than 0.");
 
         // handle a compress file
-        OutputStream os = new FileOutputStream(file);
-        if (file.getName().toLowerCase().endsWith(".gz"))
-            os = new GZIPOutputStream(os);
-
-        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8))) {
+        boolean isGZip = file.getName().toLowerCase().endsWith(".gz");
+        try (
+                OutputStream os = Files.newOutputStream(file.toPath());
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(isGZip ? new GZIPOutputStream(os) : os, StandardCharsets.UTF_8))
+        ) {
             for (int i = 0; i < numMessages; i++) {
                 _layout.writeMessage(writer, generateMessage(options));
                 writer.newLine();

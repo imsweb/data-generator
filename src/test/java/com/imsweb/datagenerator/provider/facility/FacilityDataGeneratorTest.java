@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.imsweb.datagenerator.provider.ProviderDataGeneratorOptions;
+import com.imsweb.datagenerator.utils.dto.FacilityFrequencyDto;
 
 public class FacilityDataGeneratorTest {
 
@@ -19,7 +20,7 @@ public class FacilityDataGeneratorTest {
         ProviderDataGeneratorOptions options = new ProviderDataGeneratorOptions();
 
         // null options
-        List<FacilityDto> facilities = generatorFacility.generateFacilities(1, options);
+        List<FacilityFrequencyDto> facilities = generatorFacility.generateFacilities(1, options);
         Assert.assertEquals(1, facilities.size());
         Assert.assertNotNull(facilities.get(0).getNpi());
 
