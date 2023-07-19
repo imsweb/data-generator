@@ -3,8 +3,8 @@
 **Changes in version 1.29**
 
 - Added randomly generated text for text fields in NAACCR generator.
-- Updated NAACCR XML library from version 8.10 to version 9.1.
-- Updated Layout library from version 4.9 to version 5.2.
+- Updated NAACCR XML library from version 8.10 to version 10.0.
+- Updated Layout library from version 4.9 to version 5.3.
 
 **Changes in version 1.28**
 

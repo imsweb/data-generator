@@ -22,8 +22,8 @@ repositories {
 }
 
 dependencies {
-    api 'com.imsweb:layout:5.2'
-    api 'com.imsweb:naaccr-xml:9.1'
+    api 'com.imsweb:layout:5.3'
+    api 'com.imsweb:naaccr-xml:10.0'
 
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'commons-io:commons-io:2.13.0'
