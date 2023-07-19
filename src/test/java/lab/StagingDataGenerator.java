@@ -6,12 +6,11 @@ package lab;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -58,7 +57,7 @@ public class StagingDataGenerator {
         createStagingFiles(eod, info.getEodSchemas(), "frequencies/staging_eod.csv", keyCache);
 
         File file = new File(TestingUtils.getWorkingDirectory() + "/src/main/resources/frequencies/staging_keys.csv");
-        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(file.toPath()), StandardCharsets.UTF_8))) {
             for (String key : keyCache.keySet().stream().sorted().collect(Collectors.toList()))
                 writer.write(key + "," + keyCache.get(key) + "\r\n");
         }
@@ -70,7 +69,7 @@ public class StagingDataGenerator {
 
         File keysFile = new File(TestingUtils.getWorkingDirectory() + "/src/main/resources/" + filePath);
         if (keysFile.exists()) {
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(keysFile), StandardCharsets.US_ASCII))) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(keysFile.toPath()), StandardCharsets.US_ASCII))) {
                 String line = reader.readLine();
                 while (line != null) {
                     String[] parts = StringUtils.split(line, ',');
@@ -80,7 +79,7 @@ public class StagingDataGenerator {
 
             }
             catch (IOException e) {
-                throw new RuntimeException("Unable to read staging keys", e);
+                throw new IllegalStateException("Unable to read staging keys", e);
             }
         }
 
@@ -141,7 +140,7 @@ public class StagingDataGenerator {
             lines.add(newLines);
         }
 
-        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(file.toPath()), StandardCharsets.UTF_8))) {
             for (List<String> line : lines) {
                 writer.write(String.join(",", line));
                 writer.write("\r\n");
@@ -185,12 +184,12 @@ public class StagingDataGenerator {
         Set<String> exclusions = getInputExclusions();
 
         File file = new File(TestingUtils.getWorkingDirectory() + "/src/main/resources/" + filename);
-        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(file.toPath()), StandardCharsets.UTF_8))) {
 
             for (String schemaId : schemas.stream().sorted().collect(Collectors.toList())) {
                 Schema schema = stating.getSchema(schemaId);
                 if (schema == null)
-                    throw new RuntimeException("Unable to get schema '" + schemaId + "'");
+                    throw new IllegalStateException("Unable to get schema '" + schemaId + "'");
 
                 Pattern digitRegx = Pattern.compile("^\\d+$|^\\d+-\\d+$");
 

@@ -3,15 +3,12 @@ package com.imsweb.datagenerator.hl7;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.GZIPOutputStream;
 
 import com.imsweb.datagenerator.DataGenerator;
 import com.imsweb.datagenerator.hl7.rule.CommonOrderSegmentRule;
@@ -25,6 +22,7 @@ import com.imsweb.datagenerator.hl7.rule.SpecimenSegmentRule;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.hl7.NaaccrHl7Layout;
 import com.imsweb.layout.hl7.entity.Hl7Message;
+import com.imsweb.seerutils.SeerUtils;
 
 /**
  * A data generator can be used to create fake NAACCR HL7 data files.
@@ -161,12 +159,7 @@ public class NaaccrHl7DataGenerator implements DataGenerator {
         if (numMessages < 1)
             throw new IllegalStateException("Number of messages must be greater than 0.");
 
-        // handle a compress file
-        boolean isGZip = file.getName().toLowerCase().endsWith(".gz");
-        try (
-                OutputStream os = Files.newOutputStream(file.toPath());
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(isGZip ? new GZIPOutputStream(os) : os, StandardCharsets.UTF_8))
-        ) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(SeerUtils.createOutputStream(file), StandardCharsets.UTF_8))) {
             for (int i = 0; i < numMessages; i++) {
                 _layout.writeMessage(writer, generateMessage(options));
                 writer.newLine();

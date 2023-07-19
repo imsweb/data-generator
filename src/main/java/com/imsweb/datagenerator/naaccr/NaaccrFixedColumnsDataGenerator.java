@@ -10,12 +10,10 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.GZIPOutputStream;
 
 import com.imsweb.datagenerator.utils.Distribution;
 import com.imsweb.layout.LayoutFactory;
@@ -23,6 +21,7 @@ import com.imsweb.layout.record.RecordLayoutOptions;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
+import com.imsweb.seerutils.SeerUtils;
 
 /**
  * This NAACCR Data Generators uses (and requires) a NAACCR fixed-columns layout.
@@ -49,7 +48,7 @@ public class NaaccrFixedColumnsDataGenerator extends NaaccrDataGenerator {
         super(true);
 
         if (layout == null)
-            throw new IllegalArgumentException("A layout is required for creating a NAACCR data generator!");
+            throw new IllegalStateException("A layout is required for creating a NAACCR data generator!");
         _layout = layout;
     }
 
@@ -134,11 +133,9 @@ public class NaaccrFixedColumnsDataGenerator extends NaaccrDataGenerator {
         Distribution<Integer> numTumGen = options.getNumTumorsPerPatient() == null ? getNumTumorsPerPatientDistribution() : null;
 
         // create the file and write to it
-        boolean isGZip = file.getName().toLowerCase().endsWith(".gz");
-        try (
-                OutputStream os = Files.newOutputStream(file.toPath());
-                Writer writer = new BufferedWriter(new OutputStreamWriter(isGZip ? new GZIPOutputStream(os) : os, StandardCharsets.UTF_8))
-        ) {
+        try (OutputStream os = SeerUtils.createOutputStream(file);
+             Writer writer = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8))) {
+
             RecordLayoutOptions layoutOptions = new RecordLayoutOptions();
             layoutOptions.setValueTooLongHandling(RecordLayoutOptions.VAL_TOO_LONG_NULLIFY);
 

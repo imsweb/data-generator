@@ -3,19 +3,17 @@ package com.imsweb.datagenerator.record;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.GZIPOutputStream;
 
 import com.imsweb.datagenerator.DataGenerator;
 import com.imsweb.layout.record.RecordLayout;
+import com.imsweb.seerutils.SeerUtils;
 
 /**
  * A data generator can be used to create fake data files for any fixed-columns or comma-separated formats.
@@ -89,12 +87,7 @@ public class RecordDataGenerator implements DataGenerator {
         if (numRecords < 1)
             throw new IllegalArgumentException("Number of records must be greater than 0.");
 
-        // handle a compress file
-        boolean isGZip = file.getName().toLowerCase().endsWith(".gz");
-        try (
-                OutputStream os = Files.newOutputStream(file.toPath());
-                Writer writer = new BufferedWriter(new OutputStreamWriter(isGZip ? new GZIPOutputStream(os) : os, StandardCharsets.UTF_8))
-        ) {
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(SeerUtils.createOutputStream(file), StandardCharsets.UTF_8))) {
             for (int i = 0; i < numRecords; i++)
                 _layout.writeRecord(writer, generateRecord(options));
         }

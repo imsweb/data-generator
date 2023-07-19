@@ -11,6 +11,7 @@ import com.imsweb.datagenerator.utils.DistributionUtils;
 import com.imsweb.datagenerator.utils.dto.FacilityFrequencyDto;
 import com.imsweb.datagenerator.utils.dto.PhysicianFrequencyDto;
 
+@SuppressWarnings("unused")
 public class NaaccrDataGeneratorOptions {
 
     // if provided, each patient will have this number of tumors; otherwise a random distribution will be used.

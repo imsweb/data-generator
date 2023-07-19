@@ -48,4 +48,9 @@ public class RandomUtilsTest {
         // date2 or date 3 are valid
         Assert.assertTrue(new HashSet<>(Arrays.asList(date2, date3)).contains(RandomUtils.getRandomDateBetween(date3, date2)));
     }
+
+    @Test
+    public void testGetRandomStringOfLettersOrDigits() {
+        Assert.assertNotNull(RandomUtils.getRandomStringOfLettersOrDigits(5));
+    }
 }
