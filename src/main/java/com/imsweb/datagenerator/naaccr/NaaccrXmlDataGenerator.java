@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.zip.GZIPOutputStream;
 
 import com.imsweb.datagenerator.utils.Distribution;
 import com.imsweb.layout.LayoutFactory;
@@ -48,7 +50,7 @@ public class NaaccrXmlDataGenerator extends NaaccrDataGenerator {
         super(layout == null || NaaccrFormat.NAACCR_VERSION_180.compareTo(layout.getNaaccrVersion()) <= 0);
 
         if (layout == null)
-            throw new RuntimeException("A layout is required for creating a NAACCR XML data generator!");
+            throw new IllegalArgumentException("A layout is required for creating a NAACCR XML data generator!");
         _xmlLayout = layout;
     }
 
@@ -141,8 +143,12 @@ public class NaaccrXmlDataGenerator extends NaaccrDataGenerator {
                 .collect(Collectors.toList());
 
         // create file and write to it
-        try (OutputStream os = createOutputStream(file);
-             PatientXmlWriter writer = new PatientXmlWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), rootData, writerOptions, userDictionaries)) {
+        boolean isGZip = file.getName().toLowerCase().endsWith(".gz");
+        try (
+                OutputStream os = Files.newOutputStream(file.toPath());
+                PatientXmlWriter writer = new PatientXmlWriter(new OutputStreamWriter(isGZip ? new GZIPOutputStream(os) : os,
+                        StandardCharsets.UTF_8), rootData, writerOptions, userDictionaries)
+        ) {
             int numCreatedTumors = 0;
             while (numCreatedTumors < numTumors) {
                 int numTumorForThisPatient = Math.min(numTumGen == null ? options.getNumTumorsPerPatient() : numTumGen.getValue(), numTumors - numCreatedTumors);

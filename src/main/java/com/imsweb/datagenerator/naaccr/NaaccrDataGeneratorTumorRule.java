@@ -12,7 +12,7 @@ public abstract class NaaccrDataGeneratorTumorRule extends NaaccrDataGeneratorRu
      * @param id rule ID
      * @param name rule name
      */
-    public NaaccrDataGeneratorTumorRule(String id, String name) {
+    protected NaaccrDataGeneratorTumorRule(String id, String name) {
         super(id, name);
     }
 

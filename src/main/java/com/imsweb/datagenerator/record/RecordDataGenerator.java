@@ -2,12 +2,12 @@ package com.imsweb.datagenerator.record;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,10 +29,10 @@ import com.imsweb.layout.record.RecordLayout;
 public class RecordDataGenerator implements DataGenerator {
 
     // the layout used for this generator (the layout defines the variables that can be used in the rules)
-    private RecordLayout _layout;
+    private final RecordLayout _layout;
 
     // list of rules to be executed
-    private List<RecordDataGeneratorRule> _rules;
+    private final List<RecordDataGeneratorRule> _rules;
 
     /**
      * Constructor
@@ -90,11 +90,11 @@ public class RecordDataGenerator implements DataGenerator {
             throw new IllegalArgumentException("Number of records must be greater than 0.");
 
         // handle a compress file
-        OutputStream os = new FileOutputStream(file);
-        if (file.getName().toLowerCase().endsWith(".gz"))
-            os = new GZIPOutputStream(os);
-
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8))) {
+        boolean isGZip = file.getName().toLowerCase().endsWith(".gz");
+        try (
+                OutputStream os = Files.newOutputStream(file.toPath());
+                Writer writer = new BufferedWriter(new OutputStreamWriter(isGZip ? new GZIPOutputStream(os) : os, StandardCharsets.UTF_8))
+        ) {
             for (int i = 0; i < numRecords; i++)
                 _layout.writeRecord(writer, generateRecord(options));
         }

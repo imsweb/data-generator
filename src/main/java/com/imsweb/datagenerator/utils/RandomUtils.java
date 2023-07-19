@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
 
-public class RandomUtils {
+public final class RandomUtils {
 
     private static final String[] _FILLER_TEXT = new String[] {
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -17,6 +17,8 @@ public class RandomUtils {
     };
 
     private static final Random _RANDOM = new SecureRandom();
+
+    private RandomUtils() {}
 
     /**
      * Generates a random integer between 0 (inclusive) and the requested bound (exclusive).

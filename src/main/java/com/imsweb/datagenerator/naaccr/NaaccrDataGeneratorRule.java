@@ -20,7 +20,7 @@ public abstract class NaaccrDataGeneratorRule {
      * @param id rule ID
      * @param name rule name
      */
-    public NaaccrDataGeneratorRule(String id, String name) {
+    protected NaaccrDataGeneratorRule(String id, String name) {
         _id = id;
         _name = name;
     }
@@ -89,7 +89,7 @@ public abstract class NaaccrDataGeneratorRule {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public final boolean equals(Object o) {
         if (this == o)
             return true;
         if (!(o instanceof NaaccrDataGeneratorRule))
@@ -99,7 +99,7 @@ public abstract class NaaccrDataGeneratorRule {
     }
 
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         return _id.hashCode();
     }
 }
