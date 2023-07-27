@@ -192,7 +192,8 @@ public final class DistributionUtils {
             mapping.put(1, "zip");
             mapping.put(2, "city");
             mapping.put(3, "state");
-
+            mapping.put(4, "longitude");
+            mapping.put(5, "latitude");
             distribution = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/zip_codes/" + state.toLowerCase() + ".csv"), CityFrequencyDto.class, mapping);
             _DIST_CITIES.put(state.toLowerCase(), distribution);
         }
@@ -234,7 +235,15 @@ public final class DistributionUtils {
             Map<Integer, String> mapping = new HashMap<>();
             mapping.put(1, "npi");
             mapping.put(2, "name");
+            mapping.put(3, "addressFirstLine");
+            mapping.put(4, "addressSecondLine");
+            mapping.put(5, "addressCity");
             mapping.put(6, "addressState");
+            mapping.put(7, "addressPostalCode");
+            mapping.put(8, "addressTelephone");
+            mapping.put(9, "specialty01");
+            mapping.put(10, "specialty02");
+            mapping.put(11, "specialty03");
 
             distribution = Distribution.of(Thread.currentThread().getContextClassLoader().getResource("frequencies/providers/Facility_" + state.toUpperCase() + ".csv"), FacilityFrequencyDto.class,
                     mapping);
