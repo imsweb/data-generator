@@ -11,6 +11,10 @@ public class CityFrequencyDto {
 
     private String _state;
 
+    private String _longitude;
+
+    private String _latitude;
+
     public String getZip() {
         return _zip;
     }
@@ -35,4 +39,19 @@ public class CityFrequencyDto {
         _state = state;
     }
 
+    public String getLongitude() {
+        return _longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        _longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return _latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        _latitude = latitude;
+    }
 }
