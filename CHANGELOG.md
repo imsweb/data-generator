@@ -1,5 +1,9 @@
 ## Synthetic data generator
 
+**Changes in version 1.30**
+
+- Re-added physician and facilities fields and classes that were actually used by other software.
+
 **Changes in version 1.29**
 
 - Added randomly generated text for text fields in NAACCR generator.
