@@ -68,7 +68,7 @@ public class SiteRuleTest {
         Assert.assertEquals("8070", tumor.getItemValue("histologicTypeIcdO3"));
         Assert.assertEquals("3", tumor.getItemValue("behaviorCodeIcdO3"));
         Assert.assertEquals("9", tumor.getItemValue("grade"));
-        Assert.assertEquals("9", tumor.getItemValue("laterality"));
+        Assert.assertEquals("0", tumor.getItemValue("laterality"));
 
         context = new HashMap<>();
         context.put(CONTEXT_FLAG_SEX, "1");
