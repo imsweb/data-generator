@@ -30,7 +30,6 @@ public class FacilityDataGenerator implements DataGenerator {
      * @return generated FacilityFrequencyDto
      */
     private FacilityFrequencyDto generateFacility(ProviderDataGeneratorOptions options) {
-        // make sure options are never null
         if (options == null)
             options = new ProviderDataGeneratorOptions();
 
@@ -48,16 +47,12 @@ public class FacilityDataGenerator implements DataGenerator {
      * @return list of generated facilities
      */
     public List<FacilityFrequencyDto> generateFacilities(int numProviders, ProviderDataGeneratorOptions options) {
-        // make sure options are never null
         if (options == null)
             options = new ProviderDataGeneratorOptions();
 
         List<FacilityFrequencyDto> facilities = new ArrayList<>();
-        for (int i = 0; i < numProviders; i++) {
-            FacilityFrequencyDto facility = generateFacility(options);
-            if (!facilities.contains(facility))
-                facilities.add(facility);
-        }
+        for (int i = 0; i < numProviders; i++)
+            facilities.add(generateFacility(options));
 
         return facilities;
     }

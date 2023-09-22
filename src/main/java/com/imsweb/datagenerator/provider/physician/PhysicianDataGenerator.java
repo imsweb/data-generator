@@ -30,7 +30,6 @@ public class PhysicianDataGenerator implements DataGenerator {
      * @return generated PhysicianFrequencyDto
      */
     private PhysicianFrequencyDto generatePhysician(ProviderDataGeneratorOptions options) {
-        // make sure options are never null
         if (options == null)
             options = new ProviderDataGeneratorOptions();
 
@@ -48,16 +47,12 @@ public class PhysicianDataGenerator implements DataGenerator {
      * @return list of generated physicians
      */
     public List<PhysicianFrequencyDto> generatePhysicians(int numProviders, ProviderDataGeneratorOptions options) {
-        // make sure options are never null
         if (options == null)
             options = new ProviderDataGeneratorOptions();
 
         List<PhysicianFrequencyDto> physicians = new ArrayList<>();
-        for (int i = 0; i < numProviders; i++) {
-            PhysicianFrequencyDto physician = generatePhysician(options);
-            if (!physicians.contains(physician))
-                physicians.add(physician);
-        }
+        for (int i = 0; i < numProviders; i++)
+            physicians.add(generatePhysician(options));
 
         return physicians;
     }
