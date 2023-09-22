@@ -1,5 +1,10 @@
 ## Synthetic data generator
 
+**Changes in version 1.31**
+
+- Stopped removing duplicates when creating facilities and physicians.
+- Improved assignment of laterality in NAACCR rules.
+
 **Changes in version 1.30**
 
 - Re-added physician and facilities fields and classes that were actually used by other software.
