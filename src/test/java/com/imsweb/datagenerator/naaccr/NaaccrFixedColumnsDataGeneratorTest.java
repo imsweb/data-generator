@@ -124,7 +124,8 @@ public class NaaccrFixedColumnsDataGeneratorTest {
         Assert.assertEquals(1, patient.size());
         Assert.assertNotNull(patient.get(0).get("primarySite"));
         Assert.assertNull(patient.get(0).get("addressAtDxState"));
-        Assert.assertNull(_LAYOUT.validateLine(_LAYOUT.createLineFromRecord(patient.get(0), null), 1));
+        String error = _LAYOUT.validateLine(_LAYOUT.createLineFromRecord(patient.get(0), null), 1);
+        Assert.assertNull(error, error);
 
         // null options, several tumors
         patient = generator.generatePatient(3, null);
