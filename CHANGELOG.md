@@ -1,5 +1,10 @@
 ## Synthetic data generator
 
+**Changes in version 1.32**
+
+- Updated Layout library from version 5.3 to version 5.5.
+- Updated NAACCR XML library from version 10.0 to version 10.1. 
+
 **Changes in version 1.31**
 
 - Stopped removing duplicates when creating facilities and physicians.
