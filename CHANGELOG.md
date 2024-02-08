@@ -2,6 +2,7 @@
 
 **Changes in version 1.32**
 
+- Added new rule to populate Telephone (issue #51).
 - Updated Layout library from version 5.3 to version 5.5.
 - Updated NAACCR XML library from version 10.0 to version 10.1. 
 

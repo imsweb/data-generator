@@ -70,6 +70,7 @@ The NAACCR generator current provides rules for the following fields:
  - NAPIIA
  - Diagnostic Procedure Text fields (random data only)
  - Tumor Text fields (random data only)
+ - Telephone
 
 Here is an example using the NAACCR generator:
 ```java

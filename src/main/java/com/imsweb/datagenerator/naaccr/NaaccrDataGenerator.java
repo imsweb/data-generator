@@ -23,6 +23,7 @@ import com.imsweb.datagenerator.naaccr.rule.patient.PatientIdRule;
 import com.imsweb.datagenerator.naaccr.rule.patient.RaceRule;
 import com.imsweb.datagenerator.naaccr.rule.patient.SexRule;
 import com.imsweb.datagenerator.naaccr.rule.patient.SsnRule;
+import com.imsweb.datagenerator.naaccr.rule.patient.TelephoneRule;
 import com.imsweb.datagenerator.naaccr.rule.patient.VitalStatusRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.AddressAtDxRule;
 import com.imsweb.datagenerator.naaccr.rule.tumor.AgeRule;
@@ -98,6 +99,7 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
         _patientRules.add(new BirthRule());
         _patientRules.add(new AddressCurrentRule());
         _patientRules.add(new ComputedEthnicityRule());
+        _patientRules.add(new TelephoneRule());
 
         // default tumor rules
         _tumorRules = new ArrayList<>();
