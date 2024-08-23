@@ -1,5 +1,10 @@
 ## Synthetic data generator
 
+**Changes in version 1.33**
+
+- Updated Layout library from version 5.5 to version 5.7.
+- Updated NAACCR XML library from version 10.1 to version 11.1.
+
 **Changes in version 1.32**
 
 - Added new rule to populate Telephone (issue #51).
