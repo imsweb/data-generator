@@ -3,6 +3,9 @@
  */
 package com.imsweb.datagenerator.utils.dto;
 
+import java.util.Objects;
+
+@SuppressWarnings("unused")
 public class PhysicianFrequencyDto {
 
     private String _npi;
@@ -148,5 +151,48 @@ public class PhysicianFrequencyDto {
         _specialty03 = specialty;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof PhysicianFrequencyDto))
+            return false;
+        PhysicianFrequencyDto that = (PhysicianFrequencyDto)o;
+        return Objects.equals(_npi, that._npi)
+               && Objects.equals(_lastName, that._lastName)
+               && Objects.equals(_firstName, that._firstName)
+               && Objects.equals(_middleName, that._middleName)
+               && Objects.equals(_namePrefix, that._namePrefix)
+               && Objects.equals(_nameSuffix, that._nameSuffix)
+               && Objects.equals(_credentials, that._credentials)
+               && Objects.equals(_addressFirstLine, that._addressFirstLine)
+               && Objects.equals(_addressSecondLine, that._addressSecondLine)
+               && Objects.equals(_addressCity, that._addressCity)
+               && Objects.equals(_addressState, that._addressState)
+               && Objects.equals(_addressPostalCode, that._addressPostalCode)
+               && Objects.equals(_addressTelephone, that._addressTelephone)
+               && Objects.equals(_specialty01, that._specialty01) && Objects.equals(_specialty02, that._specialty02)
+               && Objects.equals(_specialty03, that._specialty03);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(_npi,
+                _lastName,
+                _firstName,
+                _middleName,
+                _namePrefix,
+                _nameSuffix,
+                _credentials,
+                _addressFirstLine,
+                _addressSecondLine,
+                _addressCity,
+                _addressState,
+                _addressPostalCode,
+                _addressTelephone,
+                _specialty01,
+                _specialty02,
+                _specialty03);
+    }
 }
 
