@@ -1,5 +1,9 @@
 ## Synthetic data generator
 
+**Changes in version 1.34**
+
+- Fixed default values not properly set in MSH segment of HL7 generator.
+
 **Changes in version 1.33**
 
 - Updated Layout library from version 5.5 to version 5.7.

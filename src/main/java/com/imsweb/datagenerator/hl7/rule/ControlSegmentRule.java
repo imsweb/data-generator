@@ -22,6 +22,12 @@ public class ControlSegmentRule extends NaaccrHl7DataGeneratorRule {
     public void execute(Hl7Message message, NaaccrHl7DataGeneratorOptions options, Map<String, Object> context) {
         new Hl7MessageBuilder(message).withSegment("MSH")
 
+                // MSH-1: Field Separator
+                .withField(1, "|")
+
+                // MSH2: Encoding Character
+                .withField(2, "^~\\&")
+
                 // MSH-3: sending application
                 .withField(3, "IMS Data Generator")
 
@@ -40,10 +46,14 @@ public class ControlSegmentRule extends NaaccrHl7DataGeneratorRule {
                 // MSH-11: processing ID
                 .withField(11, "P")
 
-                // MSH-12: version ID -> set by the layout library
+                // MSH-12: version ID
+                .withField(12, "2.5.1")
 
                 // MSH-17: country code
-                .withField(17, "US");
+                .withField(17, "US")
+
+                // MSH-21: Message Profile Identifier
+                .withField(21, "VOL_V_50_ORU_R01", "NAACCR_CP");
 
     }
 }

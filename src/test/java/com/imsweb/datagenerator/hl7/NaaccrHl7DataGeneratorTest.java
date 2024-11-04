@@ -35,6 +35,7 @@ public class NaaccrHl7DataGeneratorTest {
         // test with no options
         generator.generateFile(file, 1);
         Hl7Message msg = layout.readAllMessages(file).get(0);
+        Assert.assertNotNull(msg.getSegment("MSH").getField(12).getValue());
         Assert.assertNotNull(msg.getSegment("PID").getField(5).getValue());
         Assert.assertNull(msg.getSegment("PID").getField(11).getValue());
 
@@ -65,7 +66,7 @@ public class NaaccrHl7DataGeneratorTest {
         Assert.assertEquals("Test", generator.generateMessage().getSegment("PID").getField(5).getComponent(1).getValue());
     }
 
-    private class MyHl7DataGenerator extends NaaccrHl7DataGenerator {
+    private static class MyHl7DataGenerator extends NaaccrHl7DataGenerator {
 
         public MyHl7DataGenerator(String layoutId) {
             super(layoutId);
