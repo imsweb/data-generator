@@ -1,5 +1,11 @@
 ## Synthetic data generator
 
+**Changes in version 2.0**
+
+- Updated the minimum Java language for the library from Java 8 to Java 11.
+- Updated Layout library from version 5.7 to version 6.0.
+- Updated NAACCR XML library from version 11.1 to version 10.2.
+
 **Changes in version 1.34**
 
 - Fixed default values not properly set in MSH segment of HL7 generator.

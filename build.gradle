@@ -24,8 +24,8 @@ repositories {
 }
 
 dependencies {
-    api 'com.imsweb:layout:5.7'
-    api 'com.imsweb:naaccr-xml:11.1'
+    api 'com.imsweb:layout:6.0'
+    api 'com.imsweb:naaccr-xml:11.2'
 
     implementation 'com.imsweb:seerutils:5.6'
     implementation 'org.apache.commons:commons-lang3:3.17.0'
@@ -52,8 +52,8 @@ tasks.withType(Javadoc).configureEach {
 
 // generate javadoc and sources (required by Nexus)
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 
     withJavadocJar()
     withSourcesJar()
@@ -210,6 +210,6 @@ nexusPublishing {
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
-    gradleVersion = '8.10.2'
+    gradleVersion = '8.11'
     distributionType = Wrapper.DistributionType.ALL
 }
