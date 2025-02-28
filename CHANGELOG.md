@@ -1,5 +1,10 @@
 ## Synthetic data generator
 
+**Changes in version 2.1**
+
+- Removed offending word from fake facility names.
+- Updated dependencies.
+
 **Changes in version 2.0**
 
 - Updated the minimum Java language for the library from Java 8 to Java 11.

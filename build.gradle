@@ -4,13 +4,13 @@ plugins {
     id 'java-library'
     id 'checkstyle'
     id 'jacoco'
-    id 'com.github.spotbugs' version '6.0.26'
+    id 'com.github.spotbugs' version '6.1.6'
     id 'maven-publish'
     id 'signing'
     id 'io.github.gradle-nexus.publish-plugin' version '2.0.0' // publish to Maven Central
-    id 'com.github.ben-manes.versions' version '0.51.0' // check for out-of-date dependencies (run 'dependencyUpdates' manually)
-    id 'org.sonatype.gradle.plugins.scan' version '2.8.3' // scan for vulnerabilities
-    id "org.sonarqube" version "5.1.0.4882"// sonarQube analysis
+    id 'com.github.ben-manes.versions' version '0.52.0' // check for out-of-date dependencies (run 'dependencyUpdates' manually)
+    id 'org.sonatype.gradle.plugins.scan' version '3.0.0' // scan for vulnerabilities
+    id "org.sonarqube" version "6.0.1.5171"// sonarQube analysis
 }
 
 group = 'com.imsweb'
@@ -24,18 +24,18 @@ repositories {
 }
 
 dependencies {
-    api 'com.imsweb:layout:6.0'
+    api 'com.imsweb:layout:6.2'
     api 'com.imsweb:naaccr-xml:11.2'
 
     implementation 'com.imsweb:seerutils:5.6'
     implementation 'org.apache.commons:commons-lang3:3.17.0'
-    implementation 'commons-io:commons-io:2.17.0'
+    implementation 'commons-io:commons-io:2.18.0'
 
-    testImplementation 'com.imsweb:validation:3.3'
-    testImplementation 'com.imsweb:staging-client-java:11.3.1'
-    testImplementation 'com.imsweb:staging-client-java-cs:11.3.1'
-    testImplementation 'com.imsweb:staging-client-java-eod-public:11.3.1'
-    testImplementation 'com.imsweb:staging-client-java-tnm:11.3.1'
+    testImplementation 'com.imsweb:validation:4.2'
+    testImplementation 'com.imsweb:staging-client-java:11.3.2'
+    testImplementation 'com.imsweb:staging-client-java-cs:11.3.2'
+    testImplementation 'com.imsweb:staging-client-java-eod-public:11.3.2'
+    testImplementation 'com.imsweb:staging-client-java-tnm:11.3.2'
     testImplementation 'junit:junit:4.13.2'
 }
 
@@ -210,6 +210,6 @@ nexusPublishing {
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
-    gradleVersion = '8.11'
+    gradleVersion = '8.13'
     distributionType = Wrapper.DistributionType.ALL
 }
