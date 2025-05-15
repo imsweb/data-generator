@@ -1,5 +1,9 @@
 ## Synthetic data generator
 
+**Changes in version 2.2**
+
+- Updated dependencies.
+
 **Changes in version 2.1**
 
 - Removed offending word from fake facility names.
