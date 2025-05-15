@@ -25,7 +25,7 @@ public class RecordDataGeneratorTest {
         Assert.assertEquals(1, generator.getRules().size());
         Assert.assertNotNull(generator.getRules().get(0).getId());
         Assert.assertNotNull(generator.getRules().get(0).getName());
-        Assert.assertEquals(generator.getRules().get(0), generator.getRules().get(0));
+        Assert.assertEquals("", generator.getRules().get(0), generator.getRules().get(0));
         Assert.assertEquals(generator.getRules().get(0).hashCode(), generator.getRules().get(0).hashCode());
 
         // no rules
@@ -48,28 +48,28 @@ public class RecordDataGeneratorTest {
         RecordDataGenerator generator = createGenerator();
 
         // null options
-        Map<String, String> record = generator.generateRecord(null);
-        Assert.assertEquals("x", record.get("field1"));
+        Map<String, String> rec = generator.generateRecord(null);
+        Assert.assertEquals("x", rec.get("field1"));
 
         // empty options
         Map<String, Object> options = new HashMap<>();
-        record = generator.generateRecord(options);
-        Assert.assertEquals("x", record.get("field1"));
+        rec = generator.generateRecord(options);
+        Assert.assertEquals("x", rec.get("field1"));
 
         // option with a key that doesn't apply
         options.put("whatever", "whatever");
-        record = generator.generateRecord(options);
-        Assert.assertEquals("x", record.get("field1"));
+        rec = generator.generateRecord(options);
+        Assert.assertEquals("x", rec.get("field1"));
 
         // option that does apply
         options.put("uppercase", Boolean.TRUE);
-        record = generator.generateRecord(options);
-        Assert.assertEquals("X", record.get("field1"));
+        rec = generator.generateRecord(options);
+        Assert.assertEquals("X", rec.get("field1"));
 
         // remove the rule from the generator
         generator.getRules().clear();
-        record = generator.generateRecord(options);
-        Assert.assertNull(record.get("field1"));
+        rec = generator.generateRecord(options);
+        Assert.assertNull(rec.get("field1"));
     }
 
     @Test

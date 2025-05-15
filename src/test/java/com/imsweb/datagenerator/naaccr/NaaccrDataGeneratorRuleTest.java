@@ -17,6 +17,7 @@ public class NaaccrDataGeneratorRuleTest {
     private final NaaccrDataGeneratorTumorRule _rule = new NaaccrDataGeneratorTumorRule("id", "name") {
         @Override
         public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
+            // test is meant to unit test other methods, not main execute one...
         }
     };
 
