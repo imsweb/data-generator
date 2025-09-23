@@ -2,13 +2,11 @@ import com.vanniktech.maven.publish.*
 
 plugins {
     id 'java-library'
-    id 'checkstyle'
     id 'jacoco'
-    id 'com.vanniktech.maven.publish' version '0.32.0' // publish to Maven Central
+    id 'com.vanniktech.maven.publish' version '0.34.0' // publish to Maven Central
     id 'com.github.ben-manes.versions' version '0.52.0' // check for out-of-date dependencies (run 'dependencyUpdates' manually)
-    id 'com.github.spotbugs' version '6.1.11' // spotbugs code analysis
-    id 'org.sonatype.gradle.plugins.scan' version '3.1.1' // scan for vulnerabilities
-    id 'org.sonarqube' version '6.1.0.5360' // sonarQube analysis
+    id 'com.github.spotbugs' version '6.4.2' // spotbugs code analysis
+    id 'org.sonarqube' version '6.3.1.5724' // sonarQube analysis
 }
 
 group = 'com.imsweb'
@@ -22,18 +20,18 @@ repositories {
 }
 
 dependencies {
-    api 'com.imsweb:layout:6.3'
-    api 'com.imsweb:naaccr-xml:11.3'
+    api 'com.imsweb:layout:6.4'
+    api 'com.imsweb:naaccr-xml:12.1'
 
     implementation 'com.imsweb:seerutils:5.7'
-    implementation 'org.apache.commons:commons-lang3:3.17.0'
-    implementation 'commons-io:commons-io:2.19.0'
+    implementation 'org.apache.commons:commons-lang3:3.18.0'
+    implementation 'commons-io:commons-io:2.20.0'
 
-    testImplementation 'com.imsweb:validation:4.3'
-    testImplementation 'com.imsweb:staging-client-java:11.4.0'
-    testImplementation 'com.imsweb:staging-client-java-cs:11.4.0'
-    testImplementation 'com.imsweb:staging-client-java-eod-public:11.4.0'
-    testImplementation 'com.imsweb:staging-client-java-tnm:11.4.0'
+    testImplementation 'com.imsweb:validation:4.6'
+    testImplementation 'com.imsweb:staging-client-java:11.6.0'
+    testImplementation 'com.imsweb:staging-client-java-cs:11.6.0'
+    testImplementation 'com.imsweb:staging-client-java-eod-public:11.6.0'
+    testImplementation 'com.imsweb:staging-client-java-tnm:11.6.0'
     testImplementation 'junit:junit:4.13.2'
 }
 
@@ -84,20 +82,6 @@ sonarqube {
     }
 }
 
-// Nexus vulnerability scan (see https://github.com/sonatype-nexus-community/scan-gradle-plugin)
-ossIndexAudit {
-    outputFormat = 'DEPENDENCY_GRAPH'
-    printBanner = false
-}
-check.dependsOn 'ossIndexAudit'
-
-// checkstyle plugin settings
-checkstyle {
-    ignoreFailures = true
-    configFile = project(':').file('config/checkstyle/checkstyle.xml')
-    configProperties = ['suppressionFile': project(':').file('config/checkstyle/suppressions.xml')]
-}
-
 // spotbugs plugin settings
 spotbugs {
     ignoreFailures = true
@@ -128,7 +112,7 @@ tasks.named("dependencyUpdates").configure {
 mavenPublishing {
     configure(new JavaLibrary(new JavadocJar.Javadoc(), true))
 
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, true)
+    publishToMavenCentral(true)
     signAllPublications()
 
     pom {
