@@ -1,5 +1,10 @@
 ## Synthetic data generator
 
+**Version 2.3 (not released yet)**
+
+- Changed the minimum Java language for this library from Java 11 to Java 21.
+- Updated dependencies.
+
 **Changes in version 2.2**
 
 - Updated dependencies.

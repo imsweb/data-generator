@@ -28,16 +28,16 @@ dependencies {
     implementation 'commons-io:commons-io:2.20.0'
 
     testImplementation 'com.imsweb:validation:4.6'
-    testImplementation 'com.imsweb:staging-client-java:11.6.0'
-    testImplementation 'com.imsweb:staging-client-java-cs:11.6.0'
-    testImplementation 'com.imsweb:staging-client-java-eod-public:11.6.0'
-    testImplementation 'com.imsweb:staging-client-java-tnm:11.6.0'
+    testImplementation 'com.imsweb:staging-client-java:11.5.1'
+    testImplementation 'com.imsweb:staging-client-java-eod-public:11.5.1'
+    testImplementation 'com.imsweb:staging-client-java-tnm:11.5.1'
+    testImplementation 'com.imsweb:staging-client-java-cs:11.5.1'
     testImplementation 'junit:junit:4.13.2'
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 tasks.withType(JavaCompile).configureEach {
