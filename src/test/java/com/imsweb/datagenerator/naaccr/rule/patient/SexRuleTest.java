@@ -25,7 +25,7 @@ public class SexRuleTest {
             Patient patient = new Patient();
             Map<String, Object> context = new HashMap<>();
             _rule.execute(patient, null, context);
-            Assert.assertTrue(validSex.contains(patient.getItemValue("sex")));
+            Assert.assertTrue(validSex.contains(patient.getItemValue("sexAssignedAtBirth")));
         }
     }
 }

@@ -10,6 +10,7 @@ import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorPatientRule;
 import com.imsweb.datagenerator.utils.DistributionUtils;
 import com.imsweb.datagenerator.utils.RandomUtils;
+import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.entity.Patient;
 
 @SuppressWarnings("java:S2160") // no need to override equals
@@ -24,15 +25,11 @@ public class NameRule extends NaaccrDataGeneratorPatientRule {
     private static final String[] _VALUES_SUFFIXES = {"CPA", "LLD", "MD", "PhD", "Ret", "RN"};
     private static final String[] _VALUES_SUFFIXES_MALE = {"Jr.", "Sr.", "III", "IV"};
 
-    private final boolean _useMaidenNameField;
-
     /**
      * Constructor.
      */
-    public NameRule(boolean useMaidenNameField) {
+    public NameRule() {
         super(ID, "Name (Last, First, Middle, Prefix, Suffix and Maiden if needed)");
-
-        _useMaidenNameField = useMaidenNameField;
     }
 
     @Override
@@ -48,8 +45,9 @@ public class NameRule extends NaaccrDataGeneratorPatientRule {
         setValue(patient, "namePrefix", getPrefix(patient));
         setValue(patient, "nameSuffix", getSuffix(patient));
 
-        String surnameKey = _useMaidenNameField ? "nameMaiden" : "nameBirthSurname";
+        String surnameKey = isOnOrBeforeNaaccrVersion(context, NaaccrFormat.NAACCR_VERSION_180) ? "nameMaiden" : "nameBirthSurname";
         setValue(patient, surnameKey, getBirthSurnameName(patient));
+
         // if a birth surname was created and returned, generate a new last name
         if (!StringUtils.isBlank(patient.getItemValue(surnameKey)))
             setValue(patient, "nameLast", getSpouseLastName(patient));

@@ -19,6 +19,7 @@ import com.imsweb.datagenerator.utils.Distribution;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.RecordLayoutOptions;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
+import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
 import com.imsweb.seerutils.SeerUtils;
@@ -45,7 +46,7 @@ public class NaaccrFixedColumnsDataGenerator extends NaaccrDataGenerator {
      * @param layout NAACCR layout to use for this generator
      */
     public NaaccrFixedColumnsDataGenerator(NaaccrLayout layout) {
-        super(true);
+        super(layout == null ? NaaccrFormat.NAACCR_VERSION_180 : layout.getNaaccrVersion());
 
         if (layout == null)
             throw new IllegalStateException("A layout is required for creating a NAACCR data generator!");

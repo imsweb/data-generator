@@ -2,6 +2,7 @@ package com.imsweb.datagenerator.naaccr;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import com.imsweb.naaccrxml.entity.AbstractEntity;
 import com.imsweb.naaccrxml.entity.Item;
@@ -88,13 +89,19 @@ public abstract class NaaccrDataGeneratorRule {
         return (fromYear == null || dxYearVal >= fromYear) && (toYear == null || dxYearVal <= toYear);
     }
 
+    protected boolean isOnOrBeforeNaaccrVersion(Map<String, Object> context, String naaccrVersion) {
+        String contextVersion = (String)context.get(NaaccrDataGenerator.CONTEXT_NAACCR_VERSION);
+        if (contextVersion == null || naaccrVersion == null)
+            return false;
+        return naaccrVersion.compareTo(contextVersion) <= 0;
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof NaaccrDataGeneratorRule))
+        if (!(o instanceof NaaccrDataGeneratorRule that))
             return false;
-        NaaccrDataGeneratorRule that = (NaaccrDataGeneratorRule)o;
         return _id.equals(that._id);
     }
 

@@ -12,7 +12,7 @@ import com.imsweb.naaccrxml.entity.Patient;
 
 public class NameRuleTest {
 
-    private final NameRule _rule = new NameRule(false);
+    private final NameRule _rule = new NameRule();
 
     @Test
     public void testExecute() {

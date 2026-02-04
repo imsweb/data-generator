@@ -46,7 +46,7 @@ public class NaaccrXmlDataGenerator extends NaaccrDataGenerator {
      * @param layout NAACCR layout to use for this generator
      */
     public NaaccrXmlDataGenerator(NaaccrXmlLayout layout) {
-        super(layout == null || NaaccrFormat.NAACCR_VERSION_180.compareTo(layout.getNaaccrVersion()) <= 0);
+        super(layout == null ? NaaccrFormat.NAACCR_VERSION_LATEST : layout.getNaaccrVersion());
 
         if (layout == null)
             throw new IllegalStateException("A layout is required for creating a NAACCR XML data generator!");

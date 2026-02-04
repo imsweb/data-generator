@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -70,11 +69,15 @@ import com.imsweb.naaccrxml.entity.Tumor;
  */
 public abstract class NaaccrDataGenerator implements DataGenerator {
 
+    public static final String CONTEXT_NAACCR_VERSION = "naaccrVersion";
     public static final String CONTEXT_FLAG_SEX = "sex";
     public static final String CONTEXT_FLAG_CURRENT_TUMOR_INDEX = "currentTumorIndex";
     public static final String CONTEXT_FLAG_SITE_FREQ_MAP = "siteFreqMap";
     public static final String CONTEXT_FLAG_AGE_GROUP_MAP = "ageGroupMap";
     public static final String CONTEXT_FLAG_MAX_AGE_GROUP = "maxAgeGroup";
+
+    // NAACCR version for the generator
+    private final String _naaccrVersion;
 
     // list of rules (order matters)
     private final List<NaaccrDataGeneratorPatientRule> _patientRules;
@@ -82,9 +85,10 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
 
     /**
      * Constructor
-     * @param useMaidenNameField if true, the name rule will use the 'nameMaiden' field, otherwise it will use the 'nameBirthSurname' field
+     * @param naaccrVersion NAACCR version (3 digits); some rules might have a different behavior based on the version.
      */
-    protected NaaccrDataGenerator(boolean useMaidenNameField) {
+    protected NaaccrDataGenerator(String naaccrVersion) {
+        _naaccrVersion = naaccrVersion;
 
         // default patient rules
         _patientRules = new ArrayList<>();
@@ -93,7 +97,7 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
         _patientRules.add(new RaceRule());
         _patientRules.add(new HispanicOriginRule());
         _patientRules.add(new SsnRule());
-        _patientRules.add(new NameRule(useMaidenNameField));
+        _patientRules.add(new NameRule());
         _patientRules.add(new VitalStatusRule());
         _patientRules.add(new DeathRule());
         _patientRules.add(new BirthRule());
@@ -258,7 +262,7 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
                 setValue(patient, entry.getKey(), entry.getValue());
 
         // filter created keys to make sure they are in the layout
-        for (Item item : patient.getItems().stream().filter(item -> isInvalidValidField(item.getNaaccrId())).collect(Collectors.toList()))
+        for (Item item : patient.getItems().stream().filter(item -> isInvalidValidField(item.getNaaccrId())).toList())
             patient.removeItem(item);
 
         // create each tumor and add it to the return list
@@ -278,7 +282,7 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
                     rule.execute(tumor, patient, options, context);
 
             // filter created keys to make sure they are in the layout
-            for (Item item : tumor.getItems().stream().filter(item -> isInvalidValidField(item.getNaaccrId())).collect(Collectors.toList()))
+            for (Item item : tumor.getItems().stream().filter(item -> isInvalidValidField(item.getNaaccrId())).toList())
                 tumor.removeItem(item);
 
             // if there is post-processing constant values, set them
@@ -319,6 +323,9 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
 
         // Context contains information that is shared amongst the rules. Contains values we want to use for this patient.
         Map<String, Object> context = new HashMap<>();
+
+        // set NAACCR version
+        context.put(CONTEXT_NAACCR_VERSION, _naaccrVersion);
 
         // Pick the patient sex. The sex of the patient will influence the tumor sites.
         context.put(CONTEXT_FLAG_SEX, DistributionUtils.getSex());
@@ -369,7 +376,7 @@ public abstract class NaaccrDataGenerator implements DataGenerator {
     }
 
     protected void addFullDates(AbstractEntity entity) {
-        for (String yearProp : entity.getItems().stream().map(Item::getNaaccrId).filter(i -> i.endsWith("Year")).collect(Collectors.toList())) {
+        for (String yearProp : entity.getItems().stream().map(Item::getNaaccrId).filter(i -> i.endsWith("Year")).toList()) {
             String prop = yearProp.replace("Year", "");
 
             String yearVal = entity.getItemValue(prop + "Year");
