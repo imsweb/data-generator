@@ -1,6 +1,6 @@
 ## Synthetic data generator
 
-**Version 2.3 (not released yet)**
+**Version 2.3**
 
 - Fix NAACCR sex rule to set the new sexAssignedAtBirth field for N26 and later.
 - Changed the minimum Java language for this library from Java 11 to Java 21.
