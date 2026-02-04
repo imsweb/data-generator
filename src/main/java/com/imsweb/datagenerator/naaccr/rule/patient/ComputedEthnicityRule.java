@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +39,7 @@ public class ComputedEthnicityRule extends NaaccrDataGeneratorPatientRule {
 
     @Override
     public List<String> getRequiredProperties() {
-        return Arrays.asList("sex", "nameLast");
+        return Collections.singletonList("nameLast");
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ComputedEthnicityRule extends NaaccrDataGeneratorPatientRule {
             birthSurname = patient.getItemValue("nameMaiden");
         boolean birthSurnameEmpty = StringUtils.isBlank(birthSurname);
         boolean birthSurnameMatch = !birthSurnameEmpty && _surnames.contains(birthSurname.toUpperCase());
-        boolean isFemale = patient.getItemValue("sex").equals("2");
+        boolean isFemale = "2".equals(getSexValue(patient, context));
 
         String computedEthnicity;
         if (birthSurnameMatch && isFemale)

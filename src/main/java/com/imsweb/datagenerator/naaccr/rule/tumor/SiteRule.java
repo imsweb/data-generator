@@ -48,7 +48,7 @@ public class SiteRule extends NaaccrDataGeneratorTumorRule {
         }
 
         if (!hasValue(tumor, "primarySite")) {
-            SiteFrequencyDto dto = DistributionUtils.getSite(patient.getItemValue("sex"));
+            SiteFrequencyDto dto = DistributionUtils.getSite(getSexValue(patient, context));
             setValue(tumor, "primarySite", dto.getSite());
             setValue(tumor, "histologicTypeIcdO3", dto.getHistology());
             setValue(tumor, "behaviorCodeIcdO3", dto.getBehavior());

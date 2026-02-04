@@ -20,7 +20,7 @@ public class ComputedEthnicityRuleTest {
         Map<String, Object> context = new HashMap<>();
 
         // computedEthnicity = 1 (non-hispanic last name, non-hispanic maiden name)
-        patient.addItem(new Item("sex", "2"));
+        patient.addItem(new Item("sexAssignedAtBirth", "2"));
         patient.addItem(new Item("nameLast", "JOHNSON"));
         patient.addItem(new Item("nameMaiden", "MILLER"));
         _rule.execute(patient, null, context);
@@ -28,7 +28,7 @@ public class ComputedEthnicityRuleTest {
         patient = new Patient();
 
         // computedEthnicity = 2 (non-hispanic last name, did not check maiden name; or patient was male)
-        patient.addItem(new Item("sex", "1"));
+        patient.addItem(new Item("sexAssignedAtBirth", "1"));
         patient.addItem(new Item("nameLast", "JOHNSON"));
         patient.addItem(new Item("nameMaiden", ""));
         _rule.execute(patient, null, context);
@@ -36,7 +36,7 @@ public class ComputedEthnicityRuleTest {
         patient = new Patient();
 
         // computedEthnicity = 3 (non-hispanic last name, missing maiden name)
-        patient.addItem(new Item("sex", "2"));
+        patient.addItem(new Item("sexAssignedAtBirth", "2"));
         patient.addItem(new Item("nameLast", "JOHNSON"));
         patient.addItem(new Item("nameMaiden", ""));
         _rule.execute(patient, null, context);
@@ -44,7 +44,7 @@ public class ComputedEthnicityRuleTest {
         patient = new Patient();
 
         // computedEthnicity = 4 (hispanic last name, non-hispanic maiden name)
-        patient.addItem(new Item("sex", "2"));
+        patient.addItem(new Item("sexAssignedAtBirth", "2"));
         patient.addItem(new Item("nameLast", "ZUZUARREGUI"));
         patient.addItem(new Item("nameMaiden", "MILLER"));
         _rule.execute(patient, null, context);
@@ -52,7 +52,7 @@ public class ComputedEthnicityRuleTest {
         patient = new Patient();
 
         // computedEthnicity = 5 (hispanic last name, did not check maiden name; or patient was male)
-        patient.addItem(new Item("sex", "1"));
+        patient.addItem(new Item("sexAssignedAtBirth", "1"));
         patient.addItem(new Item("nameLast", "ZUZUARREGUI"));
         patient.addItem(new Item("nameMaiden", ""));
         _rule.execute(patient, null, context);
@@ -60,7 +60,7 @@ public class ComputedEthnicityRuleTest {
         patient = new Patient();
 
         // computedEthnicity = 6 (hispanic last name, missing maiden name)
-        patient.addItem(new Item("sex", "2"));
+        patient.addItem(new Item("sexAssignedAtBirth", "2"));
         patient.addItem(new Item("nameLast", "ZUZUARREGUI"));
         patient.addItem(new Item("nameMaiden", ""));
         _rule.execute(patient, null, context);
@@ -68,7 +68,7 @@ public class ComputedEthnicityRuleTest {
         patient = new Patient();
 
         // computedEthnicity = 7 (female, hispanic maiden name - last name doesn't matter)
-        patient.addItem(new Item("sex", "2"));
+        patient.addItem(new Item("sexAssignedAtBirth", "2"));
         patient.addItem(new Item("nameLast", ""));
         patient.addItem(new Item("nameMaiden", "ABAD"));
         _rule.execute(patient, null, context);

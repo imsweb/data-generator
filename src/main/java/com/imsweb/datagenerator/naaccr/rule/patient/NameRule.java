@@ -1,7 +1,5 @@
 package com.imsweb.datagenerator.naaccr.rule.patient;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -33,20 +31,15 @@ public class NameRule extends NaaccrDataGeneratorPatientRule {
     }
 
     @Override
-    public List<String> getRequiredProperties() {
-        return Arrays.asList("spanishHispanicOrigin", "race1", "sex");
-    }
-
-    @Override
     public void execute(Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
         setValue(patient, "nameLast", getLastNameByRace(patient));
-        setValue(patient, "nameMiddle", getMiddleName(patient));
-        setValue(patient, "nameFirst", getFirstName(patient));
-        setValue(patient, "namePrefix", getPrefix(patient));
-        setValue(patient, "nameSuffix", getSuffix(patient));
+        setValue(patient, "nameMiddle", getMiddleName(patient, context));
+        setValue(patient, "nameFirst", getFirstName(patient, context));
+        setValue(patient, "namePrefix", getPrefix(patient, context));
+        setValue(patient, "nameSuffix", getSuffix(patient, context));
 
         String surnameKey = isOnOrBeforeNaaccrVersion(context, NaaccrFormat.NAACCR_VERSION_180) ? "nameMaiden" : "nameBirthSurname";
-        setValue(patient, surnameKey, getBirthSurnameName(patient));
+        setValue(patient, surnameKey, getBirthSurnameName(patient, context));
 
         // if a birth surname was created and returned, generate a new last name
         if (!StringUtils.isBlank(patient.getItemValue(surnameKey)))
@@ -59,26 +52,34 @@ public class NameRule extends NaaccrDataGeneratorPatientRule {
      * @return randomly generated surname
      */
     protected String getLastNameByRace(Patient patient) {
-        return DistributionUtils.getNameLast(patient.getItemValue("spanishHispanicOrigin"), patient.getItemValue("race1"));
+        String spanishHispanicOrigin = patient.getItemValue("spanishHispanicOrigin");
+        if (spanishHispanicOrigin == null)
+            spanishHispanicOrigin = "0";
+        String race1 = patient.getItemValue("race1");
+        if (race1 == null)
+            race1 = "01";
+        return DistributionUtils.getNameLast(spanishHispanicOrigin, race1);
     }
 
     /**
      * Based on patient sex, returns a random first name
      * @param patient current patient
+     * @param context context
      * @return randomly selected first name
      */
-    protected String getFirstName(Patient patient) {
-        return DistributionUtils.getNameFirst(patient.getItemValue("sex"));
+    protected String getFirstName(Patient patient, Map<String, Object> context) {
+        return DistributionUtils.getNameFirst(getSexValue(patient, context));
     }
 
     /**
      * Based on patient sex returns a random middle name. There is a 5% chance only the middle
      * initial will be returned.
      * @param patient current patient
+     * @param context context
      * @return randomly selected middle name or middle initial
      */
-    protected String getMiddleName(Patient patient) {
-        String name = DistributionUtils.getNameFirst(patient.getItemValue("sex"));
+    protected String getMiddleName(Patient patient, Map<String, Object> context) {
+        String name = DistributionUtils.getNameFirst(getSexValue(patient, context));
 
         // 1/20 chance middle name will be abbreviated
         return RandomUtils.nextInt(20) == 0 ? name.charAt(0) + "." : name;
@@ -87,14 +88,15 @@ public class NameRule extends NaaccrDataGeneratorPatientRule {
     /**
      * Returns a random name prefix (Mr, Ms, Rev,...) based on the sex of the patient
      * @param patient current patient
+     * @param context context
      * @return name prefix
      */
-    protected String getPrefix(Patient patient) {
+    protected String getPrefix(Patient patient, Map<String, Object> context) {
         // 98% chance prefix will be blank
         if (RandomUtils.nextInt(100) > 1)
             return "";
 
-        if ("1".equals(patient.getItemValue("sex")))
+        if ("1".equals(getSexValue(patient, context)))
             return _VALUES_PREFIXES_MALE[RandomUtils.nextInt(_VALUES_PREFIXES_MALE.length)];
         else
             return _VALUES_PREFIXES_FEMALE[RandomUtils.nextInt(_VALUES_PREFIXES_FEMALE.length)];
@@ -103,15 +105,16 @@ public class NameRule extends NaaccrDataGeneratorPatientRule {
     /**
      * Returns a random name suffix (Jr, MD, III,...) based on sex of patient
      * @param patient current patient
+     * @param context context
      * @return name suffix
      */
-    protected String getSuffix(Patient patient) {
+    protected String getSuffix(Patient patient, Map<String, Object> context) {
         // 97% chance suffix will be blank
         if (RandomUtils.nextInt(100) > 2)
             return "";
 
         String suffix = "";
-        if ("1".equals(patient.getItemValue("sex")))
+        if ("1".equals(getSexValue(patient, context)))
             suffix = _VALUES_SUFFIXES_MALE[RandomUtils.nextInt(_VALUES_SUFFIXES_MALE.length)];
         // 50% chance to use non-male specific suffix
         if (RandomUtils.nextInt(1) == 0)
@@ -124,11 +127,12 @@ public class NameRule extends NaaccrDataGeneratorPatientRule {
      * If patient is female, this method will return a birth surname name 60% of the time. It will return a blank string otherwise. The surname is
      * assigned by simply reassigning the already generated last name to the surname name, since it already accounts for the patient's race.
      * @param patient current patient
+     * @param context context
      * @return patient's birth surname (same as current last name) or blank if no surname name
      */
-    protected String getBirthSurnameName(Patient patient) {
+    protected String getBirthSurnameName(Patient patient, Map<String, Object> context) {
         String birthSurname = "";
-        if ("2".equals(patient.getItemValue("sex")))
+        if ("2".equals(getSexValue(patient, context)))
             if (RandomUtils.nextInt(100) < 60)
                 // patient is female and will have a birth surname - use the already generated last name
                 birthSurname = patient.getItemValue("nameLast");

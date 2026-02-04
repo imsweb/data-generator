@@ -105,7 +105,7 @@ public class StagingDataGenerator {
             SchemaLookup lookup = new SchemaLookup();
             lookup.setSite(site);
             lookup.setHistology(hist);
-            lookup.setInput("sex", filename.contains("female") ? "2" : "1");
+            lookup.setInput("sex_at_birth", filename.contains("female") ? "2" : "1");
 
             Schema csSchema = filterSchemas(cs.lookupSchema(lookup));
             Schema tnmSchema = filterSchemas(tnm.lookupSchema(lookup));
@@ -167,7 +167,7 @@ public class StagingDataGenerator {
         exclusions.add("behavior");
         exclusions.add("grade");
         exclusions.add("age_dx");
-        exclusions.add("sex");
+        exclusions.add("sex_at_birth");
         exclusions.add("ssf25"); // we are always taking the first schema, we don't use discriminators...
         return exclusions;
     }

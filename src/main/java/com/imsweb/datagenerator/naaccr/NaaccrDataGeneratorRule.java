@@ -4,8 +4,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.entity.AbstractEntity;
 import com.imsweb.naaccrxml.entity.Item;
+import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
 
 public abstract class NaaccrDataGeneratorRule {
@@ -94,6 +96,10 @@ public abstract class NaaccrDataGeneratorRule {
         if (contextVersion == null || naaccrVersion == null)
             return false;
         return naaccrVersion.compareTo(contextVersion) <= 0;
+    }
+
+    protected String getSexValue(Patient patient, Map<String, Object> context) {
+        return patient.getItemValue(isOnOrBeforeNaaccrVersion(context, NaaccrFormat.NAACCR_VERSION_250) ? "sex" : "sexAssignedAtBirth");
     }
 
     @Override

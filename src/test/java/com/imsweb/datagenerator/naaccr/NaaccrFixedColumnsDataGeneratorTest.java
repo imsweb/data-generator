@@ -22,7 +22,6 @@ import com.imsweb.datagenerator.utils.dto.PhysicianFrequencyDto;
 import com.imsweb.layout.LayoutFactory;
 import com.imsweb.layout.record.fixed.FixedColumnsField;
 import com.imsweb.layout.record.fixed.naaccr.NaaccrLayout;
-import com.imsweb.naaccrxml.entity.Item;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
 
@@ -49,12 +48,6 @@ public class NaaccrFixedColumnsDataGeneratorTest {
 
         Assert.assertNotNull(generator.getNumTumorsPerPatientDistribution());
 
-        // test no rules
-        generator.getPatientRules().clear();
-        Assert.assertTrue(generator.getPatientRules().isEmpty());
-        generator.getTumorRules().clear();
-        Assert.assertTrue(generator.getTumorRules().isEmpty());
-
         // a layout is required
         try {
             //noinspection
@@ -72,11 +65,11 @@ public class NaaccrFixedColumnsDataGeneratorTest {
         Assert.assertNotNull(generator.getPatientRule("test-patient"));
 
         // execute the rule
-        Assert.assertEquals("val1", generator.generatePatient(1, null).get(0).get("nameLast"));
+        Assert.assertEquals("val1", generator.generatePatient(1, null).getFirst().get("nameLast"));
 
         // replace a patient rule
         Assert.assertTrue(generator.replacePatientRule(new TestPatientRule("val2")));
-        Assert.assertEquals("val2", generator.generatePatient(1, null).get(0).get("nameLast"));
+        Assert.assertEquals("val2", generator.generatePatient(1, null).getFirst().get("nameLast"));
 
         // remove a patient rule
         Assert.assertTrue(generator.removePatientRule("test-patient"));
@@ -98,11 +91,11 @@ public class NaaccrFixedColumnsDataGeneratorTest {
         Assert.assertNotNull(generator.getTumorRule("test-tumor"));
 
         // execute the rule
-        Assert.assertEquals("C123", generator.generatePatient(1, null).get(0).get("primarySite"));
+        Assert.assertEquals("C123", generator.generatePatient(1, null).getFirst().get("primarySite"));
 
         // replace a tumor rule
         Assert.assertTrue(generator.replaceTumorRule(new TestTumorRule("C456")));
-        Assert.assertEquals("C456", generator.generatePatient(1, null).get(0).get("primarySite"));
+        Assert.assertEquals("C456", generator.generatePatient(1, null).getFirst().get("primarySite"));
 
         // remove a tumor rule
         Assert.assertTrue(generator.removeTumorRule("test-tumor"));
@@ -122,9 +115,9 @@ public class NaaccrFixedColumnsDataGeneratorTest {
         // null options, 1 tumor
         List<Map<String, String>> patient = generator.generatePatient(1, null);
         Assert.assertEquals(1, patient.size());
-        Assert.assertNotNull(patient.get(0).get("primarySite"));
-        Assert.assertNull(patient.get(0).get("addressAtDxState"));
-        String error = _LAYOUT.validateLine(_LAYOUT.createLineFromRecord(patient.get(0), null), 1);
+        Assert.assertNotNull(patient.getFirst().get("primarySite"));
+        Assert.assertNull(patient.getFirst().get("addressAtDxState"));
+        String error = _LAYOUT.validateLine(_LAYOUT.createLineFromRecord(patient.getFirst(), null), 1);
         Assert.assertNull(error, error);
 
         // null options, several tumors
@@ -139,17 +132,17 @@ public class NaaccrFixedColumnsDataGeneratorTest {
         // test state option
         options.setState("HI");
         patient = generator.generatePatient(1, options);
-        Assert.assertEquals("HI", patient.get(0).get("addrAtDxState"));
+        Assert.assertEquals("HI", patient.getFirst().get("addrAtDxState"));
 
         // test pre-processing constant value (since we are using a field that has a rule, it should be overridden)
         options.setConstantPatientValuesPreProcessing(Collections.singletonMap("nameLast", "TEST"));
         patient = generator.generatePatient(1, options);
-        Assert.assertNotEquals("TEST", patient.get(0).get("nameLast"));
+        Assert.assertNotEquals("TEST", patient.getFirst().get("nameLast"));
 
         // test post-processing constant value (this value should NOT be overridden)
         options.setConstantPatientValuesPostProcessing(Collections.singletonMap("nameLast", "TEST"));
         patient = generator.generatePatient(1, options);
-        Assert.assertEquals("TEST", patient.get(0).get("nameLast"));
+        Assert.assertEquals("TEST", patient.getFirst().get("nameLast"));
 
         // Test context
         int numTumors = 2;
@@ -172,8 +165,8 @@ public class NaaccrFixedColumnsDataGeneratorTest {
         generator = new NaaccrFixedColumnsDataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_18_INCIDENCE);
         patient = generator.generatePatient(1);
         Assert.assertEquals(1, patient.size());
-        Assert.assertNotNull(patient.get(0).get("primarySite"));
-        Assert.assertNull(patient.get(0).get("nameLast"));
+        Assert.assertNotNull(patient.getFirst().get("primarySite"));
+        Assert.assertNull(patient.getFirst().get("nameLast"));
     }
 
     @Test
@@ -241,14 +234,14 @@ public class NaaccrFixedColumnsDataGeneratorTest {
         List<Map<String, String>> patient = generator.generatePatient(1, null);
 
         Assert.assertEquals(1, patient.size());
-        Assert.assertNotNull(patient.get(0).get("primarySite"));
-        Assert.assertNull(patient.get(0).get("npiReportingFacility"));
-        Assert.assertNull(patient.get(0).get("npiPhysicianManaging"));
-        Assert.assertNull(patient.get(0).get("npiPhysicianFollowUp"));
-        Assert.assertNull(patient.get(0).get("npiPhysicianPrimarySurg"));
-        Assert.assertNull(patient.get(0).get("physicianManaging"));
-        Assert.assertNull(patient.get(0).get("physicianFollowUp"));
-        Assert.assertNull(patient.get(0).get("physicianPrimarySurg"));
+        Assert.assertNotNull(patient.getFirst().get("primarySite"));
+        Assert.assertNull(patient.getFirst().get("npiReportingFacility"));
+        Assert.assertNull(patient.getFirst().get("npiPhysicianManaging"));
+        Assert.assertNull(patient.getFirst().get("npiPhysicianFollowUp"));
+        Assert.assertNull(patient.getFirst().get("npiPhysicianPrimarySurg"));
+        Assert.assertNull(patient.getFirst().get("physicianManaging"));
+        Assert.assertNull(patient.getFirst().get("physicianFollowUp"));
+        Assert.assertNull(patient.getFirst().get("physicianPrimarySurg"));
 
         // Provider Options
         ProviderDataGeneratorOptions providerOptions = new ProviderDataGeneratorOptions();
@@ -268,14 +261,14 @@ public class NaaccrFixedColumnsDataGeneratorTest {
         // Test Generation with Facilities and Physicians
         patient = generator.generatePatient(1, genOptions);
         Assert.assertEquals(1, patient.size());
-        Assert.assertNotNull(patient.get(0).get("primarySite"));
-        Assert.assertNotNull(patient.get(0).get("npiReportingFacility"));
-        Assert.assertNotNull(patient.get(0).get("npiPhysicianManaging"));
-        Assert.assertNotNull(patient.get(0).get("npiPhysicianFollowUp"));
-        Assert.assertNotNull(patient.get(0).get("npiPhysicianPrimarySurg"));
-        Assert.assertNotNull(patient.get(0).get("physicianManaging"));
-        Assert.assertNotNull(patient.get(0).get("physicianFollowUp"));
-        Assert.assertNotNull(patient.get(0).get("physicianPrimarySurg"));
+        Assert.assertNotNull(patient.getFirst().get("primarySite"));
+        Assert.assertNotNull(patient.getFirst().get("npiReportingFacility"));
+        Assert.assertNotNull(patient.getFirst().get("npiPhysicianManaging"));
+        Assert.assertNotNull(patient.getFirst().get("npiPhysicianFollowUp"));
+        Assert.assertNotNull(patient.getFirst().get("npiPhysicianPrimarySurg"));
+        Assert.assertNotNull(patient.getFirst().get("physicianManaging"));
+        Assert.assertNotNull(patient.getFirst().get("physicianFollowUp"));
+        Assert.assertNotNull(patient.getFirst().get("physicianPrimarySurg"));
 
     }
 
@@ -293,7 +286,7 @@ public class NaaccrFixedColumnsDataGeneratorTest {
 
         @Override
         public void execute(Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
-            patient.addItem(new Item("nameLast", _value));
+            setValue(patient, "nameLast", _value);
         }
     }
 
@@ -311,7 +304,7 @@ public class NaaccrFixedColumnsDataGeneratorTest {
 
         @Override
         public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
-            patient.addItem(new Item("primarySite", _value));
+            setValue(tumor, "primarySite", _value);
         }
     }
 
