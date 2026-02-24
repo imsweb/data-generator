@@ -95,7 +95,7 @@ public abstract class NaaccrDataGeneratorRule {
         String contextVersion = (String)context.get(NaaccrDataGenerator.CONTEXT_NAACCR_VERSION);
         if (contextVersion == null || naaccrVersion == null)
             return false;
-        return naaccrVersion.compareTo(contextVersion) <= 0;
+        return naaccrVersion.compareTo(contextVersion) >= 0;
     }
 
     protected String getSexValue(Patient patient, Map<String, Object> context) {

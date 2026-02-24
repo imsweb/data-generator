@@ -22,41 +22,41 @@ import com.imsweb.naaccrxml.entity.Patient;
 
 public class NaaccrXmlDataGeneratorTest {
 
-    // we are going to use this layout
-    private static final NaaccrXmlLayout _LAYOUT = LayoutFactory.getNaaccrXmlLayout(LayoutFactory.LAYOUT_ID_NAACCR_XML_21_ABSTRACT);
-
     @Test
-    public void testGenerate() throws IOException {
-        NaaccrXmlDataGenerator generator = new NaaccrXmlDataGenerator(_LAYOUT);
+    public void testGenerateN26() throws IOException {
+        NaaccrXmlLayout layout = LayoutFactory.getNaaccrXmlLayout(LayoutFactory.LAYOUT_ID_NAACCR_XML_26_ABSTRACT);
+
+        NaaccrXmlDataGenerator generator = new NaaccrXmlDataGenerator(layout);
 
         // regular file, 1 tumor
         File file = TestingUtils.createFile("naaccr-data-generator-1-tumor.xml");
         generator.generateFile(file, 1, null);
-        List<Patient> patients = readXmlFile(file);
+        List<Patient> patients = readXmlFile(file, layout);
         Assert.assertEquals(1, patients.stream().map(Patient::getTumors).map(List::size).mapToInt(Integer::intValue).sum());
-        Assert.assertEquals(8, patients.get(0).getItemValue("dateOfBirth").length());
-        Assert.assertTrue(patients.get(0).getAllValidationErrors().isEmpty());
+        Assert.assertEquals(8, patients.getFirst().getItemValue("dateOfBirth").length());
+        Assert.assertNotNull(patients.getFirst().getItemValue("sexAssignedAtBirth"));
+        Assert.assertTrue(patients.getFirst().getAllValidationErrors().isEmpty());
         Assert.assertFalse(LayoutFactory.discoverFormat(file).isEmpty());
         Assert.assertTrue(NaaccrXmlUtils.readXmlFile(file, null, null, null).getUserDictionaryUri().isEmpty());
 
-        // regular file, 10 records
+        // regular file, 10 tumors
         file = TestingUtils.createFile("naaccr-data-generator-10-tumors.xml");
         generator.generateFile(file, 10, null);
-        patients = readXmlFile(file);
+        patients = readXmlFile(file, layout);
         Assert.assertEquals(10, patients.stream().map(Patient::getTumors).map(List::size).mapToInt(Integer::intValue).sum());
         Assert.assertFalse(LayoutFactory.discoverFormat(file).isEmpty());
 
-        // compressed file, 1 record
+        // compressed file, 1 tumor
         file = TestingUtils.createFile("naaccr-data-generator-1-tumor.xml.gz");
         generator.generateFile(file, 1, null);
-        patients = readXmlFile(file);
+        patients = readXmlFile(file, layout);
         Assert.assertEquals(1, patients.stream().map(Patient::getTumors).map(List::size).mapToInt(Integer::intValue).sum());
         Assert.assertFalse(LayoutFactory.discoverFormat(file).isEmpty());
 
-        // compressed file, 10 records
+        // compressed file, 10 tumors
         file = TestingUtils.createFile("naaccr-data-generator-10-tumors.xml.gz");
         generator.generateFile(file, 10, null);
-        patients = readXmlFile(file);
+        patients = readXmlFile(file, layout);
         Assert.assertEquals(10, patients.stream().map(Patient::getTumors).map(List::size).mapToInt(Integer::intValue).sum());
         Assert.assertFalse(LayoutFactory.discoverFormat(file).isEmpty());
 
@@ -64,18 +64,54 @@ public class NaaccrXmlDataGeneratorTest {
         NaaccrDataGeneratorOptions options = new NaaccrDataGeneratorOptions();
         options.setNumTumorsPerPatient(3);
         generator.generateFile(file, 9, options);
-        patients = readXmlFile(file);
+        patients = readXmlFile(file, layout);
         Assert.assertEquals(3, patients.size());
         Assert.assertEquals(9, patients.stream().map(Patient::getTumors).map(List::size).mapToInt(Integer::intValue).sum());
     }
 
-    private List<Patient> readXmlFile(File file) throws IOException {
+    @Test
+    public void testGenerateN25() throws IOException {
+        NaaccrXmlLayout layout = LayoutFactory.getNaaccrXmlLayout(LayoutFactory.LAYOUT_ID_NAACCR_XML_25_ABSTRACT);
+
+        NaaccrXmlDataGenerator generator = new NaaccrXmlDataGenerator(layout);
+
+        // regular file, 1 tumor
+        File file = TestingUtils.createFile("naaccr-data-generator-1-tumor.xml");
+        generator.generateFile(file, 1, null);
+        List<Patient> patients = readXmlFile(file, layout);
+        Assert.assertEquals(1, patients.stream().map(Patient::getTumors).map(List::size).mapToInt(Integer::intValue).sum());
+        Assert.assertEquals(8, patients.getFirst().getItemValue("dateOfBirth").length());
+        Assert.assertNotNull(patients.getFirst().getItemValue("sex"));
+        Assert.assertTrue(patients.getFirst().getAllValidationErrors().isEmpty());
+        Assert.assertFalse(LayoutFactory.discoverFormat(file).isEmpty());
+        Assert.assertTrue(NaaccrXmlUtils.readXmlFile(file, null, null, null).getUserDictionaryUri().isEmpty());
+    }
+
+    @Test
+    public void testGenerateN24() throws IOException {
+        NaaccrXmlLayout layout = LayoutFactory.getNaaccrXmlLayout(LayoutFactory.LAYOUT_ID_NAACCR_XML_24_ABSTRACT);
+
+        NaaccrXmlDataGenerator generator = new NaaccrXmlDataGenerator(layout);
+
+        // regular file, 1 tumor
+        File file = TestingUtils.createFile("naaccr-data-generator-1-tumor.xml");
+        generator.generateFile(file, 1, null);
+        List<Patient> patients = readXmlFile(file, layout);
+        Assert.assertEquals(1, patients.stream().map(Patient::getTumors).map(List::size).mapToInt(Integer::intValue).sum());
+        Assert.assertEquals(8, patients.getFirst().getItemValue("dateOfBirth").length());
+        Assert.assertNotNull(patients.getFirst().getItemValue("sex"));
+        Assert.assertTrue(patients.getFirst().getAllValidationErrors().isEmpty());
+        Assert.assertFalse(LayoutFactory.discoverFormat(file).isEmpty());
+        Assert.assertTrue(NaaccrXmlUtils.readXmlFile(file, null, null, null).getUserDictionaryUri().isEmpty());
+    }
+
+    private List<Patient> readXmlFile(File file, NaaccrXmlLayout layout) throws IOException {
         if (file.getName().endsWith(".gz")) {
             try (InputStream is = new GZIPInputStream(new FileInputStream(file))) {
-                return _LAYOUT.readAllPatients(is, "UTF-8", null);
+                return layout.readAllPatients(is, "UTF-8", null);
             }
         }
         else
-            return _LAYOUT.readAllPatients(file, "UTF-8", null);
+            return layout.readAllPatients(file, "UTF-8", null);
     }
 }
