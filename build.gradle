@@ -6,7 +6,7 @@ plugins {
     id 'com.vanniktech.maven.publish' version '0.36.0' // publish to Maven Central
     id 'com.github.ben-manes.versions' version '0.53.0' // check for out-of-date dependencies (run 'dependencyUpdates' manually)
     id 'com.github.spotbugs' version '6.4.8' // spotbugs code analysis
-    id 'org.sonarqube' version '7.2.2.6593' // sonarQube analysis
+    id 'org.sonarqube' version '7.2.3.7755' // sonarQube analysis
 }
 
 group = 'com.imsweb'
@@ -20,15 +20,15 @@ repositories {
 }
 
 dependencies {
-    api 'com.imsweb:layout:7.0'
-    api 'com.imsweb:naaccr-xml:12.1'
+    api 'com.imsweb:layout:7.1'
+    api 'com.imsweb:naaccr-xml:12.2'
 
     implementation 'com.imsweb:seerutils:5.7'
     implementation 'org.apache.commons:commons-lang3:3.20.0'
     implementation 'commons-io:commons-io:2.21.0'
 
-    testImplementation 'com.imsweb:validation:4.8'
-    testImplementation 'com.imsweb:staging-client-java:11.9.0'
+    testImplementation 'com.imsweb:validation:4.10'
+    testImplementation 'com.imsweb:staging-client-java:11.9.1'
     testImplementation 'junit:junit:4.13.2'
 }
 
@@ -144,6 +144,6 @@ mavenPublishing {
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
-    gradleVersion = '9.2.1'
+    gradleVersion = '9.4.0'
     distributionType = Wrapper.DistributionType.ALL
 }

@@ -1,5 +1,9 @@
 ## Synthetic data generator
 
+**Version 2.5**
+
+- Updated dependencies.
+
 **Version 2.4**
 
 - Fix bug in NAACCR sex rule related to new sexAssignedAtBirth field for N26 and later.
