@@ -12,6 +12,7 @@ import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
 import com.imsweb.datagenerator.utils.StagingUtils;
 import com.imsweb.datagenerator.utils.dto.SiteFrequencyDto;
+import com.imsweb.naaccrxml.NaaccrFormat;
 import com.imsweb.naaccrxml.entity.Patient;
 import com.imsweb.naaccrxml.entity.Tumor;
 
@@ -54,26 +55,28 @@ public class StagingInputRule extends NaaccrDataGeneratorTumorRule {
 
                 if (randomValidValues != null)
                     for (Entry<String, String> entry : randomValidValues.entrySet())
-                        setValue(tumor, entry.getKey(), entry.getValue().trim());
+                        if (!"figoStage".equalsIgnoreCase(entry.getKey()) || !isOnOrBeforeNaaccrVersion(context, NaaccrFormat.NAACCR_VERSION_180))
+                            setValue(tumor, entry.getKey(), entry.getValue().trim());
             }
         }
     }
 
     // the framework doesn't support proper documentation, but maybe one day it will; I am adding this while it's fresh in my memory...
-    public String getDescription () {
-        return "This rule assigns a value to the staging input field.\n"
-                + "\n"
-                + "Which staging framework is used is based on the DX year:\n"
-                + " - 2004-2015: CS\n"
-                + " - 2016-2017: TNM\n"
-                + " - 2018+: EOD\n"
-                + "\n"
-                + "The schema is determined based on the assgned site/histology.\n"
-                + "\n"
-                + "Some combinations of site/histolgy correspond to more than one schema; a discriminator should be used to \n"
-                + "uniquely identify the schema but this framework doesn't use discriminators, it just takes the \"first\" schema found.\n"
-                + "\n"
-                + "Once a schema has been identified, every input field is assigned wiht one of its \"valid\" value.\n"
-                + "Any of the valid values for a given input has the same probability to be picked.";
+    public String getDescription() {
+        return """
+                This rule assigns a value to the staging input field.
+                
+                Which staging framework is used is based on the DX year:
+                 - 2004-2015: CS
+                 - 2016-2017: TNM
+                 - 2018+: EOD
+                
+                The schema is determined based on the assgned site/histology.
+                
+                Some combinations of site/histolgy correspond to more than one schema; a discriminator should be used to\s
+                uniquely identify the schema but this framework doesn't use discriminators, it just takes the "first" schema found.
+                
+                Once a schema has been identified, every input field is assigned wiht one of its "valid" value.
+                Any of the valid values for a given input has the same probability to be picked.""";
     }
 }
