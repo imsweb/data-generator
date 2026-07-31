@@ -23,4 +23,9 @@
         <!-- Be wary of letting constructors throw exceptions, not easy to fix, and I don't think that can create a problem -->
         <Bug pattern="CT_CONSTRUCTOR_THROW"/>
     </Match>
+    <Match>
+        <!-- use intrinsic lock that expose classes; I reviewed the code and I don't see how that can be a real issue for this specific library -->
+        <Class name="com.imsweb.datagenerator.utils.StagingUtils"/>
+        <Bug code="USO"/>
+    </Match>
 </FindBugsFilter>
