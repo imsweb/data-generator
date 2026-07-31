@@ -3,6 +3,7 @@
 **Version 2.6**
 
 - Fixed issue in DOLC that would produce tumors with vital status 0 (dead) and DX date later than DOLC.
+- Updated dependencies.
 
 **Version 2.5**
 
