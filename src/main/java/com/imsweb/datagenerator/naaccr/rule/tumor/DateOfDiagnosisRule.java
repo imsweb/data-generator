@@ -1,9 +1,7 @@
 package com.imsweb.datagenerator.naaccr.rule.tumor;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorOptions;
 import com.imsweb.datagenerator.naaccr.NaaccrDataGeneratorTumorRule;
@@ -29,51 +27,56 @@ public class DateOfDiagnosisRule extends NaaccrDataGeneratorTumorRule {
     @Override
     public void execute(Tumor tumor, Patient patient, NaaccrDataGeneratorOptions options, Map<String, Object> context) {
 
-        // latest possible date set only by options if defined
-        Set<LocalDate> maxDxDates = new HashSet<>();
+        // the date range requested in the options is a hard requirement; the other constraints (age group of the site, year of birth, dx date of the
+        // previous tumor) are only applied when they don't push the generated date outside of that range
         LocalDate maxDate = options == null ? LocalDate.now() : options.getMaxDxDate();
-        maxDxDates.add(maxDate);
+        LocalDate minDate = options == null ? LocalDate.now().minusYears(10) : options.getMinDxDate();
+        // the min dx date defaults to ten years ago when it's not provided in the options; that default can end up after a requested max dx date
+        if (minDate.isAfter(maxDate))
+            minDate = maxDate.minusYears(10);
 
-        Set<LocalDate> minDxDates = new HashSet<>();
-        // never go before min date defined in options, or current date minus ten years if options not defined
-        minDxDates.add(options == null ? LocalDate.now().minusYears(10) : options.getMinDxDate());
         // never go before the year of birth
         if (hasValue(patient, "dateOfBirthYear"))
-            minDxDates.add(LocalDate.of(Integer.parseInt(patient.getItemValue("dateOfBirthYear")) + 1, 1, 1));
+            minDate = tightenMinDate(minDate, maxDate, LocalDate.of(Integer.parseInt(patient.getItemValue("dateOfBirthYear")) + 1, 1, 1));
+
         // never go before dx date of patient's most recent tumor (if this isn't the first one)
         if (!patient.getTumors().isEmpty()) {
             Tumor lastTumor = patient.getTumor(patient.getTumors().size() - 1);
-            minDxDates.add(LocalDate.of(
+            minDate = tightenMinDate(minDate, maxDate, LocalDate.of(
                     Integer.parseInt(lastTumor.getItemValue("dateOfDiagnosisYear")),
                     Integer.parseInt(lastTumor.getItemValue("dateOfDiagnosisMonth")),
                     Integer.parseInt(lastTumor.getItemValue("dateOfDiagnosisDay"))));
         }
 
-        if (context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX) != null) {
-            int birthYear = Integer.parseInt(patient.getItemValue("dateOfBirthYear"));
-            int birthMonth = Integer.parseInt(patient.getItemValue("dateOfBirthMonth"));
-            int birthDay = Integer.parseInt(patient.getItemValue("dateOfBirthDay"));
-            LocalDate dateOfBirth = LocalDate.of(birthYear, birthMonth, birthDay);
-
-            // PROBLEM: This brakes 3 previous rules:
-            // 1. Minimum date must be within 10 years of today.
-            // 2. Options specify a minimum DX date.
-            // 3. This tumor must be diagnosed after the previous ones for this patient.
-            // From Fabian: Only #2 is required. Try to get all tumors to use this minimum. If that can't be done, at least one tumor must meet it.
-            minDxDates.clear();
-            maxDxDates.clear();
-
-            int currentTumorIndex = (int)context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX);
-            @SuppressWarnings("unchecked")
-            Map<Integer, Integer> ageGroupMap = (Map<Integer, Integer>)context.get(CONTEXT_FLAG_AGE_GROUP_MAP);
-            minDxDates.add(dateOfBirth.plusYears((ageGroupMap.get(currentTumorIndex) * 10)));
-            maxDxDates.add(maxDate);
+        // never diagnose the tumor before the patient reaches the age group that was picked for its site
+        @SuppressWarnings("unchecked")
+        Map<Integer, Integer> ageGroupMap = (Map<Integer, Integer>)context.get(CONTEXT_FLAG_AGE_GROUP_MAP);
+        Integer currentTumorIndex = (Integer)context.get(CONTEXT_FLAG_CURRENT_TUMOR_INDEX);
+        if (ageGroupMap != null && currentTumorIndex != null && hasValue(patient, "dateOfBirthYear", "dateOfBirthMonth", "dateOfBirthDay")) {
+            Integer ageGroup = ageGroupMap.get(currentTumorIndex);
+            // the age group is -1 for a site that has no age distribution, in which case it tells us nothing about the dx date
+            if (ageGroup != null && ageGroup > 0) {
+                LocalDate dateOfBirth = LocalDate.of(
+                        Integer.parseInt(patient.getItemValue("dateOfBirthYear")),
+                        Integer.parseInt(patient.getItemValue("dateOfBirthMonth")),
+                        Integer.parseInt(patient.getItemValue("dateOfBirthDay")));
+                minDate = tightenMinDate(minDate, maxDate, dateOfBirth.plusYears(ageGroup * 10L));
+            }
         }
 
-        LocalDate randomDate = RandomUtils.getRandomDateBetween(minDxDates, maxDxDates);
+        LocalDate randomDate = RandomUtils.getRandomDateBetween(minDate, maxDate);
 
         setValue(tumor, "dateOfDiagnosisYear", Integer.toString(randomDate.getYear()));
         setValue(tumor, "dateOfDiagnosisMonth", Integer.toString(randomDate.getMonthValue()));
         setValue(tumor, "dateOfDiagnosisDay", Integer.toString(randomDate.getDayOfMonth()));
+    }
+
+    /**
+     * Returns the candidate date if it is a tighter minimum than the current one and still leaves a valid range, the current minimum otherwise.
+     */
+    private static LocalDate tightenMinDate(LocalDate currentMinDate, LocalDate maxDate, LocalDate candidate) {
+        if (candidate.isAfter(currentMinDate) && !candidate.isAfter(maxDate))
+            return candidate;
+        return currentMinDate;
     }
 }
