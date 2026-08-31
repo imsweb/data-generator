@@ -4,9 +4,9 @@ plugins {
     id 'java-library'
     id 'jacoco'
     id 'com.vanniktech.maven.publish' version '0.37.0' // publish to Maven Central
-    id 'io.github.ben-manes.versions' version '0.57.0' // check for out-of-date dependencies (run 'dependencyUpdates' manually)
-    id 'com.github.spotbugs' version '6.5.9' // spotbugs code analysis
-    id 'org.sonarqube' version '7.3.1.8318' // sonarQube analysis
+    id 'io.github.ben-manes.versions' version '0.61.0' // check for out-of-date dependencies (run 'dependencyUpdates' manually)
+    id 'com.github.spotbugs' version '6.5.11' // spotbugs code analysis
+    id 'org.sonarqube' version '7.4.0.8496' // sonarQube analysis
 }
 
 group = 'com.imsweb'
