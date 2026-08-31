@@ -1,5 +1,9 @@
 ## Synthetic data generator
 
+**Version 2.7**
+
+- Fixed issue in date of diagnosis rule that would produce DX dates outside of the min/max DX dates provided in the options.
+
 **Version 2.6**
 
 - Fixed issue in DOLC that would produce tumors with vital status 0 (dead) and DX date later than DOLC.

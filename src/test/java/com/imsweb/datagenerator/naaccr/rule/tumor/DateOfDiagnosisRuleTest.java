@@ -101,7 +101,85 @@ public class DateOfDiagnosisRuleTest {
 
         LocalDate startDate = dateOfBirth.plusYears(5 * 10);
         LocalDate endDate = options.getMaxDxDate();
-        Assert.assertTrue(dateOfDx.toString(), dateOfDx.isAfter(startDate) && dateOfDx.isBefore(endDate));
+        Assert.assertTrue(dateOfDx.toString(), !dateOfDx.isBefore(startDate) && !dateOfDx.isAfter(endDate));
 
+    }
+
+    @Test
+    public void testExecuteRespectsRequestedDxDateRange() {
+
+        NaaccrDataGeneratorOptions options = new NaaccrDataGeneratorOptions();
+        options.setMinDxYear(2015);
+        options.setMaxDxYear(2020);
+
+        // the birth date of a patient is based on the oldest age group of all its tumors (see BirthRule), so a tumor assigned to a
+        // younger age group used to be allowed to go decades before the requested min dx date
+        Map<Integer, Integer> ageGroupMap = new HashMap<>();
+        ageGroupMap.put(0, 7);
+        ageGroupMap.put(1, 2);
+
+        Map<String, Object> context = new HashMap<>();
+        context.put(CONTEXT_FLAG_AGE_GROUP_MAP, ageGroupMap);
+        context.put(CONTEXT_FLAG_MAX_AGE_GROUP, 7);
+
+        for (int i = 0; i < 100; i++) {
+            Patient patient = new Patient();
+            patient.addItem(new Item("dateOfBirthYear", "1945"));
+            patient.addItem(new Item("dateOfBirthMonth", "6"));
+            patient.addItem(new Item("dateOfBirthDay", "15"));
+
+            LocalDate previousDxDate = null;
+            for (int tumorIdx = 0; tumorIdx < ageGroupMap.size(); tumorIdx++) {
+                context.put(CONTEXT_FLAG_CURRENT_TUMOR_INDEX, tumorIdx);
+
+                Tumor tumor = new Tumor();
+                _rule.execute(tumor, patient, options, context);
+                patient.addTumor(tumor);
+
+                LocalDate dxDate = LocalDate.of(
+                        Integer.parseInt(tumor.getItemValue("dateOfDiagnosisYear")),
+                        Integer.parseInt(tumor.getItemValue("dateOfDiagnosisMonth")),
+                        Integer.parseInt(tumor.getItemValue("dateOfDiagnosisDay")));
+
+                Assert.assertFalse("Dx date before requested min dx date: " + dxDate, dxDate.isBefore(options.getMinDxDate()));
+                Assert.assertFalse("Dx date after requested max dx date: " + dxDate, dxDate.isAfter(options.getMaxDxDate()));
+                if (previousDxDate != null)
+                    Assert.assertFalse("Dx date before previous tumor dx date: " + dxDate, dxDate.isBefore(previousDxDate));
+                previousDxDate = dxDate;
+            }
+        }
+    }
+
+    @Test
+    public void testExecuteWhenMinDxDateCannotBeReached() {
+
+        // the min dx date defaults to ten years ago; combined with a max dx year in the past, that default range is inverted
+        NaaccrDataGeneratorOptions options = new NaaccrDataGeneratorOptions();
+        options.setMaxDxYear(2005);
+
+        Map<Integer, Integer> ageGroupMap = new HashMap<>();
+        ageGroupMap.put(0, 5);
+
+        Map<String, Object> context = new HashMap<>();
+        context.put(CONTEXT_FLAG_AGE_GROUP_MAP, ageGroupMap);
+        context.put(CONTEXT_FLAG_CURRENT_TUMOR_INDEX, 0);
+        context.put(CONTEXT_FLAG_MAX_AGE_GROUP, 5);
+
+        Patient patient = new Patient();
+        patient.addItem(new Item("dateOfBirthYear", "1940"));
+        patient.addItem(new Item("dateOfBirthMonth", "7"));
+        patient.addItem(new Item("dateOfBirthDay", "1"));
+
+        Tumor tumor = new Tumor();
+        _rule.execute(tumor, patient, options, context);
+
+        LocalDate dxDate = LocalDate.of(
+                Integer.parseInt(tumor.getItemValue("dateOfDiagnosisYear")),
+                Integer.parseInt(tumor.getItemValue("dateOfDiagnosisMonth")),
+                Integer.parseInt(tumor.getItemValue("dateOfDiagnosisDay")));
+
+        // the max dx date is the hard requirement, the dx date must fall in the ten years before it
+        Assert.assertFalse(dxDate.toString(), dxDate.isAfter(options.getMaxDxDate()));
+        Assert.assertFalse(dxDate.toString(), dxDate.isBefore(options.getMaxDxDate().minusYears(10)));
     }
 }

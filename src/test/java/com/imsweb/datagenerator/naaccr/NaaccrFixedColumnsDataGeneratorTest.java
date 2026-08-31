@@ -144,22 +144,20 @@ public class NaaccrFixedColumnsDataGeneratorTest {
         patient = generator.generatePatient(1, options);
         Assert.assertEquals("TEST", patient.getFirst().get("nameLast"));
 
-        // Test context
-        int numTumors = 2;
+        // Test context; the requested dx date range applies to every tumor, not just to one of them
+        int numTumors = 3;
         options = new NaaccrDataGeneratorOptions();
         options.setMinDxYear(2000);
         options.setMaxDxYear(2005);
-        patient = generator.generatePatient(numTumors, options);
-
-        LocalDate dateOfDx1 = LocalDate.of(Integer.parseInt(patient.get(0).get("dateOfDiagnosisYear")), Integer.parseInt(patient.get(0).get("dateOfDiagnosisMonth")),
-                Integer.parseInt(patient.get(0).get("dateOfDiagnosisDay")));
-        LocalDate dateOfDx2 = LocalDate.of(Integer.parseInt(patient.get(1).get("dateOfDiagnosisYear")), Integer.parseInt(patient.get(1).get("dateOfDiagnosisMonth")),
-                Integer.parseInt(patient.get(1).get("dateOfDiagnosisDay")));
-
-        boolean dateInRange1 = dateOfDx1.isAfter(options.getMinDxDate().minusDays(1)) && dateOfDx1.isBefore(options.getMaxDxDate().plusDays(1));
-        boolean dateInRange2 = dateOfDx2.isAfter(options.getMinDxDate().minusDays(1)) && dateOfDx2.isBefore(options.getMaxDxDate().plusDays(1));
-
-        Assert.assertTrue("Diagnosis Date outside options Minimum and Maximum.", dateInRange1 || dateInRange2);
+        for (int i = 0; i < 250; i++) {
+            patient = generator.generatePatient(numTumors, options);
+            for (Map<String, String> rec : patient) {
+                LocalDate dateOfDx = LocalDate.of(Integer.parseInt(rec.get("dateOfDiagnosisYear")), Integer.parseInt(rec.get("dateOfDiagnosisMonth")),
+                        Integer.parseInt(rec.get("dateOfDiagnosisDay")));
+                Assert.assertFalse("Diagnosis Date before options Minimum: " + dateOfDx, dateOfDx.isBefore(options.getMinDxDate()));
+                Assert.assertFalse("Diagnosis Date after options Maximum: " + dateOfDx, dateOfDx.isAfter(options.getMaxDxDate()));
+            }
+        }
 
         // another test with an incidence generator
         generator = new NaaccrFixedColumnsDataGenerator(LayoutFactory.LAYOUT_ID_NAACCR_18_INCIDENCE);
