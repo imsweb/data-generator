@@ -2,7 +2,6 @@
 
 **Version 2.8**
 
-- Now writing NAACCR XML items in alphabetical order.
 - Updated dependencies.
 
 **Version 2.7**
