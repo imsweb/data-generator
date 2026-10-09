@@ -4,9 +4,9 @@ plugins {
     id 'java-library'
     id 'jacoco'
     id 'com.vanniktech.maven.publish' version '0.37.0' // publish to Maven Central
-    id 'io.github.ben-manes.versions' version '0.61.0' // check for out-of-date dependencies (run 'dependencyUpdates' manually)
-    id 'com.github.spotbugs' version '6.5.11' // spotbugs code analysis
-    id 'org.sonarqube' version '7.4.0.8496' // sonarQube analysis
+    id 'io.github.ben-manes.versions' version '0.65.0' // check for out-of-date dependencies (run 'dependencyUpdates' manually)
+    id 'com.github.spotbugs' version '6.5.12' // spotbugs code analysis
+    id 'org.sonarqube' version '7.5.0.8588' // sonarQube analysis
 }
 
 group = 'com.imsweb'
@@ -20,18 +20,18 @@ repositories {
 }
 
 dependencies {
-    api 'com.imsweb:layout:7.1'
-    api 'com.imsweb:naaccr-xml:12.4'
+    api 'com.imsweb:layout:7.2'
+    api 'com.imsweb:naaccr-xml:13.0'
 
     implementation 'com.imsweb:seerutils:5.7'
-    implementation 'org.apache.commons:commons-lang3:3.20.0'
+    implementation 'org.apache.commons:commons-lang3:3.21.0'
     implementation 'commons-io:commons-io:2.22.0'
 
-    testImplementation 'com.imsweb:validation:4.11'
-    testImplementation 'com.imsweb:staging-client-java:11.9.4'
+    testImplementation 'com.imsweb:validation:4.13'
+    testImplementation 'com.imsweb:staging-client-java:11.11.1'
     testImplementation 'junit:junit:4.13.2'
 
-    spotbugsSlf4j 'org.slf4j:slf4j-simple:2.0.18'
+    spotbugsSlf4j 'org.slf4j:slf4j-simple:2.0.20'
 }
 
 java {
@@ -150,6 +150,6 @@ mavenPublishing {
 
 // Gradle wrapper, this allows to build the project without having to install Gradle...
 wrapper {
-    gradleVersion = '9.6.1'
+    gradleVersion = '9.8.1'
     distributionType = Wrapper.DistributionType.ALL
 }

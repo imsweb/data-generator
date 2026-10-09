@@ -1,5 +1,10 @@
 ## Synthetic data generator
 
+**Version 2.8**
+
+- Now writing NAACCR XML items in alphabetical order.
+- Updated dependencies.
+
 **Version 2.7**
 
 - Fixed issue in date of diagnosis rule that would produce DX dates outside of the min/max DX dates provided in the options.
